@@ -1,0 +1,68 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0280R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.03.10         *
+     H*    ÇnÇbÇqópéÛíçèàóùÉgÉåÉTÇ†ÇËÇÃèÍçáìØéûî[ì¸   *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0041 UF  E           K        DISK
+     FAML0101 IF  E           K        DISK
+     IDS1         DS
+     I                                        1   3 TRESAA
+     I                                        1   2 W#TRE1
+     I                                        3   3 W#TRE2
+     IDS2         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 WCUS02
+     IDS3         DS
+     I                                        1  15 ORDNOA
+     I                                        1   7 ORDN7A
+     I                                        1   8 ORDN8A
+     C*----------------------------------------------------
+     C           D0100     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           OFNAMA
+     C***                  KFLD           W#ORD3
+     C*----------------------------------------------------
+     C           *LOVAL    SETLLAML0041
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD0         W#FLG1  10
+     C                     MOVEL*BLANK    W#ORD3 15
+     C*
+     C*
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ RAML0040                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           WCUS02    IFEQ '0M'
+     C                     MOVELORDN7A    W#ORD3
+     C                     ELSE
+     C                     MOVELORDN8A    W#ORD3
+     C                     ENDIF
+     C*
+     C                     SETOF                     90
+     C           D0100     CHAINAML0101              90
+     C           *IN90     IFEQ '0'
+     C*
+     C*íºëóÇÃèÍçá
+     C           YUBINE    IFNE *BLANK
+     C           COUNTE    IFGE 2
+     C                     MOVEL'*'       DOJCDA
+     C                     UPDATRAML0040
+     C                     ELSE
+     C                     ENDIF
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*----------------------------------------------------------

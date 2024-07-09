@@ -1,0 +1,13 @@
+             PGM
+             CHGLIBL    LIBL(PRD1FTCHG PRD1FMCHG COSFTCHG COSFMCHG +
+                          COSFWCHG PRD1PO SALPO GENPO COSPO OTRPO +
+                          GENFM SALFTCHG SALFM SALFW OTRFT OTRFM +
+                          PRD1FW)
+ /*          OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 132) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIOM)          */
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 132) LPI(6) +
+                          OVRFLW(50)
+             CALL       PGM(NP3680R)
+             DLTOVR     FILE(*ALL)
+ ENDCLPGM:
+             ENDPGM     /* END CL PGM */

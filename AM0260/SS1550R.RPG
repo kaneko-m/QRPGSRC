@@ -1,0 +1,90 @@
+     H*****************************************************
+     H*    PROGRAM NAME SS1550R CODED BY K.IWAI           *
+     H*                         CODED ON 21.01.22         *
+     H*    ƒ◊Ω∫íçéc                                     *
+     H*****************************************************
+     H        1   Y
+     FDTR002C IF  E           K        DISK
+     FDTW0500 IF  E           K        DISK                      A
+     FDTW0510 IF  E           K        DISK
+     FDMR0090 IF  E           K        DISK
+     FDTP1110 IF  E           K        DISK
+     FDTP1111 IF  E           K        DISK
+     F            RDTP1110                          KRENAMERDTP1111
+     IDS1         DS
+     I                                        1   80JUSEN
+     I                                        1   60JUTNO
+     I                                        7   80SEQNO
+     IDS2         DS
+     I                                        1  30 ITDSC
+     I                                        1  25 WITDSC
+     C           D002C     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           WJUTDY
+     C*------------------------------------------------------------
+     C                     MOVEL*DATE     WJUTDY  80
+     C                     SETOF                     9091
+     C           WJUTDY    CHAINDTP1110              90
+     C           *IN90     IFEQ '0'
+     C           RRNNO     SUB  14        WRRNNO  40
+     C           WRRNNO    CHAINDTP1111              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDY2YMD     WJUTDY
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C           *LOVAL    SETLLDTW0510
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     70
+     C                     READ DTW0510                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           D002C     SETLLDTR002C
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     71
+     C                     READ DTR002C                  71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C           CUSNR     IFNE CUSNRA
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           SEQNO     IFNE 0
+     C           SHPNR     IFEQ SHPNRA
+     C                     EXSR #ADD
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     C           #ADD      BEGSR
+     C                     SETOF                     9290
+     C           JUSEN     CHAINDTW0500              92
+     C           *IN92     IFEQ '1'
+     C                     Z-ADDJUSEN     JUTNOT
+     C                     MOVELA1        JUTK1T
+     C                     MOVELORDNO     ORDNOT
+     C                     MOVELCUSNR     CUSNRT
+     C                     Z-ADDJUTDY8    JUTDYT
+     C                     MOVELITDSC     ITDSCT
+     C                     Z-ADDQUANT     QUANTT
+     C                     MOVEL*BLANK    JANCDT
+     C           WITDSC    CHAINDMR0090              90
+     C           *IN90     IFEQ '0'
+     C                     MOVELJANCD     JANCDT
+     C                     ENDIF
+     C                     WRITERDTW0500
+     C                     ENDIF
+     C                     ENDSR

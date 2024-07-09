@@ -1,0 +1,33 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0215R CODED BY N.KANEDA         *
+     H*                         CODED ON 20.03.12         *
+     H*    ÇnÇbÇqópéÛíçèàóùêîó ÇOçÌèú                 *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0080 UF  E                    DISK
+     C*----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#DATE  80
+     C                     PARM           P#RATE  32
+     C                     PARM           P#HACD  2
+     C*----------------------------------------------------
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0080                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           ORDQUA    IFEQ 0
+     C                     DELETRAML0080
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*----------------------------------------------------------

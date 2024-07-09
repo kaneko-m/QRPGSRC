@@ -1,0 +1,856 @@
+     H*****************************************************
+     H*    PROGRAM NAME NA8100R CODED BY 04/04/26         *
+     H*                         CODED ON N.KANEDA         *
+     H*    作番用ラベル印刷                             *
+     H*****************************************************
+     H            Y                                     1
+     FDTR0050 IF  E           K        DISK
+     FDTR0020 IF  E           K        DISK
+     FDTR5178 IF  E           K        DISK
+     FNPR0100 IF  E           K        DISK
+     FNPR0300 IF  E           K        DISK
+     FDMP0500 IF  E           K        DISK
+     FDMC0010 IF  E           K        DISK
+     FACS5170 IF  E           K        DISK
+     F*
+     FDXI0402 IF  E           K        DISK
+     F            RDXI0400                          KRENAMERDXI0402
+     F*
+     FDXI0405 IF  E           K        DISK
+     F            RDXI0400                          KRENAMERDXI0405
+     FNA8100FMCF  E                    WORKSTN
+     FQSYSPRT O   F     132     OF    LPRINTER
+     LQSYSPRT  68FL 68OL
+     IRDTR0050
+     I              ZZ0001                          RECCD4
+     I              ACREC                           ACREC4
+     I              AA1                             AA14
+     I              AA2                             AA24
+     I              AA4                             AA44
+     I              ITDSC                           ITDSC4
+     I              QUANT                           QUANT4
+     I              TANKA                           TANKA4
+     I              KINGA                           KINGA4
+     I              JUSEN                           JUSEN4
+     I              CUSNR                           CUSNR4
+     I              SIKYN                           SIKYN4
+     I              A1                              A14
+     I              A2                              A24
+     I              A3                              A34
+     I              A4                              A44
+     I              A5                              A54
+     I              A6                              A64
+     I              DETCN                           DETCN4
+     I              SISAC                           SISAC4
+     I              DELEV                           DELEV4
+     I              MITSU                           MITSU4
+     I              ZUMEN                           ZUMEN4
+     I              SIYTE                           SIYTE4
+     I              TORSI                           TORSI4
+     I              TORQU                           TORQU4
+     I              KENSA                           KENSA4
+     I              ZAISI                           ZAISI4
+     I              HOSIK                           HOSIK4
+     I              KATA1                           KATA14
+     I              QUAN1                           QUAN14
+     I              KIBA1                           KIBA14
+     I              KATA2                           KATA24
+     I              QUAN2                           QUAN24
+     I              KIBA2                           KIBA24
+     I              KATA3                           KATA34
+     I              QUAN3                           QUAN34
+     I              KIBA3                           KIBA34
+     I              KATA4                           KATA44
+     I              QUAN4                           QUAN44
+     I              KIBA4                           KIBA44
+     I              KATA5                           KATA54
+     I              QUAN5                           QUAN54
+     I              KIBA5                           KIBA54
+     I              BAIKA                           BAIKA4
+     I              USERN                           USERN4
+     I              SEFIN                           SEFIN4
+     I              SECAN                           SECAN4
+     I              SEHAD                           SEHAD4
+     I              NSEQN                           NSEQN4
+     I              OUTQU                           OUTQU4
+     I              OWQUA                           OWQUA4
+     I              FIQUA                           FIQUA4
+     I              FNAIY                           FNAIY4
+     I              BUNNO                           BUNNO4
+     I              FIDAY                           FIDAY4
+     I              SIDEC                           SIDEC4
+     I              ZZ0348                          FILER4
+     I              MADEL                           MADEL4
+     I              STPRI                           STPRI4
+     I              ZZ0371                          FILE44
+     IRDMC0010
+     I              REDAY                           REDAYX
+     IRDXI0402
+     I              RECCD4                          RECCDB
+     I              ACREC4                          ACRECB
+     I              SEQNO4                          SEQNOB
+     I              NBNBR4                          NBNBRB
+     I              PRNU14                          PRNU1B
+     I              NENC14                          NENC1B
+     I              PRNU24                          PRNU2B
+     I              NENC24                          NENC2B
+     I              ITDSC4                          ITDSCB
+     I              QUANT4                          QUANTB
+     I              FIDAY4                          FIDAYB
+     I              FQUAN4                          FQUANB
+     I              FNAIY4                          FNAIYB
+     I              BIKO14                          BIKO1B
+     I              BIKO24                          BIKO2B
+     I              CRTD14                          CRTD1B
+     I              CRTT14                          CRTT1B
+     I              USID14                          USID1B
+     I              JBID14                          JBID1B
+     I              PGID14                          PGID1B
+     I              UCRTD4                          UCRTDB
+     I              UCRTT4                          UCRTTB
+     I              UUSID4                          UUSIDB
+     I              UJBID4                          UJBIDB
+     I              UPGID4                          UPGIDB
+     IRDXI0405
+     I              RECCD4                          RECCDC
+     I              ACREC4                          ACRECC
+     I              SEQNO4                          SEQNOC
+     I              NBNBR4                          NBNBRC
+     I              PRNU14                          PRNU1C
+     I              NENC14                          NENC1C
+     I              PRNU24                          PRNU2C
+     I              NENC24                          NENC2C
+     I              ITDSC4                          ITDSCC
+     I              QUANT4                          QUANTC
+     I              FIDAY4                          FIDAYC
+     I              FQUAN4                          FQUANC
+     I              FNAIY4                          FNAIYC
+     I              BIKO14                          BIKO1C
+     I              BIKO24                          BIKO2C
+     I              CRTD14                          CRTD1C
+     I              CRTT14                          CRTT1C
+     I              USID14                          USID1C
+     I              JBID14                          JBID1C
+     I              PGID14                          PGID1C
+     I              UCRTD4                          UCRTDC
+     I              UCRTT4                          UCRTTC
+     I              UUSID4                          UUSIDC
+     I              UJBID4                          UJBIDC
+     I              UPGID4                          UPGIDC
+     IDS1         DS
+     I                                        1   2 GNB1
+     I                                        1   1 GNB11
+     I                                        2   2 GNB2
+     I                                        3   60GNB4
+     I                                        1   6 GNBNBR
+     IDS2         DS
+     I                                        1   80JUSEN4
+     I                                        1   60JUTNO4
+     I                                        7   80SEQNO4
+     IDS3         DS
+     I                                        1  30 GITDSC
+     I                                        1  20 GITDS1
+     I                                       21  30 GITDS2
+     I*< SDS >
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     I*< ｼｽﾃﾑ日付>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     C                     TIME           W#SYST
+     C                     MOVELS#JOB     W#JOB   5
+     C*--------------------------------------------------------
+     C           D0050     KLIST
+     C                     KFLD           GNB11
+     C                     KFLD           GNB2
+     C                     KFLD           GNB4
+     C*--------------------------------------------------------
+     C           D0020     KLIST
+     C                     KFLD           JUTNO4
+     C                     KFLD           SEQNO4
+     C*--------------------------------------------------------
+     C           D0300     KLIST
+     C                     KFLD           WKITCD
+     C                     KFLD           WKSEQN
+     C*--------------------------------------------------------
+     C           D0400     KLIST
+     C                     KFLD           GNBNBR
+     C                     KFLD           WKCRTD
+     C*------------------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*-----------------------------------------------------
+     C           PAR020    PLIST
+     C                     PARM           P#PRNU  6
+     C                     PARM           P#NECH  1
+     C                     PARM           P#KEDY  80
+     C                     PARM           P#KATA 30
+     C                     PARM           P#RECD  2
+     C*--------------------------------------------------------
+     C*    ======================================
+     C*           ***  MAIN     RTN  ***
+     C*    ======================================
+     C*--------------------------------------------------------
+     C                     MOVEL*BLANK    GNB1
+     C                     Z-ADD0         GNB4
+     C                     Z-ADD0         GQUANT
+     C                     Z-ADD1         WQUANT  40
+     C                     Z-ADD10        GCUTMS
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD1         WKSEQN  40
+     C                     Z-ADD99999999  WKCRTD  80
+     C                     MOVELW#SYMD    W#YY    40
+     C*
+     C           FLAG01    DOWEQ0
+     C                     EXFMTGAMEN1
+     C           *IN07     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           GQUANT    IFGT 0
+     C*
+     C                     EXSR #MOV1
+     C*
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     EXFMTGAMEN3
+     C           *IN07     IFEQ '1'
+     C                     EXSR #CLR1
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C                     WRITEGAMEN2
+     C*
+     C***                  EXCPTMID01
+     C*
+     C                     Z-ADD1         FLAG02
+     C                     EXSR #CLR1
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*---------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*---------------------------------------------------------
+     C           #MOV1     BEGSR
+     C                     MOVEL*BLANK    WITCOD 14
+     C                     SETOF                     90
+     C           D0050     CHAINDTR0050              90
+     C           *IN90     IFEQ '0'
+     C*
+     C                     SELEC
+     C           CUSNR4    WHNE 'ACS00'
+     C*
+     C                     SETOF                     91
+     C           D0020     CHAINDTR0020              91
+     C           *IN91     IFEQ '0'
+     C                     MOVELITDSC     GITDSC
+     C                     MOVELORDNO     GORDNO
+     C                     Z-ADDJUSEN4    GJUTNO
+     C                     MOVELJUSEN4    WITCOD
+     C* パーツ
+     C                     SETOF                     505152
+     C           A1        IFEQ 'E'
+     C           A6        ANDEQ1
+     C*
+     C                     Z-ADD0         WKUNPC  20
+     C                     MOVELITCOD     WITCO2 14
+     C           WITCO2    CHAINDTR5178              90
+     C           *IN90     IFEQ '0'
+     C*
+     C* MADE IN JAPAN
+     C                     SETOF                     9252
+     C           WITCO2    CHAINNPR0100              92
+     C           *IN92     IFEQ '0'
+     C           MADEL1    IFEQ '01'
+     C                     SETON                     52
+     C                     ELSE
+     C                     SETOF                     52
+     C                     ENDIF
+     C                     ENDIF
+     C*-------------------------------------------------------
+     C*
+     C           UNPCS     IFGT 1
+     C                     SETON                     51
+     C                     Z-ADDUNPCS     WKUNPC
+     C                     ELSE
+     C                     SETOF                     51
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     SETON                     50
+     C*
+     C* パーツ印刷
+     C                     SETOF                     60
+     C                     Z-ADD1         WCNT    30
+     C           WCNT      DOUGTGQUANT
+     C           W#SHMS    ADD  1         W#SHMS
+     C                     EXCPTMID01
+     C           WCNT      ADD  1         WCNT
+     C                     ENDDO
+     C                     ELSE
+     C*
+     C* 特殊品印刷 -------------------------------------------
+     C                     SETOF                     9265
+     C           GNBNBR    CHAINDXI0402              92
+     C           *IN92     IFEQ '0'
+     C                     Z-ADDPRNU1B    W#PRNU  60
+     C                     Z-ADDQUANTB    W#QUAN  50
+     C                     MOVELNENC1B    W#NENC  1
+     C                     MOVELITDSCB    W#ITDS 30
+     C*
+     C                     EXSR #KEN01
+     C*
+     C                     ELSE
+     C*-----------------------------------------------------
+     C           D0400     SETLLDXI0405
+     C                     Z-ADD0         FLAG90  10
+     C                     Z-ADD0         FLAG95  10
+     C           W#YY      SUB  1         W#YY
+     C           FLAG90    DOWEQ0
+     C                     READ RDXI0405                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG90
+     C                     ELSE
+     C*
+     C                     Z-ADD0         W#YY2   40
+     C                     MOVELCRTD1C    W#YY2
+     C*
+     C           NBNBRC    IFEQ GNBNBR
+     C           W#YY2     ANDGEW#YY                       2年前
+     C                     Z-ADDPRNU1C    W#PRNU  60
+     C                     MOVELNENC1C    W#NENC  1
+     C                     Z-ADDQUANTC    W#QUAN  50
+     C                     MOVELGITDSC    W#ITDS 30
+     C*
+     C                     Z-ADD1         FLAG95
+     C                     Z-ADD1         FLAG90
+     C                     ELSE
+     C                     Z-ADD1         FLAG90
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C           FLAG95    IFEQ 1
+     C                     EXSR #KEN01
+     C                     ELSE
+     C*
+     C                     Z-ADD999999    W#PRNU
+     C                     MOVE '9'       W#NENC
+     C                     MOVE *DATE     W#KEDY
+     C*
+     C                     SETOF                     6065
+     C                     Z-ADD1         WCNT    30
+     C           WCNT      DOUGTGQUANT
+     C           W#SHMS    ADD  1         W#SHMS
+     C                     EXCPTMID03
+     C           WCNT      ADD  1         WCNT
+     C                     ENDDO
+     C                     SETOF                     50
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C* 上海向け部品
+     C                     OTHER
+     C                     EXSR #ACS
+     C                     EXCPTMID02
+     C                     ENDSL
+     C*
+     C                     ELSE
+     C                     SETON                     8081
+     C                     ENDIF
+     C                     ENDSR
+     C*-------------------------------------------------------
+     C           #KEN01    BEGSR
+     C                     Z-ADD1         WCNT    30
+     C           WCNT      DOUGTW#QUAN
+     C* 検査日
+     C                     MOVE W#PRNU    P#PRNU
+     C                     MOVELW#NENC    P#NECH
+     C                     Z-ADD0         P#KEDY
+     C                     MOVELW#ITDS    P#KATA
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@SS9000' PAR020
+     C*
+     C           P#RECD    IFEQ *BLANK
+     C                     MOVE P#KEDY    W#KEDY  60
+     C                     ELSE
+     C                     MOVE *DATE     W#KEDY  60
+     C                     ENDIF
+     C*
+     C           W#SHMS    ADD  1         W#SHMS
+     C                     SETON                     65
+     C                     EXCPTMID03
+     C                     SETOF                     50
+     C           W#PRNU    ADD  1         W#PRNU
+     C           WCNT      ADD  1         WCNT
+     C                     ENDDO
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #ACS      BEGSR
+     C*
+     C                     SETOF                     91
+     C           D0020     CHAINDTR0020              91
+     C           *IN91     IFEQ '0'
+     C*
+     C                     MOVELJUSEN4    WKITCD 14
+     C                     MOVELKATA14    WKITC2 14
+     C*
+     C           WKITC2    CHAINACS5170              92
+     C           *IN92     IFEQ '0'
+     C                     MOVELITDSE7    GITDSC
+     C                     ENDIF
+     C*
+     C                     MOVELORDNO     GORDNO
+     C                     Z-ADDJUSEN4    GJUTNO
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     MOVEL*BLANK    WKHOUS  4
+     C                     MOVEL*BLANK    WKGNAM 40
+     C                     MOVEL*BLANK    WKGNA2 22
+     C                     SETOF                     90
+     C           WKITC2    CHAINNPR0100              90
+     C           *IN90     IFEQ '0'
+     C*
+     C* 部品がネジか？
+     C                     SETOF                     626364
+     C           MADEL1    IFEQ '01'
+     C           MADEL1    OREQ '02'
+     C           MADEL1    OREQ '  '
+     C*
+     C                     SELEC
+     C           MADEL1    WHEQ '01'
+     C           MADEL1    OREQ '  '
+     C                     SETOF                     63
+     C           MADEL1    WHEQ '02'
+     C                     SETON                     63
+     C                     ENDSL
+     C*
+     C                     SETOF                     92
+     C           D0300     CHAINNPR0300              92
+     C           *IN92     IFEQ '0'
+     C* 外注名
+     C           HOUSE3    IFNE 'O   '
+     C           HOUSE3    ANDNE'K   '
+     C           HOUSE3    ANDNE'T   '
+     C*
+     C                     SETOF                     93
+     C           HOUSE3    CHAINDMP0500              93
+     C           *IN93     IFEQ '0'
+     C                     SETOF                     94
+     C           GCODE     CHAINDMC0010              94
+     C           *IN94     IFEQ '0'
+     C*文字列操作
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD40        P#LENG
+     C                     MOVELGNAMEB    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WKGNAM
+     C                     MOVELP#MOJ3    WKGNA2
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C                     MOVEL'TH'      WHOUSE  4
+     C           WHOUSE    CHAINDMP0500              93
+     C                     SETOF                     94
+     C           GCODE     CHAINDMC0010              94
+     C           *IN94     IFEQ '0'
+     C*文字列操作
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD40        P#LENG
+     C                     MOVELGNAMEB    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WKGNAM
+     C                     MOVELP#MOJ3    WKGNA2
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C                     MOVEL'TH'      WHOUSE  4
+     C           WHOUSE    CHAINDMP0500              93
+     C                     SETOF                     94
+     C           GCODE     CHAINDMC0010              94
+     C           *IN94     IFEQ '0'
+     C*文字列操作
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD40        P#LENG
+     C                     MOVELGNAMEB    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WKGNAM
+     C                     MOVELP#MOJ3    WKGNA2
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*---------------------------------------------------------
+     C           #CLR1     BEGSR
+     C                     MOVEL*BLANK    GNB1
+     C                     Z-ADD0         GNB4
+     C                     MOVEL*BLANK    GITDSC
+     C                     MOVEL*BLANK    GORDNO
+     C                     Z-ADD0         GQUANT
+     C                     Z-ADD0         GJUTNO
+     C                     ENDSR
+     C*---------------------------------------------------------
+     OQSYSPRT E  101           MID01
+     O                                   13 '!@&A3V0H0!@&ｺ'
+     O        E  1             MID01
+     O                                    8 '!@&A!@&ｺ'
+     O        E  1             MID01
+     O                                    9 '!@&AR!@&ｺ'
+     O        E  1             MID01
+     O                                    9 '!@&PS!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0056!@&H023'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                                   47 '# NO:'
+     O                                   51 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0056!@&H041'
+     O                                   43 '0!@&P02!@&L0101!@&X23,0'
+     O                         GNB1      45
+     O                         GNB4      49
+     O                                   53 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0056!@&H063'
+     O                                   43 '0!@&P02!@&L0101!@&X23,0'
+     O                         CUSNR     48
+     O                                   52 '!@&ｺ'
+     O*QRCODE
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0140!@&H070'
+     O                                   37 '0!@&2D30,L,04,0,0'
+     O                                   44 '0!@&DS2,'
+     O                                   45 'B'
+     O                         UDATE     51
+     O                                   53 '99'
+     O                         WITCOD    67
+     O                                   74 '9999999'
+     O                         W#SHMS    80
+     O                                   84 '!@&ｺ'
+     O*QRCODE
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0116!@&H023'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                                   47 'NAME:'
+     O                                   51 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0106!@&H035'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                         GITDS1    62
+     O                                   66 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0126!@&H035'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                         GITDS2    52
+     O                                   56 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0176!@&H023'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                                   53 'ORDER NO  :'
+     O                                   57 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0176!@&H043'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                         GORDNO    57
+     O                                   61 '!@&ｺ'
+     O        E  1     50      MID01
+     O                 50                20 '!@&%0!@&V0206!@&H023'
+     O                 50                42 '0!@&P02!@&L0101!@&X22,'
+     O                 50                47 'Q''TY:'
+     O                 50                51 '!@&ｺ'
+     O        E  1     50      MID01
+     O                 50                20 '!@&%0!@&V0206!@&H033'
+     O                 50                42 '0!@&P02!@&L0101!@&X22,'
+     O                 50      QUANT 4   47
+     O                 50                53 'SET(S)'
+     O                 50                57 '!@&ｺ'
+     O        E  1     50      MID01
+     O                 50                20 '!@&%0!@&V0216!@&H052'
+     O                 50                42 '0!@&P02!@&L0101!@&X21,'
+     O                 50 51             46 '(1 X'
+     O                 50 51   WKUNPC4   48
+     O                 50 51             49 ')'
+     O                 50                53 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0245!@&H039'
+     O                                   32 '0!@&D102070*'
+     O                         GJUTNO    40
+     O                                   41 '*'
+     O                                   45 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0330!@&H025'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                         GJUTNO    50
+     O                                   54 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0330!@&H039'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                                   65 'TOHNICHI MFG. CO., LTD.'
+     O                                   82 ' TEL 03-3762-2452'
+     O***                                85 ' TEL 03-3762-2452'
+     O                                   89 '!@&ｺ'
+     O        E  1             MID01
+     O                                   20 '!@&%0!@&V0350!@&H066'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                N63                55 'MADE IN JAPAN'
+     O                N63                59 '!@&ｺ'
+     O                 63                56 'MADE IN TAIWAN'
+     O                 63                60 '!@&ｺ'
+     O        E  1             MID01
+     O                                    5 '!@&CT'
+     O                         GCUTMS     9
+     O                                   13 '!@&ｺ'
+     O        E  1             MID01
+     O                                    4 '!@&Q'
+     O                         WQUANT     8
+     O                                   12 '!@&ｺ'
+     O        E  1             MID01
+     O                                    8 '!@&Z!@&ｺ'
+     C*---------------------------------------------------------
+     OQSYSPRT E  101           MID02
+     O                                   13 '!@&A3V0H0!@&ｺ'
+     O        E  1             MID02
+     O                                    8 '!@&A!@&ｺ'
+     O        E  1             MID02
+     O                                    9 '!@&AR!@&ｺ'
+     O        E  1             MID02
+     O                                    9 '!@&PS!@&ｺ'
+     O***     E  1             MID02
+     O***                                20 '!@&%0!@&V0116!@&H023'
+     O***                                42 '0!@&P02!@&L0101!@&X22,'
+     O***                                47 'NAME:'
+     O***                                51 '!@&ｺ'
+     O        E  1             MID02
+     O                                   20 '!@&%0!@&V0096!@&H030'
+     O                                   40 '0!@&P02!@&L0102!@&K2'
+     O                         WKGNAM    80
+     O                                   84 '!@&ｺ'
+     O        E  1             MID02
+     O*                                  20 '!@&%0!@&V0126!@&H030'
+     O*                                  42 '0!@&P02!@&L0102!@&X22,'
+     O*                        WKGNA2    52
+     O*                                  56 '!@&ｺ'
+     O***     E  1             MID02
+     O***                                20 '!@&%0!@&V0146!@&H035'
+     O***                                42 '0!@&P02!@&L0102!@&X22,'
+     O***                                47 'NAME:'
+     O***                                51 '!@&ｺ'
+     O*QRCODE------------------------------------------------------
+     O        E  1             MID02
+     O                                   20 '!@&%0!@&V0050!@&H070'
+     O                                   37 '0!@&2D30,L,04,0,0'
+     O                                   44 '0!@&DS2,'
+     O                                   45 'B'
+     O                         UDATE     51
+     O                                   53 '99'
+     O                         WITCOD    67
+     O                                   74 '999999A'
+     O                         W#SHMS    80
+     O                                   84 '!@&ｺ'
+     O*QRCODE------------------------------------------------------
+     O        E  1             MID02
+     O                                   20 '!@&%0!@&V0156!@&H030'
+     O                                   42 '0!@&P02!@&L0102!@&X22,'
+     O                         WKITCD    56
+     O                                   60 '!@&ｺ'
+     O        E  1             MID02
+     O                                   20 '!@&%0!@&V0196!@&H030'
+     O                                   42 '0!@&P02!@&L0102!@&X22,'
+     O                         GITDSC    72
+     O                                   76 '!@&ｺ'
+     O        E  1             MID02
+     O**                                 20 '!@&%0!@&V0206!@&H030'
+     O**                                 42 '0!@&P02!@&L0101!@&X22,'
+     O**                       GITDS2    47
+     O**                                 51 '!@&ｺ'
+     O        E  1             MID02
+     O                                   20 '!@&%0!@&V0286!@&H055'
+     O                                   42 '0!@&P02!@&L0102!@&X22,'
+     O                N63                55 'MADE IN JAPAN'
+     O                N63                59 '!@&ｺ'
+     O                 63                56 'MADE IN TAIWAN'
+     O                 63                60 '!@&ｺ'
+     O        E  1             MID02
+     O                                    5 '!@&CT'
+     O                         GCUTMS     9
+     O                                   13 '!@&ｺ'
+     O        E  1             MID02
+     O                                    4 '!@&Q'
+     O                         WQUANT     8
+     O                                   12 '!@&ｺ'
+     O        E  1             MID02
+     O                                    8 '!@&Z!@&ｺ'
+     C*---------------------------------------------------------
+     OQSYSPRT E  101           MID03
+     O                                   13 '!@&A3V0H0!@&ｺ'
+     O        E  1             MID03
+     O                                    8 '!@&A!@&ｺ'
+     O        E  1             MID03
+     O                                    9 '!@&AR!@&ｺ'
+     O        E  1             MID03
+     O                                    9 '!@&PS!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0056!@&H023'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                                   47 '# NO:'
+     O                                   51 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0056!@&H041'
+     O                                   43 '0!@&P02!@&L0101!@&X23,0'
+     O                         GNB1      45
+     O                         GNB4      49
+     O                                   53 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0056!@&H063'
+     O                                   43 '0!@&P02!@&L0101!@&X23,0'
+     O                         CUSNR     48
+     O                                   52 '!@&ｺ'
+     O*QRCODE------------------------------------------------------
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0140!@&H075'
+     O                                   37 '0!@&2D30,L,03,0,0'
+     O                                   44 '0!@&DS2,'
+     O                                   45 'B'
+     O                         W#KEDY    51
+     O                                   53 '12'
+     O                         WITCOD    67
+     O                         W#PRNU    73
+     O                         W#NENC    74
+     O                         W#SHMS    80
+     O                                   84 '!@&ｺ'
+     O*PDF417-------------------------------------------------------
+     O        E  1     65      MID03
+     O                                   20 '!@&%0!@&V0250!@&H023'
+     O                                   42 '0!@&2D10,02,03,1,01,17'
+     O                                   52 '!@&DN0017,'
+     O                                   62 'AAAAAAAAAA'
+     O                         W#PRNU    68
+     O                         W#NENC    69
+     O                                   73 '!@&ｺ'
+     O        E  1     65      MID03
+     O                                   20 '!@&%0!@&V0305!@&H027'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                         W#PRNU    48
+     O                         W#NENC    49
+     O                                   53 '!@&ｺ'
+     O*-------------------------------------------------------------
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0116!@&H023'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                                   47 'NAME:'
+     O                                   51 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0106!@&H035'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                         GITDS1    62
+     O                                   66 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0126!@&H035'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                         GITDS2    52
+     O                                   56 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0176!@&H023'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                                   53 'ORDER NO  :'
+     O                                   57 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0176!@&H043'
+     O                                   42 '0!@&P02!@&L0101!@&X22,'
+     O                         GORDNO    57
+     O                                   61 '!@&ｺ'
+     O        E  1     50      MID03
+     O                 50                20 '!@&%0!@&V0206!@&H023'
+     O                 50                42 '0!@&P02!@&L0101!@&X22,'
+     O                 50                47 'Q''TY:'
+     O                 50                51 '!@&ｺ'
+     O        E  1     50      MID03
+     O                 50                20 '!@&%0!@&V0206!@&H033'
+     O                 50                42 '0!@&P02!@&L0101!@&X22,'
+     O                 50      QUANT 4   47
+     O                 50                53 'SET(S)'
+     O                 50                57 '!@&ｺ'
+     O        E  1     50      MID03
+     O                 50                20 '!@&%0!@&V0216!@&H052'
+     O                 50                42 '0!@&P02!@&L0101!@&X21,'
+     O                 50 51             46 '(1 X'
+     O                 50 51   WKUNPC4   48
+     O                 50 51             49 ')'
+     O                 50                53 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0245!@&H050'
+     O                                   32 '0!@&D102070*'
+     O                         GJUTNO    40
+     O                                   41 '*'
+     O                                   45 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0330!@&H025'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                         GJUTNO    50
+     O                                   54 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0330!@&H039'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                                   65 'TOHNICHI MFG. CO., LTD.'
+     O                                   82 ' TEL 03-3762-2452'
+     O***                                85 ' TEL 03-3762-2452'
+     O                                   89 '!@&ｺ'
+     O        E  1             MID03
+     O                                   20 '!@&%0!@&V0350!@&H066'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                N63                55 'MADE IN JAPAN'
+     O                N63                59 '!@&ｺ'
+     O                 63                56 'MADE IN TAIWAN'
+     O                 63                60 '!@&ｺ'
+     O        E  1             MID03
+     O                                    5 '!@&CT'
+     O                         GCUTMS     9
+     O                                   13 '!@&ｺ'
+     O        E  1             MID03
+     O                                    4 '!@&Q'
+     O                         WQUANT     8
+     O                                   12 '!@&ｺ'
+     O        E  1             MID03
+     O                                    8 '!@&Z!@&ｺ'
+     C*---------------------------------------------------------

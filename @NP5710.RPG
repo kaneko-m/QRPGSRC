@@ -1,0 +1,72 @@
+     H*****************************************************
+     H*    PROGRAM NAME-@NP5710 CODED BY K.IWAI           *
+     H*                         CODED ON 18.10.09         *
+     H*    PTP0740çÏê¨                                  *
+     H*****************************************************
+     H            Y
+     FDMP0600 IF  E           K        DISK
+     FPTP0740 UF  E           K        DISK                      A
+     IDS1         DS
+     I                                        1  86 ZZ0038
+     I                                        1   1 ZZ0381
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     C           *ENTRY    PLIST
+     C                     PARM           P#DATE  80
+     C           D3000     KLIST
+     C                     KFLD           PDATE
+     C                     KFLD           MCODE
+     C*-----------------------------------------------------
+     C                     MOVE P#DATE    PDATE   80
+     C*--
+     C           *LOVAL    SETLLDMP0600
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     71
+     C                     READ DMP0600                  71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           ACREC     IFNE 'D'
+     C           ZZ0381    ANDEQ'*'
+     C*
+     C                     SETOF                     90
+     C           D3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C                     EXSR #ADD1
+     C                     WRITERPTP0740
+     C                     ELSE
+     C                     EXSR #ADD2
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #ADD1     BEGSR
+     C                     Z-ADDPDATE     SDATEP
+     C                     MOVELMCODE     MCODEP
+     C*
+     C                     SELEC
+     C           MBLOK     WHEQ '1'
+     C           MBLOK     OREQ '2'
+     C                     MOVEL'O'       PLACEP
+     C           MBLOK     WHEQ '3'
+     C                     MOVEL'T'       PLACEP
+     C           MBLOK     WHEQ '4'
+     C                     MOVEL'K'       PLACEP
+     C                     ENDSL
+     C*
+     C                     EXSR #ADD2
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #ADD2     BEGSR
+     C                     Z-ADD0         HYHUNP
+     C                     Z-ADD0         TKHUNP
+     C                     ENDSR

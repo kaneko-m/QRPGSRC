@@ -1,0 +1,16 @@
+             PGM
+             DCL        VAR(&JOB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&DRPY) TYPE(*CHAR) LEN(8)
+  /*         OVRPRTF    FILE(QSYSPRT) OUTQ(CYUO2)      */
+             OVRPRTF    FILE(QSYSPRT) OUTQ(CYUO2)
+  /*         CALL       PGM(NA8100R)       */
+  /*  12/07/05 ïœçX*/
+  /*         CALL       PGM(NA8100AR)      */
+  /*  12/07/25 ïœçX*/
+  /*         CALL       PGM(NA8101AR) /* MADE IN JAPAN ëŒâû */
+  /*         CALL       PGM(NA8101CR) /* MADE IN JAPAN ëŒâû */
+  /*         CALL       PGM(NA8101_01R)                   */
+             CALL       PGM(NA8101_02R) /* êªî‘Ç»ÇµëŒâû */
+             DLTOVR     FILE(*ALL)
+ ENDCLPGM:   RETURN
+             ENDPGM     /* END CL PGM */

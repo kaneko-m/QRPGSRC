@@ -1,0 +1,39 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0020R CODED BY N.KANEDA         *
+     H*                         CODED ON 2013.12.09       *
+     H*    AUF00Ç©ÇÁACS03 Ç÷ïœçX                      *
+     H*****************************************************
+     H            Y                                     1
+     FAML0011 UF  E           K        DISK
+     IDS1         DS
+     I                                        1  15 ORDNOA
+     I                                       12  13 W#ORDN
+     C*----------------------------------------------------
+     C           *LOVAL    SETLLAML0011
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RAML0010                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           CUSNRA    IFEQ 'AUF00'
+     C*
+     C           W#ORDN    IFEQ 'TS'
+     C           W#ORDN    OREQ 'TP'
+     C*
+     C                     MOVEL'ACS05'   CUSNRA
+     C                     UPDATRAML0010
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------

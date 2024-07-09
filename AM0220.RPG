@@ -1,0 +1,249 @@
+     H*****************************************************
+     H*    PROGRAM NAME @AM0220 CODED BY N.KANEDA         *
+     H*                         CODED ON 20.10.06         *
+     H*   íSìñâcã∆Å@åüçı                                *
+     H*****************************************************
+     H        1   Y                                     1
+     FDTR9101 IF  E           K        DISK
+     I*< SDS >
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     I*< ºΩ√—ì˙ït>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     I*
+     IDS1         DS
+     I                                        1  70 WSHIP1
+     I                                        8  14 WSHIP2
+     C*-----------------------------------------------------
+     C                     TIME           W#SYST
+     C                     MOVELS#JOB     W#JOB   5
+     C*-----------------------------------------------------
+     C           *ENTRY    PLIST
+     C                     PARM           W#SHI1  8        ìsìπï{åß
+     C                     PARM           W#SHI2  8        ésãÊí¨ë∫
+     C                     PARM           W#UNCH  2        é¿îÔ
+     C                     PARM           W#SLSN  30       íSìñâcã∆
+     C*------------------------------------------------------------
+     C           D9100     KLIST
+     C                     KFLD           WSOTCD
+     C                     KFLD           WSUBCD
+     C*------------------------------------------------------------
+     C                     MOVEL*BLANK    WUNCHI  2
+     C                     SELEC
+     C           W#SHI1    WHEQ 'ñkäCìπ'
+     C*
+     C                     MOVEL'ON'      W#UNCH           é¿îÔ
+     C*
+     C***                  MOVEL'1'       WSOTCD  1
+     C                     MOVEL'3'       WSOTCD  1
+     C                     MOVEL*BLANK    WSUBCD  1
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'çÈã åß'
+     C                     MOVEL'2'       WSOTCD  1
+     C                     MOVEL'1'       WSUBCD  1
+     C                     EXSR #SYINO
+     C           W#SHI1    WHEQ 'êÁótåß'
+     C*
+     C                     MOVEL'3'       WSOTCD  1
+     C                     MOVEL*BLANK    WSUBCD  1
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'ì»ñÿåß'
+     C           W#SHI1    OREQ 'àÔèÈåß'
+     C           W#SHI1    OREQ 'åQînåß'
+     C           W#SHI1    OREQ 'êVäÉåß'
+     C*
+     C                     MOVEL'2'       WSOTCD
+     C                     MOVEL'1'       WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'ã{èÈåß'
+     C           W#SHI1    OREQ 'éRå`åß'
+     C           W#SHI1    OREQ 'èHìcåß'
+     C           W#SHI1    OREQ 'ïüìáåß'
+     C           W#SHI1    OREQ 'ê¬êXåß'
+     C           W#SHI1    OREQ 'ä‚éËåß'
+     C*
+     C                     MOVEL'2'       WSOTCD
+     C                     MOVEL'2'       WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'ê_ìﬁêÏ'
+     C           W#SHI1    OREQ 'ìåãûìs'
+     C*
+     C                     MOVEL'3'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'ãûìsï{'
+     C           W#SHI1    OREQ 'é†âÍåß'
+     C           W#SHI1    OREQ 'ëÂç„ï{'
+     C           W#SHI1    OREQ 'ìﬁó«åß'
+     C           W#SHI1    OREQ 'òaâÃéR'
+     C           W#SHI1    OREQ 'ï∫å…åß'
+     C           W#SHI1    OREQ 'çÅêÏåß'
+     C           W#SHI1    OREQ 'ìøìáåß'
+     C*
+     C                     MOVEL'4'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'äÚïååß'
+     C           W#SHI1    OREQ 'ïüà‰åß'
+     C           W#SHI1    OREQ 'êŒêÏåß'
+     C           W#SHI1    OREQ 'ïxéRåß'
+     C*
+     C                     MOVEL'6'       WSOTCD
+     C                     MOVEL'1'       WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'ê√â™åß'
+     C           W#SHI1    OREQ 'éRóúåß'
+     C*
+     C                     MOVEL'6'       WSOTCD
+     C                     MOVEL'2'       WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'çLìáåß'
+     C           W#SHI1    OREQ 'éRå˚åß'
+     C           W#SHI1    OREQ 'ìáç™åß'
+     C           W#SHI1    OREQ 'íπéÊåß'
+     C           W#SHI1    OREQ 'çÇímåß'
+     C           W#SHI1    OREQ 'à§ïQåß'
+     C           W#SHI1    OREQ 'â™éRåß'
+     C*
+     C                     MOVEL'8'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'ïüâ™åß'
+     C           W#SHI1    OREQ 'ç≤âÍåß'
+     C           W#SHI1    OREQ 'í∑çËåß'
+     C           W#SHI1    OREQ 'åFñ{åß'
+     C           W#SHI1    OREQ 'ëÂï™åß'
+     C           W#SHI1    OREQ 'ã{çËåß'
+     C           W#SHI1    OREQ 'é≠éôìá'
+     C           W#SHI1    OREQ 'â´ìÍåß'
+     C*
+     C                     MOVEL'9'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C           W#SHI1    WHEQ 'â´ìÍåß'
+     C*
+     C                     MOVEL'ON'      W#UNCH
+     C*
+     C                     MOVEL'9'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C*  ÇSÇ©ÇUÉOÉãÅ[Év
+     C           W#SHI1    WHEQ 'éOèdåß'
+     C*
+     C                     SELEC
+     C           W#SHI2    WHEQ 'à…âÍés'
+     C*
+     C                     MOVEL'4'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C* 5
+     C                     OTHER
+     C*
+     C                     MOVEL'6'       WSOTCD
+     C                     MOVEL'1'       WSUBCD
+     C                     EXSR #SYINO
+     C* 7
+     C                     ENDSL
+     C*
+     C*  ÇPÇ©ÇUÉOÉãÅ[Év
+     C           W#SHI1    WHEQ 'í∑ñÏåß'
+     C*
+     C                     SELEC
+     C           W#SHI2    WHEQ 'î—ìcés'
+     C           W#SHI2    OREQ 'à…ìﬂés'
+     C           W#SHI2    OREQ 'ãÓÉñç™'
+     C           W#SHI2    OREQ 'è„à…ìﬂ'
+     C           W#SHI2    OREQ 'â∫à…ìﬂ'
+     C           W#SHI2    OREQ 'ñÿë]åS'
+     C*
+     C                     MOVEL'6'       WSOTCD
+     C                     MOVEL'2'       WSUBCD
+     C                     EXSR #SYINO
+     C                     OTHER
+     C                     MOVEL'6'       WSOTCD
+     C                     MOVEL'2'       WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C                     ENDSL
+     C*
+     C*  ÇUÇ©ÇVÉOÉãÅ[Év
+     C           W#SHI1    WHEQ 'à§ímåß'
+     C*
+     C                     SELEC
+     C           W#SHI2    WHEQ 'ñLã¥és'
+     C           W#SHI2    OREQ 'â™çËés'
+     C           W#SHI2    OREQ 'îºìcés'
+     C           W#SHI2    OREQ 'ñLêÏés'
+     C           W#SHI2    OREQ 'ï…ìÏés'
+     C           W#SHI2    OREQ 'ä†íJés'
+     C           W#SHI2    OREQ 'ñLìcés'
+     C           W#SHI2    OREQ 'à¿èÈés'
+     C           W#SHI2    OREQ 'êºîˆés'
+     C           W#SHI2    OREQ 'äóåSés'
+     C           W#SHI2    OREQ 'èÌääés'
+     C           W#SHI2    OREQ 'êVèÈés'
+     C           W#SHI2    OREQ 'ìåäCés'
+     C           W#SHI2    OREQ 'ëÂï{és'
+     C           W#SHI2    OREQ 'ímëΩés'
+     C           W#SHI2    OREQ 'ímóßés'
+     C           W#SHI2    OREQ 'çÇïlés'
+     C           W#SHI2    OREQ 'ñLñæés'
+     C           W#SHI2    OREQ 'ì˙êiés'
+     C           W#SHI2    OREQ 'ìcå¥és'
+     C           W#SHI2    OREQ 'Ç›ÇÊÇµ'
+     C           W#SHI2    OREQ 'í∑ãvéË'
+     C           W#SHI2    OREQ 'ìåãΩí¨'
+     C           W#SHI2    OREQ 'à¢ãvî‰'
+     C           W#SHI2    OREQ 'ìåâYí¨'
+     C           W#SHI2    OREQ 'ìÏímëΩ'
+     C           W#SHI2    OREQ 'î¸ïlí¨'
+     C           W#SHI2    OREQ 'ïêñLí¨'
+     C           W#SHI2    OREQ 'çKìcí¨'
+     C           W#SHI2    OREQ 'ê›äyí¨'
+     C           W#SHI2    OREQ 'ìåâhí¨'
+     C           W#SHI2    OREQ 'ñLç™ë∫'
+     C*
+     C                     MOVEL'7'       WSOTCD
+     C                     MOVEL*BLANK    WSUBCD
+     C                     EXSR #SYINO
+     C*  ÇVÉOÉãÅ[Év
+     C*
+     C                     OTHER
+     C*  ÇUÉOÉãÅ[Év
+     C*
+     C                     MOVEL'6'       WSOTCD
+     C                     MOVEL'1'       WSUBCD
+     C                     EXSR #SYINO
+     C*
+     C                     ENDSL
+     C*
+     C                     ENDSL
+     C*------------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     C           #SYINO    BEGSR
+     C                     SETOF                     91
+     C           D9100     CHAINDTR9101              91
+     C           *IN91     IFEQ '0'
+     C*
+     C                     Z-ADDSLSNR     W#SLSN
+     C*
+     C                     ENDIF
+     C                     ENDSR

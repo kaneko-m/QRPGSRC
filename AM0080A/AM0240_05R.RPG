@@ -1,0 +1,107 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    ÇnÇbÇqópéÛíçèàóùìØéûî[ì¸ämîFèàóù           *
+     H*    êÖåÀÅEÉgÉ~É^óp                               *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0101 UF  E           K        DISK
+     F            RAML0100                          KRENAMERAML0101
+     FAML0120 IF  E           K        DISK
+     C*-----------------------------------------------------
+     C           D0120     KLIST
+     C                     KFLD           CUSNRE
+     C                     KFLD           YUBINE
+     C                     KFLD           SHPNME
+     C                     KFLD           SHIP1E
+     C                     KFLD           SHIP2E
+     C*-----------------------------------------------------
+     C           *LOVAL    SETLLAML0101
+     C*
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     71
+     C                     READ RAML0101                 71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C           YUBINE    IFNE *BLANK
+     C*
+     C                     SELEC
+     C           ERR01E    WHEQ '51'
+     C                     EXSR #MOVE1
+     C*
+     C           W#FLG1    IFEQ 1
+     C                     MOVEL*BLANK    ERR01E
+     C                     MOVEL'*'       TYKCDE
+     C****                 UPDATRAML0101
+     C                     ENDIF
+     C           ERR02E    WHEQ '51'
+     C                     EXSR #MOVE1
+     C           W#FLG1    IFEQ 1
+     C                     MOVEL*BLANK    ERR02E
+     C                     MOVEL'*'       TYKCDE
+     C                     ENDIF
+     C           ERR03E    WHEQ '51'
+     C                     EXSR #MOVE1
+     C           W#FLG1    IFEQ 1
+     C                     MOVEL*BLANK    ERR03E
+     C                     MOVEL'*'       TYKCDE
+     C                     ENDIF
+     C           ERR04E    WHEQ '51'
+     C           W#FLG1    IFEQ 1
+     C                     MOVEL*BLANK    ERR04E
+     C                     MOVEL'*'       TYKCDE
+     C                     ENDIF
+     C           ERR05E    WHEQ '51'
+     C           W#FLG1    IFEQ 1
+     C                     MOVEL*BLANK    ERR05E
+     C                     MOVEL'*'       TYKCDE
+     C                     ENDIF
+     C                     ENDSL
+     C*
+     C                     EXSR #MOVE1
+     C*
+     C*ëóÇËêÊÇ™ìØÇ∂èÍçáÅEñæç◊ÇQåèà»è„
+     C           W#CONT    IFGE 2
+     C                     MOVEL'*'       DOJCDE
+     C                     ELSE
+     C                     MOVEL*BLANK    DOJCDE
+     C                     ENDIF
+     C                     UPDATRAML0101
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #MOVE1    BEGSR
+     C*
+     C                     Z-ADD0         W#CONT  30
+     C                     Z-ADD0         W#FLG1  10
+     C                     SETOF                     90
+     C           D0120     CHAINAML0120              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           GOKEIF    IFGT 30000
+     C                     Z-ADD1         W#FLG1
+     C                     ELSE
+     C*
+     C*ÇRñúà»â∫ÇæÇ™íºëóñæç◊Ç†ÇË
+     C           TYKCDF    IFEQ '*'
+     C                     Z-ADD1         W#FLG1
+     C                     ELSE
+     C                     Z-ADD0         W#FLG1
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     Z-ADDCOUNTF    W#CONT
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------

@@ -1,0 +1,703 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0080R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.03.12         *
+     H*    各代理店受注入力　標準品エラーあり         *
+     H*****************************************************
+     H            Y                                     1
+     FDMR0010 IF  E           K        DISK
+     FAML0040 IF  E           K        DISK
+     F*<エラーヘッダーF>
+     FAML0100 IF  E           K        DISK
+     F*MR0030 IF  E           K        DISK
+     FAGM0060 IF  E           K        DISK
+     FQSYSPRT O   F     340     OF    LPRINTER
+     LQSYSPRT  31FL 31OL
+     E*------------------------------------------------------------
+     E                    TBL01   1  40 50
+     E*------------------------------------------------------------
+     IRDMR0010
+     I              ZZ0001                          ZZ001E
+     I              ACREC                           ACRECE
+     I              CUSNR                           CUSNRE
+     I              CUSNM                           CUSNME
+     I              SHPNR                           SHPNRE
+     I              AREAD                           AREADE
+     I              CUSA1                           CUSA1E
+     I              CUSA2                           CUSA2E
+     I              AREAC                           AREACE
+     I              PHONE                           PHONEE
+     I              SLNR1                           SLNR1E
+     I              SLBR1                           SLBR1E
+     I              SLNR2                           SLNR2E
+     I              SLBR2                           SLBR2E
+     I              SLNR3                           SLNR3E
+     I              SLBR3                           SLBR3E
+     I              CRLAM                           CRLAME
+     I              DCODE                           DCODEE
+     I              CLSCD                           CLSCDE
+     I              SIHCD                           SIHCDE
+     I              TESIT                           TESITE
+     I              SMTCD                           SMTCDE
+     I              KEITS                           KEITSE
+     I              TATEA                           TATEAE
+     I              TATES                           TATESE
+     I              SIMUA                           SIMUAE
+     I              SIMUS                           SIMUSE
+     I              KESAI                           KESAIE
+     I              USDAY                           USDAYE
+     I              USANS                           USANSE
+     I              OTSUA                           OTSUAE
+     I              OTSUS                           OTSUSE
+     I              TELEX                           TELEXE
+     I              BANNM                           BANNME
+     I              BAAR1                           BAAR1E
+     I              BAAR2                           BAAR2E
+     I              BAYCD                           BAYCDE
+     I              OPPNO                           OPPNOE
+     I              INSNM                           INSNME
+     I              INAR1                           INAR1E
+     I              INAR2                           INAR2E
+     I              NOTPT                           NOTPTE
+     I              NOAR1                           NOAR1E
+     I              NOAR2                           NOAR2E
+     I              INTER                           INTERE
+     I              ZZ0671                          ZZ671E
+     I              MATIM                           MATIME
+     I              MADAY                           MADAYE
+     I              SHPNMB                          SHPNBE
+     I              SHIP1B                          SHI1BE
+     I              SHIP2B                          SHI2BE
+     I              AREASB                          AREABE
+     I              EWECD                           EWECDE
+     I              UPDID                           UPDIDE
+     I              UPDDD                           UPDDDE
+     I              UPDTD                           UPDTDE
+     I              CRTD1                           CRTD1E
+     I              CRTT1                           CRTT1E
+     I              USID1                           USID1E
+     I              JBID1                           JBID1E
+     I              PGID1                           PGID1E
+     IDS1         DS
+     I                                        1   80GJUTN2
+     I                                        1   60GJUTNA
+     I                                        7   80GJUTNB
+     IDS2         DS
+     I                                        1  14 WITCOD
+     I                                        1   10W1
+     I                                        2   20W2
+     I                                        3   30W3
+     I                                        4   40W4
+     I                                        5   50W5
+     I                                        6   60W6
+     I                                        7   70W7
+     I                                        8   80W8
+     I                                        9   90W9
+     I                                       10  100W10
+     I                                       11  110W11
+     I                                       12  120W12
+     I                                       13  130W13
+     I                                       14  140W14
+     IDS3         DS
+     I                                        1   6 WJUTKC
+     I                                        1   1 A1
+     I                                        2   20A2
+     I                                        3   30A3
+     I                                        4   40A4
+     I                                        5   50A5
+     I                                        6   60A6
+     IDS4         DS
+     I                                        1  42 ITNBRA
+     I                                        1   5 WITNB5
+     I                                        1  14 WITNB1
+     I                                        1  25 ITNB25
+     IDS5         DS
+     I                                        1   80WJUTNO
+     I                                        1   60WCNT
+     I                                        7   80WSEQNO
+     IDS6         DS
+     I                                        1  30 ITDSC
+     I                                        1  25 ITDS25
+     I                                       26  26 ITDS26
+     I                                       26  30 ITDS23
+     I                                       27  30 ITDS30
+     IDS7         DS
+     I                                        1  25 W#KAT3
+     I                                        5   8 W#QU1
+     I                                       13  16 W#QU2
+     IDS8         DS
+     I                                        1   5 CUSNRE
+     I                                        1   1 W#CUS1
+     IDS9         DS
+     I                                        1   5 CUSNRA
+     I                                        1   1 W#CUSA
+     I                                        1   2 W#CUS2
+     IDS10        DS
+     I                                        1   80JUSENA
+     I                                        1   60JUTNOA
+     I                                        7   80SEQNOA
+     IDS11        DS
+     I                                        1   8 ZZ0172
+     I                                        4   4 TRACE
+     IDS12        DS
+     I                                        1  15 HNAME
+     I                                        1   1 TANA1T
+     I                                       15  15 BIKO1T
+     IDS14        DS
+     I***                                     1  86 WMAIL
+     I***                                    27  27 W#X1
+     I***                                    28  86 WMAIL2
+     I*< SDS >
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     I*< ｼｽﾃﾑ日付>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     C*-----------------------------------------------------
+     C                     TIME           W#SYST
+     C                     MOVELS#JOB     W#JOB   5
+     C                     TIME           CLOCK   60
+     C*----------------------------------------------------
+     C           PAR070    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*----------------------------------------------------
+     C           D0100     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           ORDNOA
+     C*----------------------------------------------------
+     C*印刷処理
+     C                     EXSR #PRT02                     AML0040
+     C*------------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*----------------------------------------------------------
+     C           #PRT02    BEGSR
+     C                     Z-ADD0         MDS     10
+     C                     Z-ADD0         FLAG10  10
+     C                     MOVEL*BLANK    CCMAIL 50
+     C                     Z-ADD0         WLCNT   20       行カウント
+     C*LIST
+     C                     Z-ADD0         FLAG98  10
+     C                     MOVEL*BLANK    WKSHI1 60
+     C                     MOVEL*BLANK    WKBUSY 62
+     C           FLAG98    DOWEQ0
+     C                     SETOF                     725051
+     C                     SETOF                     525354
+     C                     SETOF                     555658
+     C                     SETOF                     57
+     C                     READ RAML0040                 72
+     C           *IN72     IFEQ '1'
+     C                     Z-ADD1         FLAG98
+     C                     ELSE
+     C*
+     C                     MOVEL*BLANK    WKSHCD  1
+     C                     MOVEL*BLANK    W#SNSN  3
+     C                     MOVELSLSNRA    W#SNSN
+     C***                  MOVEL'585'     W#SNSN
+     C                     SETOF                     90
+     C           W#SNSN    CHAINAGM0060              90
+     C           *IN90     IFEQ '0'
+     C***                  MOVELMAIL6     CCMAIL
+     C                     MOVELMAIL6     WMAIL  86
+     C                     ENDIF
+     C***                  MOVELTBL01,1   WMAIL  86
+     C*
+     C***                  EXSR #MAIL
+     C*
+     C*水戸・トミタ以外
+     C           W#CUS2    IFNE '0M'
+     C           W#CUS2    ANDNE'0T'
+     C*
+     C           A1A       IFEQ ' '
+     C*
+     C*エラーコード
+     C                     MOVEL*BLANK    W#ERR3 60
+     C                     SELEC
+     C           ERRCDA    WHEQ '01'
+     C                     SETON                     50    代理店
+     C           ERRCDA    WHEQ '02'
+     C                     SETON                     51    型式
+     C           ERRCDA    WHEQ '03'
+     C                     SETON                     52    数量
+     C           ERRCDA    WHEQ '04'
+     C                     SETON                     53    単価
+     C           ERRCDA    WHEQ '05'
+     C           ERRCDA    OREQ '09'
+     C                     SETON                     54    トルク値
+     C           ERRCDA    WHEQ '06'
+     C                     SETON                     55    販売不可
+     C           ERRCDA    WHEQ '07'
+     C                     SETON                     56    販売単位
+     C           ERRCDA    WHEQ '10'
+     C                     SETON                     58    重複
+     C           ERRCDA    WHEQ '11'
+     C                     SETON                     59    単位
+     C                     ENDSL
+     C*
+     C                     MOVELMFROMA    WMFROM 30
+     C*----
+     C           MDS       IFEQ 0
+     C*
+     C*エラー項目
+     C                     EXSR #ERRCD
+     C*
+     C                     MOVELCUSNRA    W#CUSN  5
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELOFNAMA    W#OFNA 82
+     C*
+     C*代理店名
+     C                     SETOF                     9060
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'
+     C                     MOVELSHPNBE    W#SHPM 80
+     C                     ELSE
+     C                     MOVEL*BLANK    W#SHPM
+     C                     ENDIF
+     C*
+     C*代理店メールアドレス取得
+     C                     EXSR #DMAIL
+     C*
+     C                     EXSR #DS120                     出荷先
+     C*
+     C                     SETON                     60
+     C                     EXCPTMIDASI
+     C                     SETOF                     60
+     C                     Z-ADD1         MDS
+     C                     ENDIF
+     C*
+     C*----
+     C                     EXSR #DR120                     出荷先
+     C*
+     C*
+     C*------------
+     C           CUSNRA    IFEQ W#CUSN
+     C           ORDNOA    ANDEQW#ORDN
+     C           OFNAMA    ANDEQW#OFNA
+     C*
+     C   OF                EXCPTMIDASI
+     C   OF                SETOF                     OF
+     C*
+     C                     MOVEL*BLANK    W#NBNB  6
+     C                     Z-ADD0         WKQTYR  50
+     C                     Z-ADD0         WKQTOB  50
+     C                     Z-ADDDELDYA    WDELDY  80
+     C                     SETOF                     90
+     C*
+     C*
+     C*明細10行
+     C           WLCNT     IFEQ 10
+     C                     EXCPTMIDASI
+     C                     Z-ADD0         WLCNT
+     C                     ELSE
+     C                     EXCPTMEI01
+     C                     ADD  1         WLCNT
+     C                     ENDIF
+     C*
+     C                     ELSE                              ****
+     C*
+     C                     MOVELCUSNRA    W#CUSN
+     C                     MOVELORDNOA    W#ORDN
+     C                     MOVELOFNAMA    W#OFNA
+     C*エラー項目
+     C                     EXSR #ERRCD
+     C*
+     C*代理店メールアドレス取得
+     C                     EXSR #DMAIL
+     C*
+     C                     EXSR #DS120
+     C*-------------
+     C                     SETOF                     90
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'
+     C                     MOVELSHPNBE    W#SHPM
+     C                     ELSE
+     C                     MOVEL*BLANK    W#SHPM
+     C                     ENDIF
+     C*-------------
+     C                     EXCPTMIDASI
+     C                     Z-ADD0         WLCNT
+     C*
+     C                     MOVEL*BLANK    W#ITDS 30
+     C                     MOVEL*BLANK    W#NBNB  6
+     C                     Z-ADD0         WKQTYR  50
+     C                     Z-ADD0         WKQTOB  50
+     C                     Z-ADDDELDYA    WDELDY
+     C*
+     C                     EXCPTMEI01
+     C                     ADD  1         WLCNT
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*DELETE
+     C***        *LOVAL    SETLLAML0041
+     C***                  Z-ADD0         FLAG98  10
+     C***        FLAG98    DOWEQ0
+     C***                  SETOF                     72
+     C***                  READ RAML0041                 72
+     C***        *IN72     IFEQ '1'
+     C***                  Z-ADD1         FLAG98
+     C***                  ELSE
+     C***                  DELETRAML0041
+     C***                  ENDIF
+     C***                  ENDDO
+     C                     ENDSR
+     C*
+     C*----------------------------------------------------------
+     C           #ERRCD    BEGSR
+     C*
+     C                     MOVEL*BLANK    W#ERR1255        エラー内容
+     C                     MOVEL*BLANK    W#ERR2 60
+     C*
+     C                     SETOF                     91
+     C           D0100     CHAINAML0100              91
+     C           *IN91     IFEQ '0'
+     C*
+     C*文字列操作（エラー内容）
+     C*                    MOVEL'1'       P#SKBN
+     C*                    Z-ADD62        P#LENG
+     C*                    MOVELERRMOE    P#MOJ1
+     C*                    MOVEL*BLANK    P#MOJ2
+     C*                    MOVEL*BLANK    P#MOJ3
+     C*                    MOVEL*BLANK    P#RETN
+     C*                    CALL '@SB010R' PAR070
+     C*                    MOVELP#MOJ2    W#ERR1
+     C                     MOVELERRMOE    W#ERR1
+     C***
+     C*指定納品先＊運賃未記入
+     C           ERR01E    IFGE '50'
+     C           ERR01E    ANDLE'51'
+     C           ERR02E    ORGE '50'
+     C           ERR02E    ANDLE'51'
+     C           ERR03E    ORGE '50'
+     C           ERR03E    ANDLE'51'
+     C           ERR04E    ORGE '50'
+     C           ERR04E    ANDLE'51'
+     C           ERR05E    ORGE '50'
+     C           ERR05E    ANDLE'51'
+     C*
+     C                     MOVELTBL01,2   W#ERR2
+     C                     ENDIF
+     C*
+     C*エラーステータス２
+     C                     MOVEL*BLANK    WKERR1  3        エラーコード
+     C                     SELEC
+     C*代理店エラー
+     C           ERR01E    WHEQ '01'
+     C           ERR02E    OREQ '01'
+     C           ERR03E    OREQ '01'
+     C           ERR04E    OREQ '01'
+     C           ERR05E    OREQ '01'
+     C                     MOVEL'OFF'     WKERR1
+     C                     MOVELTBL01,3   W#ERR3
+     C*型式エラー
+     C           ERR01E    WHEQ '02'
+     C           ERR02E    OREQ '02'
+     C           ERR03E    OREQ '02'
+     C           ERR04E    OREQ '02'
+     C           ERR05E    OREQ '02'
+     C                     MOVEL'OFF'     WKERR1
+     C                     MOVELTBL01,4   W#ERR3
+     C*数量エラー
+     C           ERR01E    WHEQ '03'
+     C           ERR02E    OREQ '03'
+     C           ERR03E    OREQ '03'
+     C           ERR04E    OREQ '03'
+     C           ERR05E    OREQ '03'
+     C                     MOVELTBL01,5   W#ERR3
+     C*単価エラー
+     C           ERR01E    WHEQ '04'
+     C           ERR02E    OREQ '04'
+     C           ERR03E    OREQ '04'
+     C           ERR04E    OREQ '04'
+     C           ERR05E    OREQ '04'
+     C                     MOVELTBL01,6   W#ERR3
+     C*トルク値エラー
+     C           ERR01E    WHEQ '05'
+     C           ERR02E    OREQ '05'
+     C           ERR03E    OREQ '05'
+     C           ERR04E    OREQ '05'
+     C           ERR05E    OREQ '05'
+     C                     MOVELTBL01,7   W#ERR3
+     C*販売不可エラー
+     C           ERR01E    WHEQ '06'
+     C           ERR02E    OREQ '06'
+     C           ERR03E    OREQ '06'
+     C           ERR04E    OREQ '06'
+     C           ERR05E    OREQ '06'
+     C                     MOVELTBL01,8   W#ERR3
+     C*単位エラー
+     C           ERR01E    WHEQ '07'
+     C           ERR02E    OREQ '07'
+     C           ERR03E    OREQ '07'
+     C           ERR04E    OREQ '07'
+     C           ERR05E    OREQ '07'
+     C                     MOVELTBL01,9   W#ERR3
+     C*納期エラー
+     C           ERR01E    WHEQ '08'
+     C           ERR02E    OREQ '08'
+     C           ERR03E    OREQ '08'
+     C           ERR04E    OREQ '08'
+     C           ERR05E    OREQ '08'
+     C                     MOVEL'OFF'     WKERR1
+     C                     MOVELTBL01,10  W#ERR3
+     C*小数点エラー
+     C           ERR01E    WHEQ '09'
+     C           ERR02E    OREQ '09'
+     C           ERR03E    OREQ '09'
+     C           ERR04E    OREQ '09'
+     C           ERR05E    OREQ '09'
+     C                     MOVELTBL01,28  W#ERR3
+     C*重複点エラー
+     C           ERR01E    WHEQ '10'
+     C           ERR02E    OREQ '10'
+     C           ERR03E    OREQ '10'
+     C           ERR04E    OREQ '10'
+     C           ERR05E    OREQ '10'
+     C                     MOVELTBL01,29  W#ERR3
+     C*
+     C*単位エラー（海外単位）
+     C           ERR01E    WHEQ '11'
+     C           ERR02E    OREQ '11'
+     C           ERR03E    OREQ '11'
+     C           ERR04E    OREQ '11'
+     C           ERR05E    OREQ '11'
+     C                     MOVELTBL01,30  W#ERR3
+     C*
+     C                     ENDSL
+     C*エラー内容がブランクで無い場合はメールアドレス印刷
+     C           W#ERR1    IFNE *BLANK
+     C                     MOVEL*BLANK    WKERR1  3        エラーコード
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #DMAIL    BEGSR
+     C*代理店メールアドレス
+     C*メールアドレスつなぎ
+     C                     SETOF                     61
+     C           '@'       SCAN EMAILA:1  W       10     61
+     C           *IN61     IFEQ '1'
+     C*
+     C*エラーコードを判断して、外部アドレスへ送信しない
+     C*
+     C           WKERR1    IFEQ 'OFF'
+     C***                  MOVEL*BLANK    W#X1
+     C***                  MOVEL*BLANK    WMAIL2
+     C                     ELSE
+     C***                  MOVEL';'       W#X1
+     C***                  MOVELEMAILA    WMAIL2
+     C***                  MOVEL*BLANK    W#X1
+     C***                  MOVEL*BLANK    WMAIL2
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C***                  MOVEL*BLANK    W#X1
+     C***                  MOVEL*BLANK    WMAIL2
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #DR120    BEGSR
+     C                     MOVELCUSNRA    WKCUSN  5
+     C                     MOVELSHIP1A    WKSHI1 60
+     C                     MOVELBUSYOA    WKBUSY 62
+     C                     MOVEL*BLANK    WKSHCD
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #DS120    BEGSR
+     C                     MOVELCUSNRA    WKCUSN  5
+     C                     MOVELSHIP1A    W#SHI1 60
+     C                     MOVELBUSYOA    W#BUSY 62
+     C                     MOVEL*BLANK    WKSHCD
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C***        #MAIL     BEGSR
+     C*
+     C***                  SELEC
+     C***        W#CUS2    WHEQ '0W'
+     C***                  MOVELTBL01,11  WMAIL
+     C***        W#CUS2    WHEQ '0Q'
+     C***                  MOVELTBL01,12  WMAIL
+     C***        W#CUS2    WHEQ '0I'
+     C***                  MOVELTBL01,13  WMAIL
+     C***        W#CUS2    WHEQ '0N'
+     C***                  MOVELTBL01,14  WMAIL
+     C***        W#CUS2    WHEQ '0F'
+     C***                  MOVELTBL01,15  WMAIL
+     C***        W#CUS2    WHEQ '0H'
+     C***                  MOVELTBL01,16  WMAIL
+     C***        W#CUS2    WHEQ '0J'
+     C***        W#CUS2    OREQ '0G'
+     C***                  MOVELTBL01,17  WMAIL
+     C***        W#CUS2    WHEQ '01'
+     C***        W#CUS2    OREQ '02'
+     C***                  MOVELTBL01,18  WMAIL
+     C***        W#CUS2    WHEQ '0S'
+     C***                  MOVELTBL01,19  WMAIL
+     C***        W#CUS2    WHEQ '0B'
+     C***                  MOVELTBL01,20  WMAIL
+     C***        W#CUS2    WHEQ '0U'
+     C***                  MOVELTBL01,21  WMAIL
+     C***        W#CUS2    WHEQ '0L'
+     C***                  MOVELTBL01,22  WMAIL
+     C***        W#CUS2    WHEQ '0M'
+     C***                  MOVELTBL01,23  WMAIL
+     C***        W#CUS2    WHEQ '0E'
+     C***                  MOVELTBL01,24  WMAIL
+     C***        W#CUS2    WHEQ '0A'
+     C***                  MOVELTBL01,25  WMAIL
+     C***        W#CUS2    WHEQ '0T'
+     C***                  MOVELTBL01,26  WMAIL
+     C***        W#CUS2    WHEQ '0K'
+     C***                  MOVELTBL01,27  WMAIL
+     C***                  ENDSL
+     C***                  ENDSR
+     C*-----------------------------------------------------
+     OQSYSPRT E  101           MIDASI
+     O                         WMAIL     86
+     O***                      WMFROM    71
+     O                         UDATE     92
+     O                         CLOCK     98
+     O                                  133 'エラー表記意味'
+     O***                      CCMAIL   193
+     O* 2
+     O        E  1             MIDASI
+     O                                   14 'ファイル名：'
+     O                         FNAMEA    86
+     O* 3
+     O        E  1             MIDASI
+     O                                   14 'ｵﾘｼﾞﾅﾙﾌｧｲﾙ：'
+     O                         OFNAMA    82
+     O*
+     O* 4
+     O*エラー内容
+     O        E  1             MIDASI
+     O                         W#ERR1   255
+     O* 5
+     O*エラーステータス１
+     O        E  1             MIDASI
+     O                         W#ERR2    60
+     O*
+     O* 6
+     O*エラーステータス２
+     O        E  1             MIDASI
+     O                         W#ERR3    60
+     O* 7
+     O        E  1             MIDASI
+     O                         CUSNRA     5
+     O                         W#SHPM    85
+     O                         UDATE Y   90
+     O                         CLOCK    100 '  :  :  '
+     O                                  115 'C:顧客'
+     O                                  124 'P:型式'
+     O                                  133 'Q:数量'
+     O                                  142 'K:単価'
+     O                                  149 'T:ﾄﾙｸ'
+     O                                  162 'H:販売不可'
+     O                                  175 'S:数量単位'
+     O* 8
+     O        E  1             MIDASI
+     O                         SHPNMA    60
+     O                         YUBINA    72
+     O                         SHIP1A   144
+     O* 9
+     O        E  1             MIDASI
+     O                         SHIP2A    70
+     O                         BUSYOA   144
+     O                         SHTELA   160
+     O* 10
+     O        E  1             MIDASI
+     O                         BIKO1A    72
+     O                         BIKO2A   146
+     O                         DUEDYA   158 '    /  /  '
+     O                         SAGCDA4  164
+     O* 11
+     O        E  1             MIDASI
+     O                                    8 '受注'
+     O                                   17 '注文NO '
+     O                                   43 '型式'
+     O                                   75 '数量'
+     O                                   84 '単価'
+     O                                   94 '金額'
+     O                                  101 '引'
+     O                                  108 '未'
+     O                                  134 'トルク値'
+     O                                  141 '単位'
+     O                                  152 '営業'
+     O                                  157 '同'
+     O* 12
+     O        E  1             MEI01
+     O                         JUTNOA4    6
+     O                         SEQNOA4    8
+     O                         ORDNOA    24
+     O***                      W#ITDS    55
+     O                         ITNBRA    67
+     O                         ORDQUA4   75
+     O                         TANKAA4   83
+     O                         KINGAA4   93
+     O                         SLSNRA    98
+     O***                      A1A       88
+     O                         WKQTYR4  100
+     O                         WKQTOB4  106
+     O                         WDELDYY  118
+     O                         WKSHCD   130
+     O                 50               125 'Cｴﾗｰ'
+     O                 51               125 'Pｴﾗｰ'
+     O                 52               125 'Qｴﾗｰ'
+     O                 53               125 'Kｴﾗｰ'
+     O                 54               125 'Tｴﾗｰ'
+     O                 55               125 'Hｴﾗｰ'
+     O                 56               125 'Sｴﾗｰ'
+     O                 57               125 'Dｴﾗｰ'
+     O                 58               125 'Nｴﾗｰ'
+     O                 59               125 'Tｴﾗｰ'
+     O                         TOKSSA   137
+     O                         TOTAMA   139
+     O                         W#NBNB   146
+     O                         ESLSNA4  150
+     O                         TRESAA   153
+     O***                      DOJCDA   155
+** TBL01< ｺﾏﾝﾄﾞｶﾞｲﾀﾞﾝｽ >
+ORDER_DONE@TOHNICHI.CO.JP
+直送運賃の明細がありません（指定以外）
+代理店コードに間違いがあります
+型式に間違いがあります
+数量に間違いがあります
+単価に間違いがあります
+トルク値・単位に間違いがあります
+取扱い不可の製品があります
+販売個数は１０本単位です
+納期に間違いがあります
+ORDER_DONEW@TOHNICHI.CO.JP
+ORDER_DONEQ@TOHNICHI.CO.JP
+ORDER_DONEI@TOHNICHI.CO.JP
+ORDER_DONEN@TOHNICHI.CO.JP
+ORDER_DONEF@TOHNICHI.CO.JP
+ORDER_DONEH@TOHNICHI.CO.JP
+ORDER_DONEG@TOHNICHI.CO.JP
+ORDER_DONEP@TOHNICHI.CO.JP
+ORDER_DONES@TOHNICHI.CO.JP
+ORDER_DONEB@TOHNICHI.CO.JP
+ORDER_DONEU@TOHNICHI.CO.JP
+ORDER_DONEY@TOHNICHI.CO.JP
+ORDER_DONEM@TOHNICHI.CO.JP
+ORDER_DONEE@TOHNICHI.CO.JP
+ORDER_DONEA@TOHNICHI.CO.JP
+ORDER_DONET@TOHNICHI.CO.JP
+ORDER_DONEK@TOHNICHI.CO.JP
+小数点の桁数に間違いがあります
+重複の可能性があります
+海外単位があります

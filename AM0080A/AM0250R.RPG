@@ -1,0 +1,183 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    ＯＣＲ用受注処理エラーフラグ確認処理　　 *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0040 UF  E                    DISK
+     FAML0100 IF  E           K        DISK
+     FAML0101 IF  E           K        DISK
+     F            RAML0100                          KRENAMERAML0101
+     FDMR0040 IF  E           K        DISK
+     IDS1         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 WKCUS
+     IDS2         DS
+     I                                        1  15 ORDNOA
+     I                                        1   7 ORDN7A
+     I                                        1   8 ORDN8A
+     C*----------------------------------------------------
+     C           D0100     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           ORDNOA
+     C                     KFLD           OFNAMA
+     C*----------------------------------------------------
+     C           D0101     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           OFNAMA
+     C                     KFLD           W#ORD3
+     C*----------------------------------------------------
+     C                     MOVEL*BLANK    W#ERR   2
+     C                     MOVEL*BLANK    W#ORD3 15
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           WKCUS     IFNE '0M'
+     C           WKCUS     ANDNE'0T'
+     C*
+     C           ORDQUA    IFNE 0
+     C*
+     C                     SETOF                     90
+     C           D0100     CHAINAML0100              90
+     C           *IN90     IFEQ '0'
+     C*
+     C                     EXSR #MOVE1
+     C*
+     C                     UPDATRAML0040
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*----------------
+     C                     ELSE
+     C*
+     C           WKCUS     IFEQ '0M'
+     C                     MOVELORDN7A    W#ORD3
+     C                     ELSE
+     C                     MOVELORDN8A    W#ORD3
+     C                     ENDIF
+     C*
+     C           ORDQUA    IFNE 0
+     C*
+     C                     SETOF                     91
+     C           D0101     CHAINAML0101              91
+     C           *IN91     IFEQ '0'
+     C*
+     C                     EXSR #MOVE1
+     C*
+     C                     UPDATRAML0040
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #MOVE1    BEGSR
+     C*--------------------
+     C*
+     C*拡販製品の場合、拡販営業更新
+     C                     MOVEL*BLANK    W#ITDS 25
+     C                     MOVELITNBRA    W#ITDS
+     C           W#ITDS    CHAINDMR0040              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           EXPAN4    IFEQ 1                          拡販品か？
+     C           ESLSNA    IFEQ 0
+     C                     Z-ADDESLSNE    ESLSNA
+     C                     ENDIF
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C*同時納入
+     C           DOJCDE    IFEQ '*'
+     C                     MOVEL'*'       DOJCDA
+     C                     ELSE
+     C                     MOVEL' '       DOJCDA
+     C                     ENDIF
+     C*エラーコード
+     C           ERR05E    IFGE '50'
+     C           ERR05E    ANDLE'51'
+     C           ERR04E    OREQ '50'
+     C           ERR04E    ANDLE'51'
+     C           ERR03E    ORGE '50'
+     C           ERR03E    ANDLE'51'
+     C           ERR02E    ORGE '50'
+     C           ERR02E    ANDLE'51'
+     C           ERR01E    ORGE '50'
+     C           ERR01E    ANDLE'51'
+     C*---
+     C           ERR05E    IFNE *BLANK
+     C           ERRCDA    IFEQ *BLANK
+     C                     MOVELERR05E    ERRCDA
+     C                     MOVEL*BLANK    A1A
+     C                     ENDIF
+     C                     ELSE
+     C           ERR04E    IFNE *BLANK
+     C           ERRCDA    IFEQ *BLANK
+     C                     MOVELERR04E    ERRCDA
+     C                     MOVEL*BLANK    A1A
+     C                     ENDIF
+     C                     ELSE
+     C           ERR03E    IFNE *BLANK
+     C           ERRCDA    IFEQ *BLANK
+     C                     MOVELERR03E    ERRCDA
+     C                     MOVEL*BLANK    A1A
+     C                     ENDIF
+     C                     ELSE
+     C           ERR02E    IFNE *BLANK
+     C           ERRCDA    IFEQ *BLANK
+     C                     MOVELERR02E    ERRCDA
+     C                     MOVEL*BLANK    A1A
+     C                     ENDIF
+     C                     ELSE
+     C           ERR01E    IFNE *BLANK
+     C           ERRCDA    IFEQ *BLANK
+     C                     MOVELERR01E    ERRCDA
+     C                     MOVEL*BLANK    A1A
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*---
+     C                     ELSE
+     C*
+     C           ERR01E    IFGE '01'
+     C           ERR01E    ANDLE'49'
+     C           ERR02E    ORGE '01'
+     C           ERR02E    ANDLE'49'
+     C           ERR03E    ORGE '01'
+     C           ERR03E    ANDLE'49'
+     C           ERR04E    ORGE '01'
+     C           ERR04E    ANDLE'49'
+     C                     MOVEL' '       A1A
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C*エラー項目がブランクではない
+     C           ERRMOE    IFNE *BLANK
+     C                     MOVEL' '       A1A
+     C                     ENDIF
+     C*------------------
+     C                     ENDSR
+     C*-----------------------------------------------------

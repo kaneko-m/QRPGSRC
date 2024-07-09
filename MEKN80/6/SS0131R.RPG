@@ -1,0 +1,540 @@
+     H*****************************************************
+     H*    PROGRAM NAME SS0130R CODED BY N.KANEDA         *
+     H*                         CODED ON 02/10/10         *
+     H*    納品書発行                                   *
+     H*****************************************************
+     H        1   Y
+     FDTR0351 IF  E           K        DISK
+     FDTR0300 IF  E           K        DISK
+     FDMR0010 IF  E           K        DISK
+     FDMR0030 IF  E           K        DISK
+     FDMR0040 IF  E           K        DISK
+     FDTR0120 IF  E           K        DISK
+     F*＜雑伝票F＞
+     FDTR0460 IF  E           K        DISK
+     FQSYSPRT O   F     132     OF    LPRINTER
+     LQSYSPRT  21FL 20OL
+     IRDMR0010
+     I              ZZ0001                          RECCD2
+     I              ACREC                           ACREC2
+     I              CUSNR                           CUSNR2
+     I              CUSNM                           CUSNM2
+     I              SHPNR                           SHPNR2
+     I              AREAD                           AREAD2
+     I              CUSA1                           CUSA12
+     I              CUSA2                           CUSA22
+     I              AREAC                           AREAC2
+     I              MATIM                           MATIM2
+     I              MADAY                           MADAY2
+     I              TELEX                           TELEX2
+     I              SHPNMB                          CUSNB2
+     I              SHIP1B                          SHI1B2
+     I              SHIP2B                          SHI2B2
+     I              AREASB                          ARE2B2
+     IRDMR0030
+     I              ZZ0001                          RECCD3
+     I              ACREC                           ACREC3
+     I              SHPNR                           SHPNR3
+     I              SHPNM                           SHPNM3
+     I              SHIP1                           SHIP13
+     I              SHIP2                           SHIP23
+     I              AREAS                           AREAS3
+     I              ZZ0134                          FILER3
+     I              MATIM                           MATIM3
+     I              MADAY                           MADAY3
+     IRDMR0040
+     I              ZZ0001                          RECCD4
+     I              ACREC                           ACREC4
+     I              ITNBR                           ITNBR4
+     I              ITDSC                           ITDSC4
+     I              ITCOD                           ITCOD4
+     I              LSTPC                           LSTPC4
+     I              MATIM                           MATIM4
+     I              MADAY                           MADAY4
+     IDS1         DS
+     I                                        1  30 ITDSCA
+     I                                        1  25 ITNBRA
+     I                                       26  30 XYZ
+     IDS3         DS
+     I                                        1   80JUSEN
+     I                                        1   60JUTNOA
+     I                                        7   80SEQNOA
+     I*S4         DS
+     I*                                       1  80 SHPNMB
+     I*                                       1  31 SHPN13
+     I*                                      32  40 SHPN23
+     IDS6         DS
+     I                                        1  40 CUSNM2
+     I                                        1  30 CUSN12
+     I                                       31  40 CUSN22
+     IDS5         DS
+     I                                        1  40 SHPNM3
+     I                                        1  30 SHPN13
+     I                                       31  40 SHPN23
+     IDS8         DS
+     I                                        1   80JUSEN1
+     I                                        1   60WWJUTE
+     I                                        7   80WWSEQE
+     IDS9         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 W#CUS1
+     C*------------------------------------------------------------
+     C           D0460     KLIST
+     C                     KFLD           JUTNOA
+     C                     KFLD           SEQNOA
+     C*------------------------------------------------------------
+     C           PAR020    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*------------------------------------------------------------
+     C* /* ｼｮｷﾁ ｾｯﾃｲ */
+     C                     Z-ADD0         WKJUT1  60
+     C                     Z-ADD0         WKSEQ1  20
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD0         FLAG02  10
+     C                     Z-ADD0         FLAG03  10
+     C                     Z-ADD0         FLAG04  10
+     C                     Z-ADD0         WKSEA1  20
+     C                     Z-ADD0         WKSSP1  50
+     C                     MOVEL*BLANK    WKNBN1  6
+     C                     Z-ADD0         WKSEB1  20
+     C                     MOVEL*BLANK    WKITN1 30
+     C                     Z-ADD0         WGOKEI  90
+     C                     Z-ADD0         WURDAY  60
+     C                     Z-ADD0         WLCNT   20
+     C                     Z-ADD0         FLAG30  10
+     C                     MOVEL*BLANK    WTELEX 20
+     C*------------------------------------------------------------
+     C* /* 納品書発行リスト */
+     C           *LOVAL    SETLLDTR0351
+     C                     SETOF                     70
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0                          +++++++++++++++
+     C                     READ RDTR0350                 70              +
+     C           *IN70     IFEQ '1'                        ************* +
+     C           FLAG30    IFEQ 1
+     C                     EXSR #END                                   * +
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C                     Z-ADD1         FLAG01
+     C                     ENDIF
+     C                     ELSE                            ------------* +
+     C*                                                                * +
+     C                     Z-ADD1         FLAG30
+     C*                                                                * +
+     C           FLAG02    IFEQ 0                                      * +
+     C                     Z-ADDJUTNOA    WKJUT1                       * +
+     C                     Z-ADD1         FLAG02                       * +
+     C                     ENDIF                                       * +
+     C*                                                                * +
+     C* /*　納品書見出し */                                          * +
+     C           JUTNOA    IFEQ WKJUT1                     ****        * +
+     C*                                                       *        * +
+     C                     EXSR #MID1                         *        * +
+     C                     ELSE                            ---*        * +
+     C                     EXSR #END                          *        * +
+     C                     Z-ADDJUTNOA    WKJUT1              *        * +
+     C                     EXSR #MID1                         *        * +
+     C                     ENDIF                           ****        * +
+     C*                                                                  +
+     C                     ENDIF                           ************* +
+     C*                                                                  +
+     C                     ENDDO                           +++++++++++++++
+     C*------------------------------------------------------------
+     C* /* ｵﾜﾘ */
+     C*
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     C*    ======================================
+     C*            ***  SUB     RTN  ***
+     C*    ======================================
+     C* /* 納品書見出し  */
+     C           #MID1     BEGSR
+     C                     SETOF                     505157
+     C           CUSNRA    IFEQ '0R 31'
+     C           CUSNRA    OREQ '0R 32'
+     C           CUSNRA    OREQ '0R 33'
+     C           CUSNRA    OREQ '0R 34'
+     C           CUSNRA    OREQ '0R 35'
+     C           CUSNRA    OREQ '0R 36'
+     C           CUSNRA    OREQ '0R 37'
+     C           CUSNRA    OREQ '0R 38'
+     C           CUSNRA    OREQ '0R 39'
+     C           CUSNRA    OREQ '0R 40'
+     C           CUSNRA    OREQ '0R 41'
+     C           CUSNRA    OREQ '0R 42'
+     C           CUSNRA    OREQ '0R 43'
+     C           CUSNRA    OREQ '0R 44'
+     C                     SETON                     51
+     C                     ELSE
+     C                     SETON                     50
+     C                     ENDIF
+     C           SEQNOA    IFEQ WKSEQ1
+     C*
+     C                     SETOF                     90
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'                        ****************
+     C                     MOVEL*BLANK    WCUSNM 60
+     C                     MOVELCUSNB2    WCUSNM
+     C                     MOVELTELEX2    WTELEX
+     C*                                                                   *
+     C                     SETOF                     915556               *
+     C           SHPNRA    CHAINDMR0030              91                   *
+     C           *IN91     IFEQ '0'                        *************  *
+     C                     SELEC
+     C           SHPNRA    WHEQ '0U 02'
+     C                     SETON                     55
+     C           SHPNRA    WHEQ '0U 11'
+     C                     SETON                     56
+     C                     ENDSL
+     C*
+     C*                    MOVELSHPNMB    #0E     1
+     C*                    MOVE SHPNMB    #0F     1
+     C*                    MOVELSHPN13    WSHP1  32
+     C*                    MOVE #0F       WSHP1
+     C*                    MOVE SHPN23    WSHP2  12
+     C*                    MOVEL#0E       WSHP2
+     C*                                                                *  *
+     C                     MOVELCUSNRA    WKCUS1  1                    *  *
+     C*                                                                *  *
+     C           WKCUS1    IFEQ '0'                        **********  *  *
+     C           WKCUS1    OREQ 'D'                        **********  *  *
+     C*                                                             *  *  *
+     C                     SETOF                     52
+     C           CUSNRA    IFEQ SHPNRA
+     C                     SETOF                     52
+     C                     ELSE
+     C                     SETON                     52
+     C                     ENDIF
+     C*
+     C*
+     C                     Z-ADDJUTNOA    WWJUTE  60
+     C**                   Z-ADDSEQ       WWSEQE  20
+     C                     Z-ADDDETCNA    WWSEQE  20
+     C           WWSEQE    DOUEQ100
+     C                     SETOF                     9053
+     C           JUSEN1    CHAINDTR0120              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           SHPNRV    IFEQ *BLANK
+     C                     SETON                     53
+     C                     ELSE
+     C                     SETOF                     53
+     C                     ENDIF
+     C*
+     C* 備考１
+     C                     MOVEL*BLANK    W#BIK1 42
+     C                     MOVEL*BLANK    W#BIK2 42
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD42        P#LENG
+     C                     MOVELBIKO1V    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR020
+     C                     MOVELP#MOJ2    W#BIK1
+     C                     MOVELP#MOJ3    W#BIK2
+     C*備考２
+     C                     MOVEL*BLANK    W#BIK3 62
+     C                     MOVELBIKO2V    W#BIK3
+     C*
+     C                     LEAVE
+     C                     ELSE
+     C                     ENDIF
+     C           WWSEQE    ADD  1         WWSEQE
+     C                     ENDDO
+     C*
+     C*--------------------------------------------------------
+     C                     MOVEL'PRT03'   P#ADD1  5
+     C                     SETOF                     91
+     C           D0460     CHAINDTR0460              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           W#CUS1    IFEQ '0A'
+     C           W#CUS1    OREQ '0B'
+     C           W#CUS1    OREQ '0I'
+     C                     MOVEL'PRT02'   P#ADD1           事務所印刷
+     C                     ELSE
+     C                     MOVEL*BLANK    P#ADD1           事務所なし
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL'PRT03'   P#ADD1           甲府製品倉
+     C                     ENDIF
+     C*----------------------------------------------------------
+     C*
+     C                     EXCPTMID03                            *  *  *  *
+     C*                                                             *  *  *
+     C                     ENDIF                           **********  *  *
+     C*                                                                *  *
+     C                     ENDIF                           *************  *
+     C*                                                                   *
+     C                     ENDIF                           ****************
+     C*
+     C                     ELSE
+     C*
+     C* /* 行数カウント */
+     C           1         ADD  WLCNT     WLCNT
+     C*
+     C           WLCNT     IFGT 6                          *************
+     C*2016/12/27
+     C                     EXSR #TANKA
+     C                     EXCPTMEI01                                  *
+     C                     Z-ADD1         WLCNT                        *
+     C                     Z-ADD0         WGOKEI                       *
+     C*                                                                *
+     C           WKCUS1    IFEQ '0'                        **********  *
+     C           WKCUS1    OREQ 'D'                        **********  *
+     C*
+     C                     SETOF                     52
+     C           CUSNRA    IFEQ SHPNRA
+     C                     SETOF                     52
+     C                     ELSE
+     C                     SETON                     52
+     C                     ENDIF
+     C*
+     C                     Z-ADDJUTNOA    WWJUTE  60
+     C                     Z-ADDSEQNOA    WWSEQE  20
+     C           WWSEQE    DOUEQ100
+     C                     SETOF                     9053
+     C           JUSEN1    CHAINDTR0120              90
+     C           *IN90     IFEQ '0'
+     C           SHPNRV    IFEQ *BLANK
+     C                     SETON                     53
+     C                     ELSE
+     C                     SETOF                     53
+     C                     ENDIF
+     C* 備考１
+     C                     MOVEL*BLANK    W#BIK1 42
+     C                     MOVEL*BLANK    W#BIK2 42
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD42        P#LENG
+     C                     MOVELBIKO1V    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR020
+     C                     MOVELP#MOJ2    W#BIK1
+     C                     MOVELP#MOJ3    W#BIK2
+     C*
+     C                     LEAVE
+     C                     ELSE
+     C                     ENDIF
+     C           WWSEQE    ADD  1         WWSEQE
+     C                     ENDDO
+     C*
+     C*--------------------------------------------------------
+     C                     MOVEL'PRT03'   P#ADD1  5
+     C                     SETOF                     91
+     C           D0460     CHAINDTR0460              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           W#CUS1    IFEQ '0A'
+     C           W#CUS1    OREQ '0B'
+     C           W#CUS1    OREQ '0I'
+     C                     MOVEL'PRT02'   P#ADD1           事務所印刷
+     C                     ELSE
+     C                     MOVEL*BLANK    P#ADD1           事務所なし
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL'PRT03'   P#ADD1           甲府製品倉
+     C                     ENDIF
+     C*----------------------------------------------------------
+     C*                                                             *  *
+     C                     EXCPTMID03                            *  *  *
+     C*                                                             *  *
+     C                     ELSE                            ---------*  *
+     C                     ENDIF                           **********  *
+     C*                                                                *
+     C* /* 金額合計（明細出力）*/                                    *
+     C           A1A       IFEQ 'A'                        **********  *
+     C                     MOVEL*BLANK    WKITN1                    *  *
+     C                     MOVEL*BLANK    WOITDS 30                 *
+     C                     MOVEL*BLANK    WNITNB 25                 *
+     C                     MOVEL*BLANK    WRK1    1                 *
+     C                     MOVEL*BLANK    WLK1    1                 *
+     C*                                                             *  *
+     C*トルクセット値                                             *  *
+     C                     EXSR #TOKSE
+     C*                                                             *  *
+     C*                                                             *  *
+     C                     MOVELITDSCA    WITDSC 25
+     C                     SETOF                     92             *  *
+     C           WITDSC    CHAINDMR0040              92             *  *
+     C           *IN92     IFEQ '0'                        ****     *  *
+     C                     MOVELITDSC4    WKITN1              *     *  *
+     C                     MOVE XYZ       WKITN1              *     *  *
+     C                     EXCPTMEI02                         *     *  *
+     C           KINGAA    ADD  WGOKEI    WGOKEI              *     *  *
+     C                     ELSE                            ---*     *  *
+     C                     ENDIF                           ****     *  *
+     C*                                                             *  *
+     C                     ELSE                            ---------*  *
+     C                     MOVELITDSCA    WKITN1                    *  *
+     C                     EXCPTMEI02                               *  *
+     C           KINGAA    ADD  WGOKEI    WGOKEI                    *  *
+     C                     ENDIF                           **********  *
+     C*                                                                *
+     C                     ELSE                            ------------*
+     C* /* 金額合計（明細出力）*/                                    *
+     C           A1A       IFEQ 'A'                        **********  *
+     C                     MOVEL*BLANK    WKITN1                    *  *
+     C*                                                             *  *
+     C*トルクセット値                                             *  *
+     C                     EXSR #TOKSE
+     C*                                                             *  *
+     C                     SETOF                     93             *  *
+     C           ITNBRA    CHAINDMR0040              93             *  *
+     C           *IN93     IFEQ '0'                        ****     *  *
+     C                     MOVELITDSC4    WKITN1              *     *  *
+     C                     MOVE XYZ       WKITN1              *     *  *
+     C                     EXCPTMEI02                         *     *  *
+     C           KINGAA    ADD  WGOKEI    WGOKEI              *     *  *
+     C                     ELSE                            ---*     *  *
+     C                     ENDIF                           ****     *  *
+     C*                                                             *  *
+     C                     ELSE                            ---------*  *
+     C                     MOVELITDSCA    WKITN1                    *  *
+     C                     EXCPTMEI02                               *  *
+     C           KINGAA    ADD  WGOKEI    WGOKEI                    *  *
+     C                     ENDIF                           **********  *
+     C*                                                                *
+     C                     ENDIF                           *************
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #TOKSE    BEGSR
+     C                     SETOF                     57
+     C                     MOVEL*BLANK    W#TOKS  7
+     C                     SETOF                     90
+     C           D0460     CHAINDTR0300              90
+     C           *IN90     IFEQ '0'
+     C           TOKSSK    IFNE *BLANK
+     C                     SETON                     57
+     C                     MOVE TOKSSK    W#TOKS
+     C                     ELSE
+     C                     SETOF                     57
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #END      BEGSR
+     C                     Z-ADD0         FLAG03
+     C           FLAG03    DOWEQ0
+     C           WLCNT     IFLE 5
+     C                     EXCPTMEI03
+     C           1         ADD  WLCNT     WLCNT
+     C                     ELSE
+     C                     Z-ADD1         FLAG03
+     C                     ENDIF
+     C                     ENDDO
+     C*2016/12/27
+     C                     EXSR #TANKA
+     C                     SETOF                     303132
+     C                     SELEC
+     C           SYKNOA    WHGE 100000
+     C           SYKNOA    ANDLE999999
+     C                     SETON                     30
+     C           SYKNOA    WHGE 1000000
+     C           SYKNOA    ANDLE9999999
+     C                     SETON                     31
+     C           SYKNOA    WHGE 10000000
+     C           SYKNOA    ANDLE99999999
+     C                     SETON                     32
+     C                     ENDSL
+     C*
+     C                     EXCPTMEI01
+     C                     Z-ADD0         WLCNT
+     C                     Z-ADD0         WGOKEI
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C*2016/12/27
+     C           #TANKA    BEGSR
+     C           *IN50     IFEQ '1'
+     C                     SETOF                     54
+     C           TANKAA    IFEQ 0
+     C           KINGAA    IFGE 10000000
+     C                     SETON                     54
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDSR
+     C*------------------------------------------------------------
+     OQSYSPRT E  103           MID03
+     O                         SHPN13    34
+     O                         P#ADD1    70
+     O                 55                80 '東'
+     O                 56                80 '西'
+     O        E  1             MID03
+     O                         SHPN23    34
+     O        E  1             MID03
+     O                         CUSNRA    13
+     O                         ORDNOA    37
+     O                 53      W#BIK3   114
+     O        E  1             MID03
+     O                 52                   '発注元:'
+     O                 52      WCUSNM    70
+     O                N52                10 ' '
+     O                                   10 ' '
+     O        E  1             MID03
+     O                 53      SHPNMV    55
+     O                N53                10 ' '
+     O        E  1             MID03
+     O                 53      BUSYOV    67
+     O                 53      W#BIK1   109
+     O                N53                10 ' '
+     O        E  1             MID03
+     O                         SHUD8AY   56
+     O                                   65 '甲府*'
+     O        E  3             MID03
+     O                                   10 ' '
+     O*------------------------------------------------------------
+     O        E  1             MEI01
+     O*****************************************************************
+     O*                                  20 '*5/21,24ﾊ ﾀﾅ'
+     O*                                  39 'ｵﾛｼﾄﾅﾘﾏｽﾉﾃﾞ ｼｭｯｶﾋﾞﾆ'
+     O*                                  52 ' ｺﾞﾁｭｳｲｸﾀﾞｻｲ.'
+     O***************************************1234567890123*************
+     O*                                  14 '8/13より8/16'
+     O*                                  34 'まで夏期休暇のため'
+     O*                                  56 '出荷日にご注意下さい'
+     O*****************************************************************
+     O                         WTELEX    55
+     O                 50      WGOKEIJ   70
+     O                 51                70 '*****'
+     O                                   75 'NO.'
+     O                         SYKNOA    83
+     O                 30                84 '6'
+     O                 31                84 '7'
+     O                 32                84 '8'
+     O                         SYKNOA    92
+     O*------------------------------------------------------------
+     O        E  1             MEI02
+     O                         JUSEN     11
+     O                         WKITN1    42
+     O                         QUANTAL   49
+     O                 50N54   TANKAA3   57
+     O                 50N54   KINGAAJ   70
+     O                 51N54             57 '*****'
+     O                 51N54             70 '*****'
+     O                 50N51 54KINGAA3   57
+     O                 50N51 54KINGAAJ   70
+     O                         NBNBRA    77
+     O                         BQUANA4   83
+     O                 57      W#TOKS    90
+     O*------------------------------------------------------------
+     O        E  1             MEI03
+     O                                   10 ' '

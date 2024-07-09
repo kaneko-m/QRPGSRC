@@ -1,0 +1,483 @@
+     H*****************************************************
+     H*    PROGRAM NAME NP5710R CODED BY K.IWAI           *
+     H*                         CODED ON 18.10.03         *
+     H*   消化分数集計処理PARM版                      *
+     H*****************************************************
+     H            Y
+     FPTP0740 UF  E           K        DISK
+     FDTP9000AIF  E           K        DISK
+     F            RDTP9000A                         KRENAMERDTP9001
+     FKTP9000AIF  E           K        DISK
+     F            RKTP9000A                         KRENAMERKTP9001
+     FUTP9000AIF  E           K        DISK
+     F            RUTP9000A                         KRENAMERUTP9001
+     FDTC0040 IF  E           K        DISK
+     FKTC0040 IF  E           K        DISK
+     FUTC0040 IF  E           K        DISK
+     FDMP0600 IF  E           K        DISK
+     IRDTP9001
+     I              ACREC                           ACREC1
+     I              SDATE                           SDATE1
+     I              MCODE                           MCODE1
+     I              SOFUN                           SOFUN1
+     IRKTP9001
+     I              ACREC                           ACREC2
+     I              SDATE                           SDATE2
+     I              MCODE                           MCODE2
+     I              SOFUN                           SOFUN2
+     I              SGYOU                           SGYOU2
+     IRUTP9001
+     I              ACREC                           ACREC3
+     I              SDATE                           SDATE3
+     I              MCODE                           MCODE3
+     I              SOFUN                           SOFUN3
+     I              SGYOU                           SGYOU3
+     IRDTC0040
+     I              ACREC                           ACREC4
+     I              SDATE                           SDATE4
+     I              SCODE                           SCODE4
+     I              HIKYU                           HIKYU4
+     I              GOKAK                           GOKAK4
+     I              PTIME                           PTIME4
+     I              WTIME                           WTIME4
+     I              CHUNS                           CHUNS4
+     I              NBNBR                           NBNBR4
+     IRKTC0040
+     I              ACREC                           ACREC5
+     I              SDATE                           SDATE5
+     I              SCODE                           SCODE5
+     I              HIKYU                           HIKYU5
+     I              GOKAK                           GOKAK5
+     I              PTIME                           PTIME5
+     I              WTIME                           WTIME5
+     I              CHUNS                           CHUNS5
+     I              NBNBR                           NBNBR5
+     I              SGYON                           SGYON5
+     IRUTC0040
+     I              ACREC                           ACREC6
+     I              SDATE                           SDATE6
+     I              SCODE                           SCODE6
+     I              HIKYU                           HIKYU6
+     I              GOKAK                           GOKAK6
+     I              PTIME                           PTIME6
+     I              WTIME                           WTIME6
+     I              CHUNS                           CHUNS6
+     I              NBNBR                           NBNBR6
+     I              SGYON                           SGYON6
+     IRDMP0600
+     I              ZZ0001                          ZZ0007
+     I              ACREC                           ACREC7
+     I              MCOST                           MCOST7
+     I              MBLOK                           MBLOK7
+     I              GCODE6                          GCODE7
+     I              GROUX6                          GROUX7
+     IDS1         DS
+     I                                        1   6 NBNBR4
+     I                                        1   2 NBNB41
+     IDS2         DS
+     I                                        1   6 NBNBR5
+     I                                        1   2 NBNB51
+     IDS3         DS
+     I                                        1   6 NBNBR6
+     I                                        1   2 NBNB61
+     IDS4         DS
+     I                                        1   80PDATE
+     I                                        3   80PDATE6
+     IDS5         DS
+     I                                        1   3 MCODE2
+     I                                        1   1 MCOD12
+     IDS6         DS
+     I                                        1   3 SCODE5
+     I                                        1   1 SCOD12
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     C*----------------------------------------------------
+     C           *ENTRY    PLIST
+     C                     PARM           P#DATE  80
+     C           PAR010    PLIST
+     C                     PARM           P#DATE  80
+     C           N3000     KLIST
+     C                     KFLD           PDATE
+     C                     KFLD           WMCODE
+     C*----------------------------------------------------
+     C                     MOVE P#DATE    PDATE   80
+     C*PTP0740フォーマット作成
+     C                     CALL '@NP5710' PAR010           PTP0740 CLEAR
+     C*DTP9000A----
+     C           *LOVAL    SETLLDTP9000A
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ DTP9000A                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           ACREC1    IFEQ ' '
+     C           SDATE1    IFEQ PDATE6
+     C*
+     C           MCODE1    IFNE 'DU '
+     C           MCODE1    ANDNE'HU '
+     C           MCODE1    ANDNE'PU '
+     C           MCODE1    ANDNE'SU '
+     C*
+     C                     MOVELMCODE1    WMCODE  3
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C*                    SETON                     H1
+     C                     ELSE
+     C           HYHUNP    ADD  SOFUN1    HYHUNP
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*KTP9000A----
+     C                     Z-ADD0         HYHUNP
+     C           *LOVAL    SETLLKTP9000A
+     C                     Z-ADD0         FLAG02
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ KTP9000A                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           ACREC2    IFEQ ' '
+     C           SDATE2    IFEQ PDATE6
+     C*
+     C                     MOVELMCODE2    WMCODE  3
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C*                    SETON                     H2
+     C                     ELSE
+     C           HYHUNP    ADD  SOFUN2    HYHUNP
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*SGYOU
+     C*
+     C           MCODE2    IFNE SGYOU2
+     C*
+     C                     SETOF                     90
+     C           SGYOU2    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GROUX7    IFEQ '*'
+     C*
+     C           SGYOU2    IFNE *BLANK
+     C                     MOVELSGYOU2    WMCODE
+     C                     ELSE
+     C*
+     C                     SETOF                     90
+     C           MCODE2    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GCODE7    IFNE *BLANK
+     C                     MOVELGCODE7    WMCODE
+     C                     ELSE
+     C                     MOVELMCODE2    WMCODE
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVELMCODE2    WMCODE
+     C                     ENDIF
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C*
+     C***        SGYOU     IFNE '   '
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C*                    SETON                     H2
+     C                     ELSE
+     C           HYHUNP    ADD  SOFUN2    HYHUNP
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C***                  ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*UTP9000A----
+     C                     Z-ADD0         HYHUNP
+     C           *LOVAL    SETLLUTP9000A
+     C                     Z-ADD0         FLAG02
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ UTP9000A                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           ACREC3    IFEQ ' '
+     C           SDATE3    IFEQ PDATE6
+     C*
+     C                     MOVELMCODE3    WMCODE  3
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C                     SETON                     H3
+     C                     ELSE
+     C           HYHUNP    ADD  SOFUN3    HYHUNP
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*SGYOU
+     C*
+     C           MCODE3    IFNE SGYOU3
+     C*
+     C                     SETOF                     90
+     C           SGYOU3    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GROUX7    IFEQ '*'
+     C*
+     C           SGYOU3    IFNE *BLANK
+     C                     MOVELSGYOU3    WMCODE
+     C                     ELSE
+     C*
+     C                     SETOF                     90
+     C           MCODE3    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GCODE7    IFNE *BLANK
+     C                     MOVELGCODE7    WMCODE
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVELMCODE3    WMCODE
+     C                     ENDIF
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C*
+     C***        SGYOU     IFNE '   '
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C*                    SETON                     H2
+     C                     ELSE
+     C           HYHUNP    ADD  SOFUN3    HYHUNP
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C***                  ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C*DTC0040----
+     C           *LOVAL    SETLLDTC0040
+     C                     Z-ADD0         FLAG02
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ DTC0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           SDATE4    IFEQ PDATE6
+     C           ACREC4    IFEQ ' '
+     C           NBNB41    ANDNE'X '
+     C*
+     C                     MOVELSCODE4    WMCODE  3
+     C*分数計算
+     C                     Z-ADD0         WAAA    50
+     C                     Z-ADD0         WHUNS   50
+     C           CHUNS4    IFEQ 0
+     C           GOKAK4    MULT WTIME4    WAAA      H
+     C           WAAA      ADD  PTIME4    WHUNS     H
+     C                     ELSE
+     C                     Z-ADDCHUNS4    WHUNS     H
+     C                     ENDIF
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C*                    SETON                     H4
+     C                     ELSE
+     C           TKHUNP    ADD  WHUNS     TKHUNP    H
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*KTC0040----
+     C           *LOVAL    SETLLKTC0040
+     C                     Z-ADD0         FLAG02
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ KTC0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           SDATE5    IFEQ PDATE6
+     C           ACREC5    IFEQ ' '
+     C           NBNB51    ANDNE'X '
+     C*分数計算
+     C                     Z-ADD0         WAAA
+     C                     Z-ADD0         WHUNS
+     C           CHUNS5    IFEQ 0
+     C           GOKAK5    MULT WTIME5    WAAA      H
+     C           WAAA      ADD  PTIME5    WHUNS     H
+     C                     ELSE
+     C                     Z-ADDCHUNS5    WHUNS     H
+     C                     ENDIF
+     C*
+     C                     MOVELSCODE5    WMCODE
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C                     SETON                     90
+     C                     SETON                     H5
+     C                     ELSE
+     C           TKHUNP    ADD  WHUNS     TKHUNP    H
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*
+     C*ｸﾞﾙｰﾌﾟｺｰﾄﾞ
+     C           SCODE5    IFNE SGYON5
+     C*
+     C                     SETOF                     90
+     C           SGYON5    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GROUX7    IFEQ '*'
+     C*
+     C           SGYON5    IFNE *BLANK
+     C                     MOVELSGYON5    WMCODE
+     C                     ELSE
+     C*
+     C                     SETOF                     90
+     C           SCODE5    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GCODE7    IFNE *BLANK
+     C                     MOVELGCODE7    WMCODE
+     C                     ELSE
+     C                     MOVELSCODE5    WMCODE
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE  3
+     C                     ENDIF
+     C*
+     C***                  MOVELSCODE5    WMCODE  3
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C**                   SETON                     90
+     C**                   SETON                     H5
+     C                     ELSE
+     C           TKHUNP    ADD  WHUNS     TKHUNP    H
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*SGYON
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*UTC0040----
+     C           *LOVAL    SETLLUTC0040
+     C                     Z-ADD0         FLAG02
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ UTC0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C           SDATE6    IFEQ PDATE6
+     C           ACREC6    IFEQ ' '
+     C           NBNB61    ANDNE'X '
+     C*
+     C                     MOVELSCODE6    WMCODE  3
+     C*分数計算
+     C                     Z-ADD0         WAAA
+     C                     Z-ADD0         WHUNS
+     C           CHUNS6    IFEQ 0
+     C           GOKAK6    MULT WTIME6    WAAA      H
+     C           WAAA      ADD  PTIME6    WHUNS     H
+     C                     ELSE
+     C                     Z-ADDCHUNS6    WHUNS     H
+     C                     ENDIF
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C                     SETON                     H6
+     C                     ELSE
+     C           TKHUNP    ADD  WHUNS     TKHUNP    H
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*----
+     C           SCODE6    IFNE SGYON6
+     C*
+     C                     SETOF                     90
+     C           SGYON6    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GROUX7    IFEQ '*'
+     C*
+     C           SGYON6    IFNE *BLANK
+     C                     MOVELSGYON6    WMCODE
+     C                     ELSE
+     C*
+     C                     SETOF                     90
+     C           SCODE6    CHAINDMP0600              90
+     C           *IN90     IFEQ '0'
+     C           GCODE7    IFNE *BLANK
+     C                     MOVELGCODE7    WMCODE
+     C                     ELSE
+     C                     MOVELSCODE6    WMCODE
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    WMCODE  3
+     C                     ENDIF
+     C*
+     C           N3000     CHAINPTP0740              90
+     C           *IN90     IFEQ '1'
+     C***                  SETON                     H6
+     C                     ELSE
+     C           TKHUNP    ADD  WHUNS     TKHUNP    H
+     C                     UPDATRPTP0740
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     SETON                     LR
+     C                     RETRN

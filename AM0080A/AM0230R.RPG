@@ -1,0 +1,92 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    ÇnÇbÇqópéÛíçèàóùÉGÉâÅ[çXêVèàóù             *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0040 UF  E                    DISK
+     FAML0100 IF  E           K        DISK
+     FAML0101 IF  E           K        DISK
+     F            RAML0100                          KRENAMERAML0101
+     IDS1         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 WKCUS
+     C*----------------------------------------------------
+     C           D0100     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           ORDNOA
+     C                     KFLD           OFNAMA
+     C*----------------------------------------------------
+     C           D0101     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           OFNAMA
+     C*----------------------------------------------------
+     C                     MOVEL*BLANK    W#ERR   2
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           ORDQUA    IFNE 0
+     C*
+     C           WKCUS     IFNE '0M'
+     C           WKCUS     ANDNE'0T'
+     C*
+     C                     SETOF                     90
+     C           D0100     CHAINAML0100              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           ERR01E    IFEQ *BLANK
+     C           ERR02E    ANDEQ*BLANK
+     C           ERR03E    ANDEQ*BLANK
+     C           ERR04E    ANDEQ*BLANK
+     C           ERR05E    ANDEQ*BLANK
+     C           ERRMOE    ANDEQ*BLANK
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    A1A
+     C                     UPDATRAML0040
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C*-------------------------------
+     C                     ELSE
+     C*
+     C                     SETOF                     90
+     C           D0101     CHAINAML0101              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           ERR01E    IFEQ *BLANK
+     C           ERR02E    ANDEQ*BLANK
+     C           ERR03E    ANDEQ*BLANK
+     C           ERR04E    ANDEQ*BLANK
+     C           ERR05E    ANDEQ*BLANK
+     C           ERRMOE    ANDEQ*BLANK
+     C*
+     C                     ELSE
+     C                     MOVEL*BLANK    A1A
+     C                     UPDATRAML0040
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C*
+     C                     ENDIF
+     C*
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------

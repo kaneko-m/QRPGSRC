@@ -1,0 +1,105 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    ＯＣＲ用受注処理同時納入確認処理           *
+     H*    水戸・トミタ用                               *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0101 UF  E           K        DISK
+     F            RAML0100                          KRENAMERAML0101
+     IDS1         DS
+     I                                        1  42 ITNBRA
+     I                                        1   5 ITNB5A
+     I                                        1  25 ITNB2A
+     IDS2         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 CUS02A
+     IDS3         DS
+     I                                        1   5 CUSNRE
+     I                                        1   2 CUS02E
+     IDS4         DS
+     I                                        1  15 ORDNOE
+     I                                        1   3 ORD03E
+     IDS5         DS
+     I                                        1   5 SHPNRA
+     I                                        1   1 WKSHPN
+     C*-----------------------------------------------------
+     C*指定納品先・直送運賃確認（水戸・トミタ）
+     C*
+     C           *LOVAL    SETLLAML0101
+     C*
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     71
+     C                     READ RAML0101                 71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C           CUS02E    IFEQ '0M'
+     C           CUS02E    OREQ '0T'
+     C*
+     C*
+     C           YUBINE    IFNE *BLANK
+     C           DUMMYE    ANDEQ*BLANK
+     C*
+     C*指定納品先以外
+     C           YUBINE    ORNE *BLANK
+     C           SHITEE    ANDEQ'*'
+     C*
+     C           GOKEIE    IFGT 0
+     C           GOKEIE    ANDLT30000
+     C*
+     C                     MOVEL'*'       WDOJCD  1
+     C                     MOVEL*BLANK    WERRCD  2
+     C*直送明細あり？
+     C           TYKCDE    IFEQ '*'
+     C*同時納入コード設定
+     C                     MOVELWDOJCD    DOJCDE
+     C                     UPDATRAML0101
+     C                     ELSE
+     C*直送明細運賃なし
+     C                     EXSR #ERR51
+     C                     UPDATRAML0101
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #ERR51    BEGSR
+     C*運賃なし
+     C           ERR01E    IFEQ *BLANK
+     C           ERR01E    OREQ '51'
+     C                     MOVEL'51'      ERR01E
+     C                     ELSE
+     C           ERR02E    IFEQ *BLANK
+     C           ERR02E    OREQ '51'
+     C                     MOVEL'51'      ERR02E
+     C                     ELSE
+     C           ERR03E    IFEQ *BLANK
+     C           ERR03E    OREQ '51'
+     C                     MOVEL'51'      ERR03E
+     C                     ELSE
+     C           ERR04E    IFEQ *BLANK
+     C           ERR04E    OREQ '51'
+     C                     MOVEL'51'      ERR04E
+     C                     ELSE
+     C           ERR05E    IFEQ *BLANK
+     C           ERR05E    OREQ '51'
+     C                     MOVEL'51'      ERR05E
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------

@@ -1,0 +1,7 @@
+             PGM
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 198) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIOM)
+             CALL       PGM(NP3700R)
+             DLTOVR     FILE(*ALL)
+ ENDCLPGM:
+             ENDPGM     /* END CL PGM */

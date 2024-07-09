@@ -1,0 +1,93 @@
+             PGM
+/*変数定義*/
+             DCL        VAR(&ERR) TYPE(*CHAR) LEN(1)
+             DCL        VAR(&DRPY) TYPE(*CHAR) LEN(8)
+             DCL        VAR(&MSG) TYPE(*CHAR) LEN(75)
+             DCL        VAR(&RTCD) TYPE(*CHAR) LEN(2) VALUE('  ')
+             DCL        VAR(&PGID) TYPE(*CHAR) LEN(10) +
+                          VALUE('          ')
+             DCL        VAR(&TEXT) TYPE(*CHAR) LEN(512) VALUE(' ')
+             DCL        VAR(&P#USID) TYPE(*CHAR) LEN(10) /* ﾕｰｻﾞｰ ID */
+             DCL        VAR(&P#JBID) TYPE(*CHAR) LEN(10) /* ｼﾞｮﾌﾞ ID */
+ /*排他制御（ロック設定*/
+             CALL       PGM(@SB050R) PARM('L' 'DTR0300' ' ' ' ' ' ' +
+                          ' ' ' ' 'AM0080A' &P#USID &P#JBID ' ')
+  /*　　　　　　　　　　　　　　                        */
+/*本番・テスト環境判断*/
+             CALL       PGM(AM0290R) PARM(&ERR)
+/*本番環境*/
+             IF         COND(&ERR *EQ ' ') THEN(DO)
+             ENDDO
+/* テスト環境 */
+             IF         COND(&ERR *EQ '1') THEN(DO)
+             CHGLIBL    LIBL(PRD1FTCHG PRD1FMCHG PRD1FWCHG COSFTCHG +
+                          COSFMCHG COSFWCHG PRD1PO SALPO GENPO +
+                          COSPO OTRPO CHKACTLIB SALFTCHG SALFM +
+                          SALFW OTRFT OTRFM QGPL)
+             ENDDO
+ /*          */
+             CLRPFM     FILE(AML0100) /* エラー抽出用WF */
+             CLRPFM     FILE(AML0120) /* 直送データ集計 */
+             CLRPFM     FILE(AML0130) /* 直送データ集計 */
+ /*          */
+ /*          CALL       PGM(AM0070R)           */
+ /*          CALL       PGM(AM0071R)           */
+ /*          CALL       PGM(AM0072R)           */
+ /*          CALL       PGM(AM0073R)           */
+ /*          CALL       PGM(AM0074R)           */
+             CALL       PGM(AM0075R)
+ /*          CALL       PGM(AM0530R)           */
+ /*          CALL       PGM(AM0531R)           */
+ /*          CALL       PGM(AM0532R)           */
+ /*          CALL       PGM(AM0533R)           */
+             CALL       PGM(AM0534R)
+             CALL       PGM(AM0540R) /* 受注データ重複確認 */
+    /*数量０を削除する*/
+             CALL       PGM(AM0090R)
+    /*注文NOに対するエラー確認 */
+             CALL       PGM(AM0240R)
+             CALL       PGM(AM0240_01R)
+    /*明細を確認後、AML0101を更新*/
+             CALL       PGM(AM0240_02R)
+    /*直送先データ集計 */
+             CALL       PGM(AM0240_04R)
+             CALL       PGM(AM0240_05R)
+    /*明細を確認後、AML0040を更新*/
+             CALL       PGM(AM0250R)
+    /*直送の場合　同時納入にする  */
+             CALL       PGM(AM0280R)
+             CALL       PGM(AM0280_01R)
+    /*エラーフラグ更新（１件でもあれば全件エラーにする）*/
+             CALL       PGM(AM0230R)
+ /*          */
+/* エラーなし */
+     /*      OVRPRTF    FILE(QSYSPRT) PAGESIZE(68 198) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIOM)              */
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 340) LPI(6) +
+                          OVRFLW(40) OUTQ(WILPLEXCHG/SHIOM)
+     /*      OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 340) LPI(6) +
+                          OVRFLW(40)                          */
+    /* */
+    /*       CALL       PGM(AM0080_01R) /* 受注処理 */
+    /*       CALL       PGM(AM0080_02R) /* 受注処理 */
+             CALL       PGM(AM0080_03R) /* 受注処理 */
+             DLTOVR     FILE(*ALL)
+    /* */
+/* エラーあり */
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 340) LPI(6) +
+                          OVRFLW(31) OUTQ(WILPLEXCHG/SHIKM)
+      /*     OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 340) LPI(6) +
+                          OVRFLW(31)          */
+     /* */
+     /*      CALL       PGM(AM0080_05R) /* エラーリスト*/
+     /*      CALL       PGM(AM0085_05R) /* エラーリスト水戸・トミタ*/
+             CALL       PGM(AM0080_06R) /* エラーリスト*/
+             CALL       PGM(AM0085_06R) /* エラーリスト水戸・トミタ*/
+     /* */
+             CLRPFM     FILE(AML0040)
+ /*排他制御（ロック解除)  */
+             CALL       PGM(@SB050R) PARM('U' 'DTR0300' ' ' ' ' ' ' +
+                          ' ' ' ' 'AM0080A' &P#USID &P#JBID ' ')
+             GOTO       CMDLBL(ENDCLPGM)
+ ENDCLPGM:
+             ENDPGM     /* END CL PGM */

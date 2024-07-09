@@ -1,0 +1,230 @@
+     H*****************************************************
+     H*    PROGRAM NAME-SS2100R CODED BY K.IWAI           *
+     H*                         CODED ON 19.03.26         *
+     H*   送り状                                        *
+     H*****************************************************
+     H        1   Y
+     FDTR0600 IF  E                    DISK
+     FQSYSPRT O   F     378     OF    LPRINTER
+     LQSYSPRT 112FL112OL
+     I*< ｼｽﾃﾑ日付>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     C           PAR010    PLIST
+     C                     PARM           P#SYKN  80
+     C                     PARM           P#ITDS 30
+     C                     PARM           P#QUAN  50
+     C                     PARM           P#CNT2  20
+     C                     PARM           P#CNT3  20       文字数
+     C                     PARM           P#DOJN 100
+     C                     PARM           P#RECD  2
+     C*-----------------------------------------------------------
+     C           PAR020    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*-----------------------------------------------------------
+     C                     MOVEL*BLANK    W#MOJ1256
+     C                     MOVEL*BLANK    W#MOJ2256
+     C                     MOVEL*BLANK    W#MOJ3 50
+     C                     MOVEL*BLANK    W#MOJ4 60
+     C                     MOVEL*BLANK    W#MOM1256
+     C                     MOVEL*BLANK    W#MOM2256
+     C                     MOVEL*BLANK    W#MOM3256
+     C*-----------------------------------------------------------
+     C                     TIME           W#SYST
+     C                     Z-ADD1         CNT     20
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7050
+     C                     READ DTR0600                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C                     MOVELDELNO6    P#SYKN
+     C                     MOVEL*BLANK    P#ITDS
+     C                     Z-ADD0         P#QUAN
+     C                     Z-ADD0         P#CNT2
+     C                     Z-ADD0         P#CNT3
+     C                     Z-ADD0         P#DOJN
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@SS0460' PAR010
+     C           P#CNT2    IFNE 0
+     C                     SETON                     50
+     C                     ENDIF
+     C* 型式
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'2'       P#SKBN
+     C           P#CNT3    ADD  7         P#LENG
+     C                     MOVELP#ITDS    P#MOJ1
+     C                     MOVEL'数量'  P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR020
+     C                     MOVELP#MOJ3    W#MOJ1
+     C*
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'2'       P#SKBN
+     C                     MOVELW#MOJ1    P#MOJ1
+     C* 数量
+     C                     SELEC
+     C           P#QUAN    WHLT 10
+     C                     MOVE P#QUAN    W#QUA1  1
+     C           P#LENG    ADD  4         P#LENG
+     C                     MOVE W#QUA1    P#MOJ2
+     C           P#QUAN    WHGE 10
+     C           P#QUAN    ANDLT100
+     C                     MOVE P#QUAN    W#QUA2  2
+     C           P#LENG    ADD  4         P#LENG
+     C                     MOVE W#QUA2    P#MOJ2
+     C           P#QUAN    WHGE 100
+     C           P#QUAN    ANDLT1000
+     C                     MOVE P#QUAN    W#QUA3  3
+     C           P#LENG    ADD  4         P#LENG
+     C                     MOVE W#QUA3    P#MOJ2
+     C                     OTHER
+     C           P#LENG    ADD  5         P#LENG
+     C                     MOVE P#QUAN    P#MOJ2
+     C                     ENDSL
+     C                     CALL '@SB010R' PAR020
+     C                     MOVELP#MOJ3    W#MOJ3
+     C*
+     C           P#CNT2    IFNE 0
+     C*
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'2'       P#SKBN
+     C*
+     C           P#LENG    ADD  4         P#LENG
+     C                     MOVELW#MOJ3    P#MOJ1
+     C                     MOVEL'他'    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR020
+     C*
+     C                     MOVELP#MOJ3    W#MOM1
+     C* 件数
+     C*
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'2'       P#SKBN
+     C                     MOVELW#MOM1    P#MOJ1
+     C                     SELEC
+     C           P#CNT2    WHLT 10
+     C                     MOVE P#CNT2    W#CNT1  1
+     C           P#LENG    ADD  2         P#LENG
+     C                     MOVE W#CNT1    P#MOJ2
+     C           P#CNT2    WHGE 10
+     C           P#CNT2    ANDLT100
+     C                     MOVE P#CNT2    W#CNT2  2
+     C           P#LENG    ADD  2         P#LENG
+     C                     MOVE W#CNT2    P#MOJ2
+     C                     ENDSL
+     C*
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR020
+     C                     MOVELP#MOJ3    W#MOM2
+     C*
+     C* 点
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL'2'       P#SKBN
+     C           P#LENG    ADD  4         P#LENG
+     C                     MOVELW#MOM2    P#MOJ1
+     C                     MOVEL'点'    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR020
+     C*
+     C                     MOVELP#MOJ3    W#MOJ4
+     C                     ENDIF
+     C*
+     C           CNT       IFEQ 1
+     C                     EXCPTMID1
+     C                     ELSE
+     C                     EXCPTMID2
+     C                     ENDIF
+     C*
+     C                     EXCPTMEI
+     C                     ADD  1         CNT
+     C           CNT       IFEQ 19
+     C                     Z-ADD1         CNT
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     SETON                     LR
+     C                     RETRN
+     C*--------------------------------------------------
+     OQSYSPRT E  101           MID1
+     O                                    2 '1'
+     O                         DELCD6    13
+     O                         DTYPE6    24
+     O                         SHUCD6    37
+     O                         SHNM16   138
+     O                         SHNM26   239
+     O                         SHUZP6   247
+     O                         SHAD16   348
+     OQSYSPRT E  1             MID2
+     O                                    2 '1'
+     O                         DELCD6    13
+     O                         DTYPE6    24
+     O                         SHUCD6    37
+     O                         SHNM16   138
+     O                         SHNM26   239
+     O                         SHUZP6   247
+     O                         SHAD16   348
+     O        E  1             MEI
+     O                                    2 '2'
+     O                         SHAD26   103
+     O                         SHAD36   204
+     O                         SHUTL6   225
+     O                         OWNCD6   246
+     O                         SHUDY6   257
+     O                         ARVDY6   268
+     O                         QUANT6   272
+     O                         SAISU6   278
+     O                         WEIGT6   284
+     O        E  1             MEI
+     O                                    2 '3'
+     O                         DELNO6   103
+     O                         TIMZN6   204
+     O                         BASCD6   305
+     O        E  1             MEI
+     O                                    2 '4'
+     O                         YSIZE6   103
+     O                         COOLK6   204
+     O***                      P#ITDS   235
+     O***                               241 '数量'
+     O***                      P#QUAN4  246
+     O                N50      W#MOJ3   255
+     O***              50               250 '他'
+     O***              50      P#CNT24  252
+     O***              50               256 '点'
+     O                 50      W#MOJ4   265
+     O        E  1             MEI
+     O                                    2 '5'
+     O                         BIKO26   103
+     O                         BIKO36   204
+     O                         BIKO46   305
+     O        E  1             MEI
+     O                                    2 '6'
+     O                         BIKO56   103
+     O                         STPCD6   105
+     O                         W#SYMD   114
+     O                         W#SHMS   120

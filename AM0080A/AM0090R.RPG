@@ -1,0 +1,32 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    êîó ÇOÉåÉRÅ[ÉhçÌèú                         *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0040 UF  E                    DISK
+     C*----------------------------------------------------
+     C                     MOVEL*BLANK    W#ERR   2
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C*
+     C           ORDQUA    IFEQ 0
+     C*
+     C                     DELETRAML0040
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------

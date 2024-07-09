@@ -1,0 +1,457 @@
+     H*****************************************************
+     H*    PROGRAM NAME SS0140SR CODED BY K.IWAI          *
+     H*                         CODED ON 05/10/14         *
+     H*    îÑè„é¿ê—Å@çbï{                               *
+     H*****************************************************
+     H        1   Y
+     FDTR0350 UF  E           K        DISK
+     FDTR0300 UF  E           K        DISK
+     FDTR0180 IF  E           K        DISK                      A
+     FDTR0190 IF  E           K        DISK
+     FDTR0010 UF  E           K        DISK
+     FDTR5200 UF  E           K        DISK
+     FDTR0120 UF  E           K        DISK
+     IRDTR0180
+     I              ZZ0001                          RECCD2
+     I              ACREC                           ACREC2
+     I              JUTNO                           JUTNO2
+     I              SEQNO                           SEQNO2
+     I              CUSNR                           CUSNR2
+     I              SHPNR                           SHPNR2
+     I              SLSNR                           SLSNR2
+     I              ORDNO                           ORDNO2
+     I              JUTDY                           JUTDY2
+     I              DELCD                           DELCD2
+     I              DELDY                           DELDY2
+     I              DETCN                           DETCN2
+     I              A1                              A12
+     I              A2                              A22
+     I              A3                              A32
+     I              A4                              A42
+     I              A5                              A52
+     I              A6                              A62
+     I              QUANT                           QUANT2
+     I              TANKA1                          TANKA2
+     I              KINGA                           KINGA2
+     I              ITDSC                           ITDSC2
+     I              ITCOD                           ITCOD2
+     I              DOJNO                           DOJNO2
+     I              BUNYN                           BUNYN2
+     I              INVNO                           INVNO2
+     I              NBNBR                           NBNBR2
+     I              BUMOR                           BUMOR2
+     I              BUNDT                           BUNDT2
+     I              BQUAN                           BQUAN2
+     I              HJQTY                           HJQTY2
+     I              BUNSU                           BUNSU2
+     I              REJUK                           REJUK2
+     I              SLSND                           SLSND2
+     I              TKING                           TKING2
+     I              SSHUF                           SSHUF2
+     I              HIKIQ                           HIKIQ2
+     I              NOFIL                           NOFIL2
+     I              ZZ0172                          FILER2
+     I              SHPCD                           SHPCD2
+     I              SHUDY                           SHUDY2
+     I              REDAY                           REDAY2
+     I              JUTDY8                          JUTD82
+     I              DELDY8                          DELD82
+     I              SHUDY8                          SHUD82
+     I              REDAY8                          REDA82
+     IRDTR0190
+     I              ZZ0001                          RECCD9
+     I              ACREC                           ACREC9
+     I              JUTNO                           JUTNO9
+     I              SEQNO                           SEQNO9
+     I              CUSNR                           CUSNR9
+     I              SHPNR                           SHPNR9
+     I              SLSNR                           SLSNR9
+     I              ORDNO                           ORDNO9
+     I              JUTDY                           JUTDY9
+     I              DELCD                           DELCD9
+     I              DELDY                           DELDY9
+     I              DETCN                           DETCN9
+     I              A1                              A19
+     I              A2                              A29
+     I              A3                              A39
+     I              A4                              A49
+     I              A5                              A59
+     I              A6                              A69
+     I              QUANT                           QUANT9
+     I              TANKA1                          TANKA9
+     I              KINGA                           KINGA9
+     I              ITDSC                           ITDSC9
+     I              ITCOD                           ITCOD9
+     I              DOJNO                           DOJNO9
+     I              BUNYN                           BUNYN9
+     I              INVNO                           INVNO9
+     I              NBNBR                           NBNBR9
+     I              BUMOR                           BUMOR9
+     I              BUNDT                           BUNDT9
+     I              BQUAN                           BQUAN9
+     I              HJQTY                           HJQTY9
+     I              BUNSU                           BUNSU9
+     I              REJUK                           REJUK9
+     I              SLSND                           SLSND9
+     I              TKING                           TKING9
+     I              SSHUF                           SSHUF9
+     I              HIKIQ                           HIKIQ9
+     I              NOFIL                           NOFIL9
+     I              ZZ0172                          FILER9
+     I              SHPCD                           SHPCD9
+     I              SHUDY                           SHUDY9
+     I              REDAY                           REDAY9
+     I              JUTDY8                          JUTD89
+     I              DELDY8                          DELD89
+     I              SHUDY8                          SHUD89
+     I              REDAY8                          REDA89
+     IRDTR0010
+     I              ZZ0001                          RECCD3
+     I              ACREC                           ACREC3
+     I              A1                              A13
+     I              A2                              A23
+     I              A3                              A33
+     I              A4                              A43
+     I              A5                              A53
+     I              A6                              A63
+     I              A7                              A73
+     I              A8                              A83
+     I              A9                              A93
+     I              A10                             A103
+     I              A11                             A113
+     I              A12                             A123
+     I              A13                             A133
+     I              A14                             A143
+     I              QTYOO                           QTYOO3
+     I              QTYOH                           QTYOH3
+     I              QTYRS                           QTYRS3
+     I              QTYRD                           QTYRD3
+     I              QTYRR                           QTYRR3
+     I              QTYRM                           QTYRM3
+     I              QTYRT                           QTYRT3
+     I              QTYOB                           QTYOB3
+     I              QTYOR                           QTYOR3
+     I              QTYOM                           QTYOM3
+     I              QTYOT                           QTYOT3
+     I              QTSOS                           QTSOS3
+     I              NOSTK                           NOSTK3
+     I              YOSTK                           YOSTK3
+     I              HIKIW                           HIKIW3
+     I              MINOW                           MINOW3
+     I              ZZ0082                          FILER3
+     I              ITNBR                           ITNBR3
+     IRDTR5200
+     I              ZZ0001                          RECCD4
+     I              ACREC                           ACREC4
+     I              ITCOD                           ITCOD4
+     I              QTYOO                           QTYOO4
+     I              QTYOH                           QTYOH4
+     I              QTYRS                           QTYRS4
+     I              QTYRD                           QTYRD4
+     I              QTYRR                           QTYRR4
+     I              QTYRM                           QTYRM4
+     I              QTYRT                           QTYRT4
+     I              QTYOB                           QTYOB4
+     I              QTYOR                           QTYOR4
+     I              QTYOM                           QTYOM4
+     I              QTYOT                           QTYOT4
+     I              QTSOS                           QTSOS4
+     I              ZZ0066                          FILER4
+     I              KOMIY                           KOMIY4
+     I              TAKU                            TAKU4
+     I              ZZ0104                          IDSC14
+     IDS1         DS
+     I                                        1   8 FILER2
+     I                                        1   1 SYUKA2
+     I                                        2   2 KOZYO2
+     IDS2         DS
+     I                                        1  14 ITCODA
+     I                                        1   10ITC1
+     I                                        2   20ITC2
+     I                                        3   30ITC3
+     I                                        4   40ITC4
+     I                                        5   50ITC5
+     I                                        6   60ITC6
+     I                                        7   70ITC7
+     I                                        8   80ITC8
+     I                                        9   90ITC9
+     I                                       10  100ITC10
+     I                                       11  110ITC11
+     I                                       12  120ITC12
+     I                                       13  130ITC13
+     I                                       14  140ITC14
+     IDS3         DS
+     I                                        1  30 ITDSCA
+     I                                        1  14 ITDS11
+     IDS4         DS
+     I                                        1   6 NBNBRA
+     I                                        1   2 SECOD1
+     IDS5         DS
+     I                                        1   80JUSEN1
+     I                                        1   60JUTNOA
+     I                                        7   80SEQNOA
+     I*-----------------------------------------------------
+     I*< SDS >
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     I*< ºΩ√—ì˙ït>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     C*-----------------------------------------------------
+     C                     TIME           W#SYST
+     C                     MOVELS#JOB     W#JOB   5
+     C*-----------------------------------------------------
+     C* /* ∑∞ … √≤∑ﬁ */
+     C*----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#KOSN  1
+     C                     PARM           P#KEY1 10
+     C                     PARM           P#KEY2 14
+     C                     PARM           P#SAKB  80
+     C                     PARM           P#RTCD  2
+     C*----------------------------------------------------
+     C           D0010     KLIST
+     C                     KFLD           ITC1
+     C                     KFLD           ITC2
+     C                     KFLD           ITC3
+     C                     KFLD           ITC4
+     C                     KFLD           ITC5
+     C                     KFLD           ITC6
+     C                     KFLD           ITC7
+     C                     KFLD           ITC8
+     C                     KFLD           ITC9
+     C                     KFLD           ITC10
+     C                     KFLD           ITC11
+     C                     KFLD           ITC12
+     C                     KFLD           ITC13
+     C                     KFLD           ITC14
+     C*
+     C*------------------------------------------------------------
+     C           D0180     KLIST
+     C                     KFLD           JUTNOA
+     C                     KFLD           SEQNOA
+     C*------------------------------------------------------------
+     C*    ======================================
+     C*           ***  MAIN     RTN  ***
+     C*    ======================================
+     C*------------------------------------------------------------
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RDTR0350                 70
+     C           *IN70     IFEQ '1'
+     C                     EXSR #DEL
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           SEQNOA    IFNE 0
+     C                     EXSR #URAGE
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*------------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     C           #DEL      BEGSR
+     C                     Z-ADD0         FLAG02  10
+     C           *LOVAL    SETLLDTR0350
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RDTR0350                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C                     DELETRDTR0350
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C*    ======================================
+     C*            ***  SUB     RTN  ***
+     C*    ======================================
+     C           #URAGE    BEGSR
+     C*
+     C*
+     C                     SETOF                     92
+     C           D0180     CHAINDTR0190              92
+     C           *IN92     IFEQ '1'
+     C*
+     C                     SETOF                     91
+     C           D0180     CHAINDTR0180              91
+     C           *IN91     IFEQ '1'
+     C                     EXSR #MOVE1
+     C                     WRITERDTR0180
+     C*--SPD--
+     C                     MOVEL*BLANK    P#KOSN
+     C                     MOVE JUTNOA    P#KEY1
+     C                     MOVE SEQNOA    P#KEY2
+     C                     Z-ADD0         P#SAKB
+     C                     MOVEL*BLANK    P#RTCD
+     C                     CALL 'CT5300R' PAR010
+     C*
+     C                     SETOF                     93
+     C           D0180     CHAINDTR0300              93
+     C           *IN93     IFEQ '0'
+     C                     MOVEL'*'       SHPCDK
+     C**                   Z-ADDSHUDYA    SHUDYK
+     C**                   Z-ADDSHUD8A    SHUD8K
+     C                     MOVE W#SYMD    SHUDYK
+     C                     Z-ADDW#SYMD    SHUD8K
+     C*****                MOVE *DATE     SHUDYK
+     C*****                Z-ADD*DATE     SHUD8K
+     C*
+     C***                  Z-ADDW#SYMD    CRTD1K
+     C***                  Z-ADDW#SHMS    CRTT1K
+     C***                  MOVELS#USR     USID1K
+     C***                  MOVELS#JOB     JBID1K
+     C***                  MOVELS#PGID    PGID1K
+     C*
+     C                     UPDATRDTR0300
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C           A1A       IFEQ 'A'                        **********
+     C*                                                             *
+     C           A2A       IFEQ 0                          ******** *
+     C                     SETOF                     92           * *
+     C           D0010     CHAINDTR0010              92           * *
+     C           *IN92     IFEQ '0'                        ****** * *
+     C*                                                         * * *
+     C           A3A       IFEQ 1                          **** * * *
+     C           QTYRD3    SUB  QUANTA    QTYRD3              * * * *
+     C           QTYRT3    SUB  QUANTA    QTYRT3              * * * *
+     C*
+     C***                  Z-ADDW#SYMD    CRTD1A
+     C***                  Z-ADDW#SHMS    CRTT1A
+     C***                  MOVELS#USR     USID1A
+     C***                  MOVELS#JOB     JBID1A
+     C***                  MOVELS#PGID    PGID1A
+     C                     UPDATRDTR0010                      * * * *
+     C                     ELSE                            ---* * * *
+     C*
+     C           QTYRS3    SUB  QUANTA    QTYRS3              * * * *
+     C           QTYRT3    SUB  QUANTA    QTYRT3              * * * *
+     C*
+     C***                  Z-ADDW#SYMD    CRTD1A
+     C***                  Z-ADDW#SHMS    CRTT1A
+     C***                  MOVELS#USR     USID1A
+     C***                  MOVELS#JOB     JBID1A
+     C***                  MOVELS#PGID    PGID1A
+     C                     UPDATRDTR0010                      * * * *
+     C                     ENDIF                           **** * * *
+     C*                                                         * * *
+     C                     ELSE                            -----* * *
+     C                     ENDIF                           ****** * *
+     C*                                                           * *
+     C                     ENDIF                           ******** *
+     C*                                                             *
+     C                     ELSE                            ---------*
+     C                     ENDIF                           **********
+     C*
+     C           A1A       IFEQ 'E'                        ************
+     C*                                                               *
+     C           A2A       IFEQ 0                          ********** *
+     C*                                                             * *
+     C           SECOD1    IFEQ '**'                       ******** * *
+     C                     SETOF                     92           * * *
+     C**         ITDS11    CHAINDTR5200              92           * * *
+     C           ITCODA    CHAINDTR5200              92           * * *
+     C           *IN92     IFEQ '0'                        ****** * * *
+     C*                                                         * * * *
+     C           A3A       IFEQ 1                          **** * * * *
+     C           QTYRD4    SUB  QUANTA    QTYRD4              * * * * *
+     C           QTYRT4    SUB  QUANTA    QTYRT4              * * * * *
+     C                     UPDATRDTR5200                      * * * * *
+     C                     ELSE                            ---* * * * *
+     C           QTYRS4    SUB  QUANTA    QTYRS4              * * * * *
+     C           QTYRT4    SUB  QUANTA    QTYRT4              * * * * *
+     C                     UPDATRDTR5200                      * * * * *
+     C                     ENDIF                           **** * * * *
+     C*                                                         * * * *
+     C                     ELSE                            -----* * * *
+     C                     ENDIF                           ****** * * *
+     C*                                                           * * *
+     C                     ENDIF                           ******** * *
+     C*                                                             * *
+     C                     ELSE                            ---------* *
+     C                     ENDIF                           ********** *
+     C*                                                               *
+     C                     ELSE                            -----------*
+     C                     ENDIF                           ************
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #MOVE1    BEGSR
+     C                     MOVEL'JF'      RECCD2
+     C                     MOVEL*BLANK    ACREC2
+     C                     Z-ADDJUTNOA    JUTNO2
+     C                     Z-ADDSEQNOA    SEQNO2
+     C                     MOVELCUSNRA    CUSNR2
+     C                     MOVELSHPNRA    SHPNR2
+     C                     Z-ADDSLSNRA    SLSNR2
+     C                     MOVELORDNOA    ORDNO2
+     C                     Z-ADDJUTDYA    JUTDY2
+     C                     Z-ADDDELCDA    DELCD2
+     C                     Z-ADDDELDYA    DELDY2
+     C                     Z-ADDDETCNA    DETCN2
+     C                     MOVELA1A       A12
+     C                     Z-ADDA2A       A22
+     C                     Z-ADDA3A       A32
+     C                     Z-ADDA4A       A42
+     C                     Z-ADDA5A       A52
+     C                     Z-ADDA6A       A62
+     C                     Z-ADDQUANTA    QUANT2
+     C                     Z-ADDTANKAA    TANKA2
+     C                     Z-ADDKINGAA    KINGA2
+     C                     MOVELITDSCA    ITDSC2
+     C                     MOVELITCODA    ITCOD2
+     C                     MOVELDOJNOA    DOJNO2
+     C                     Z-ADDBUNYNA    BUNYN2
+     C                     Z-ADDINVNOA    INVNO2
+     C                     MOVELNBNBRA    NBNBR2
+     C                     Z-ADDBUMORA    BUMOR2
+     C                     MOVELBUNDTA    BUNDT2
+     C                     Z-ADDBQUANA    BQUAN2
+     C                     Z-ADDHJQTYA    HJQTY2
+     C                     Z-ADDBUNSUA    BUNSU2
+     C                     MOVELREJUKA    REJUK2
+     C                     MOVELSLSNDA    SLSND2
+     C                     Z-ADDTKINGA    TKING2
+     C                     MOVELSSHUFA    SSHUF2
+     C                     Z-ADDHIKIQA    HIKIQ2
+     C                     MOVELNOFILA    NOFIL2
+     C                     MOVEL*BLANK    SYUKA2
+     C                     MOVEL'K'       KOZYO2
+     C                     MOVEL'*'       SHPCD2
+     C                     Z-ADDSHUDYA    SHUDY2
+     C                     Z-ADDREDAYA    REDAY2
+     C                     Z-ADDJUTD8A    JUTD82
+     C                     Z-ADDDELD8A    DELD82
+     C                     Z-ADDSHUD8A    SHUD82
+     C                     Z-ADDREDA8A    REDA82
+     C*
+     C                     SETOF                     95
+     C           JUSEN1    CHAINDTR0120              95
+     C           *IN95     IFEQ '0'
+     C                     MOVELW#SYMD    REDA8V
+     C                     MOVELW#SYMD    SHUD8V
+     C***                  MOVEL*DATE     REDA8V
+     C***                  MOVEL*DATE     SHUD8V
+     C                     UPDATRDTR0120
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDSR
+     C*------------------------------------------------------------

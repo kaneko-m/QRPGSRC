@@ -1,0 +1,263 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0280R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.03.10         *
+     H*    ＯＣＲ用受注処理通常納品先の場合　　　　   *
+     H*     住所情報を消す                              *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0043 UF  E           K        DISK
+     FDMR0010 IF  E           K        DISK
+     FDMR0030 IF  E           K        DISK
+     IDS1         DS
+     I                                        1   3 TRESAA
+     I                                        1   2 W#TRE1
+     I                                        3   3 W#TRE2
+     IDS2         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 WCUS02
+     IDS3         DS
+     I                                        1  15 ORDNOA
+     I                                        1   7 ORDN7A
+     I                                        1   8 ORDN8A
+     IDS4         DS
+     I                                        1  10 PHONEA
+     I                                        1   1 DEFAUA
+     C*----------------------------------------------------
+     C           D0100     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           OFNAMA
+     C                     KFLD           W#ORD3
+     C*----------------------------------------------------
+     C           *LOVAL    SETLLAML0043
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD0         FLAG10  10
+     C                     Z-ADD0         W#FLG1  10
+     C                     MOVEL*BLANK    W#ORD3 15
+     C*
+     C                     MOVEL*BLANK    W#SHPN  5
+     C*
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ RAML0040                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           WCUS02    IFNE '0M'
+     C*出荷先コードあり
+     C           SHPN2A    IFNE *BLANK
+     C*
+     C           FLAG10    IFEQ 0
+     C                     MOVELSHPN2A    W#SHPN  5
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELORDNOA    W#ORD7  7
+     C***                  Z-ADD1         FLAG10
+     C                     ENDIF
+     C*
+     C                     SETOF                     90
+     C           SHPN2A    CHAINDMR0030              90
+     C           *IN90     IFEQ '0'
+     C*
+     C                     MOVEL*BLANK    YUBINA
+     C                     MOVELSHPNMB    SHPNMA
+     C                     MOVELSHIP1B    SHIP1A
+     C                     MOVELSHIP2B    SHIP2A
+     C                     MOVELSHTELB    SHTELA
+     C                     MOVEL*BLANK    BUSYOA
+     C                     MOVEL*BLANK    BIKO1A
+     C                     MOVEL*BLANK    BIKO2A
+     C                     UPDATRAML0040
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           YUBINA    IFNE *BLANK
+     C*
+     C                     SETOF                     9091
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           SHPNR     CHAINDMR0030              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           YUBINA    IFEQ AREASB
+     C           DEFAUA    ANDEQ'*'
+     C*
+     C                     MOVEL*BLANK    YUBINA
+     C                     MOVEL*BLANK    SHPNMA
+     C                     MOVEL*BLANK    SHIP1A
+     C                     MOVEL*BLANK    SHIP2A
+     C                     MOVEL*BLANK    SHTELA
+     C                     MOVEL*BLANK    BUSYOA
+     C                     MOVEL*BLANK    BIKO1A
+     C                     MOVEL*BLANK    BIKO2A
+     C*
+     C           W#SHPN    IFNE *BLANK
+     C           ORDNOA    IFEQ W#ORDN
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ELSE
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELORDNOA    W#ORD7  7
+     C*
+     C           W#SHPN    IFNE *BLANK
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ENDIF
+     C                     MOVELSHPN2A    W#SHPN  5
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     UPDATRAML0040
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           W#SHPN    IFNE *BLANK
+     C           ORDNOA    IFEQ W#ORDN
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ELSE
+     C**
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELORDNOA    W#ORD7  7
+     C           W#SHPN    IFNE *BLANK
+     C           ORDNOA    IFEQ W#ORDN
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ENDIF
+     C**
+     C                     MOVELSHPN2A    W#SHPN  5
+     C                     ENDIF
+     C**
+     C                     ENDIF
+     C                     UPDATRAML0040
+     C**
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-------------------------------------------------------------
+     C           *LOVAL    SETLLAML0043
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD0         FLAG10  10
+     C                     Z-ADD0         W#FLG1  10
+     C                     MOVEL*BLANK    W#ORD3 15
+     C*
+     C                     MOVEL*BLANK    W#SHPN  5
+     C*
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ RAML0040                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           WCUS02    IFEQ '0M'
+     C*出荷先コードあり
+     C           SHPN2A    IFNE *BLANK
+     C*
+     C           FLAG10    IFEQ 0
+     C                     MOVELSHPN2A    W#SHPN  5
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELORDNOA    W#ORD7  7
+     C                     Z-ADD1         FLAG10
+     C                     ENDIF
+     C*
+     C                     SETOF                     90
+     C           SHPN2A    CHAINDMR0030              90
+     C           *IN90     IFEQ '0'
+     C*
+     C                     MOVEL*BLANK    YUBINA
+     C                     MOVELSHPNMB    SHPNMA
+     C                     MOVELSHIP1B    SHIP1A
+     C                     MOVELSHIP2B    SHIP2A
+     C                     MOVELSHTELB    SHTELA
+     C                     MOVEL*BLANK    BUSYOA
+     C                     MOVEL*BLANK    BIKO1A
+     C                     MOVEL*BLANK    BIKO2A
+     C                     UPDATRAML0040
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           YUBINA    IFNE *BLANK
+     C*
+     C                     SETOF                     9091
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           SHPNR     CHAINDMR0030              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           YUBINA    IFEQ AREASB
+     C           DEFAUA    ANDEQ'*'
+     C                     MOVEL*BLANK    YUBINA
+     C                     MOVEL*BLANK    SHPNMA
+     C                     MOVEL*BLANK    SHIP1A
+     C                     MOVEL*BLANK    SHIP2A
+     C                     MOVEL*BLANK    SHTELA
+     C                     MOVEL*BLANK    BUSYOA
+     C                     MOVEL*BLANK    BIKO1A
+     C                     MOVEL*BLANK    BIKO2A
+     C*
+     C*-------------------------------------------------
+     C           W#SHPN    IFNE *BLANK
+     C           ORDN7A    IFEQ W#ORD7
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ELSE
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELORDNOA    W#ORD7  7
+     C           W#SHPN    IFNE *BLANK
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ENDIF
+     C*
+     C                     MOVELSHPN2A    W#SHPN  5
+     C*
+     C                     ENDIF
+     C*-----------------------------------------
+     C                     ENDIF
+     C                     UPDATRAML0040
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           W#SHPN    IFNE *BLANK
+     C           ORDN7A    IFEQ W#ORD7
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ELSE
+     C                     MOVELORDNOA    W#ORDN 15
+     C                     MOVELORDNOA    W#ORD7  7
+     C**
+     C           W#SHPN    IFNE *BLANK
+     C           ORDN7A    IFEQ W#ORD7
+     C                     MOVELW#SHPN    SHPN2A
+     C                     ENDIF
+     C                     MOVELSHPN2A    W#SHPN  5
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     UPDATRAML0040
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*----------------------------------------------------------

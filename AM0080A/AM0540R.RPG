@@ -1,0 +1,72 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0540R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.03.10         *
+     H*   受注重複データ確認処理　　　　　　　 　　   *
+     H*                                                   *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0043 UF  E           K        DISK
+     FDMR0040 IF  E           K        DISK
+     C*----------------------------------------------------
+     C           PAR100    PLIST
+     C                     PARM           P#CUSN  5
+     C                     PARM           P#ODNO 15
+     C                     PARM           P#ITTP  1
+     C                     PARM           P#ITCD 14
+     C                     PARM           P#ITDS 30
+     C                     PARM           P#RECD  2
+     C*----------------------------------------------------
+     C           *LOVAL    SETLLAML0043
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ RAML0040                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           ERRCDA    IFEQ *BLANK
+     C*
+     C           A1A       IFEQ 'A'
+     C           A1A       OREQ 'B'
+     C           A1A       OREQ 'E'
+     C*
+     C                     SETOF                     90
+     C                     MOVEL*BLANK    W#ITCD 14
+     C                     MOVELITNBRA    W#ITNB 25
+     C           W#ITNB    CHAINDMR0040              90
+     C           *IN90     IFEQ '0'
+     C                     MOVELITCOD     W#ITCD
+     C                     ELSE
+     C                     MOVELITNBRA    W#ITCD
+     C                     ENDIF
+     C*
+     C*---------------------------------------------------------
+     C*DTR0020 CHECK
+     C                     SETOF                     80
+     C                     MOVELCUSNRA    P#CUSN
+     C                     MOVELORDNOA    P#ODNO
+     C                     MOVELA1A       P#ITTP
+     C                     MOVELW#ITCD    P#ITCD
+     C                     MOVELITNBRA    P#ITDS
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@NA0495' PAR100
+     C*---------------------------------------------------------
+     C           P#RECD    IFEQ 'NG'
+     C                     MOVEL*BLANK    A1A
+     C                     MOVEL'10'      ERRCDA
+     C                     ELSE
+     C                     MOVEL*BLANK    ERRCDA
+     C                     ENDIF
+     C                     UPDATRAML0040
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*----------------------------------------------------------

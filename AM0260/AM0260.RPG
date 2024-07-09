@@ -1,0 +1,24 @@
+             PGM
+/*ïœêîíËã`*/
+             DCL        VAR(&ERR) TYPE(*CHAR) LEN(1)
+             CALL       PGM(AM0055R) PARM(&ERR)   /*ƒ◊Ω∫óp*/
+/* ¥◊∞≈º */
+             IF         COND(&ERR *EQ ' ') THEN(DO)
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(68 198) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIOM)
+             CALL       PGM(AM0260R)
+             DLTOVR     FILE(*ALL)
+             ENDDO
+/* ¥◊∞±ÿ */
+             IF         COND(&ERR *EQ '1') THEN(DO)
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(68 198) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIKM)
+             CALL       PGM(AM0260R)
+             DLTOVR     FILE(*ALL)
+             ENDDO
+             CLRPFM     FILE(AML0010)
+/*       */
+             CLRPFM     FILE(DTW0500)
+             CALL       PGM(SS1550R) /* î≠íçécçÏê¨ */
+ ENDCLPGM:
+             ENDPGM     /* END CL PGM */

@@ -1,0 +1,248 @@
+/*     %%TS  SD  20040919  123414  STAFF       REL-V4R4M0  5769-PW1           */
+             PGM        /* DATE=Y, COL=1, DSP=--1-            */
+             DCLF       FILE(MENP01)
+             DCL        VAR(&MSG) TYPE(*CHAR) LEN(80)
+             DCL        VAR(&MSGID) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&MSGDTA) TYPE(*CHAR) LEN(120)
+             DCL        VAR(&ERRCNT) TYPE(*DEC) LEN(1) VALUE(0)
+             DCL        VAR(&TITLE) TYPE(*CHAR) LEN(50) +
+                          VALUE('                                     -
+             ')
+             MONMSG     MSGID(CPF4168 CPF5143) EXEC(GOTO +
+                          CMDLBL(SDAOFF))
+             MONMSG     MSGID(CPF5140 CPF5144) EXEC(GOTO +
+                          CMDLBL(SDAOFF))
+             MONMSG     MSGID(CPF4101) EXEC(GOTO CMDLBL(SDAFILE))
+             MONMSG     MSGID(CPF4131) EXEC(GOTO CMDLBL(SDAFMT))
+             MONMSG     MSGID(CPF4169) EXEC(GOTO CMDLBL(SDASZERR))
+             MONMSG     MSGID(CPF6801) EXEC(GOTO CMDLBL(SDAMSG))
+             MONMSG     MSGID(CPF9999) EXEC(GOTO CMDLBL(SDAERR))
+ SDAMENU:    CHGVAR     VAR(&MENUPGMQ) VALUE(MENP01)
+ SDABEGIN:   SNDRCVF    DEV(*FILE) RCDFMT(MENUFMT)
+             RMVMSG     CLEAR(*ALL)
+             CHGVAR     VAR(&ERRCNT) VALUE(0)
+ SDACF1:     /* COMMAND FOR "CF1=END" FUNCTION KEY            */
+             IF         COND(&IN01) THEN(DO)
+             RETURN
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00010:   /* 1                                                       */
+             IF         COND(&OPTION = 1) THEN(DO)
+    /*       CALL       PGM(NP0300)             */
+             CALL       PGM(NP0300A)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00020:   /* 2                                                       */
+             IF         COND(&OPTION = 2) THEN(DO)
+    /*       CALL       PGM(NP0305)             */
+             CALL       PGM(NP0305A)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00030:   /* 3                                                       */
+             IF         COND(&OPTION = 3) THEN(DO)
+             CALL       PGM(NP0308)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00040:   /* 4                                                       */
+             IF         COND(&OPTION = 4) THEN(DO)
+      /*     CALL       PGM(NP0572SR) /* SPD »ÌÞÙ°ÁÝ 05/10/19 */
+             CALL       PGM(NP0572ASR) /*  NPD0600A UPDATE     */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00050:   /* 5  ‚a‚h‚mŽè”zƒf[ƒ^Æ‰ï                               */
+             IF         COND(&OPTION = 5) THEN(DO)
+             CALL       PGM(NP0500R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00060:   /* 6  ‚a‚h‚m»ìŽwŽ¦‘Æ‰ï                               */
+             IF         COND(&OPTION = 6) THEN(DO)
+         /*  CALL       PGM(NP0512R)   */
+             CALL       PGM(NP0513R) /* 11/08/30 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00070:   /* 7  ‚a‚h‚m»ìŽwŽ¦‘Æ‰ïi•”•iNO)                      */
+             IF         COND(&OPTION = 7) THEN(DO)
+         /*  CALL       PGM(NP0518R)   */
+             CALL       PGM(NP0510R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00080:   /* 8   ‚a‚h‚m»ìŠ®¬Æ‰ï                                */
+             IF         COND(&OPTION = 8) THEN(DO)
+         /*  CALL       PGM(NP0590R)   */
+         /*  CALL       PGM(NP0591R)   */
+             CALL       PGM(NP0592R) /* 11/08/30 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00090:   /* 9   •”•iisÆ‰ï                                      */
+             IF         COND(&OPTION = 9) THEN(DO)
+        /*   CALL       PGM(NP0520R)  */
+             CALL       PGM(NP0521R)   /* 08/07/02 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00100:   /* 10  H’öi•àó‹µÆ‰ï                                  */
+             IF         COND(&OPTION = 10) THEN(DO)
+         /*  CALL       PGM(NP0530R)   */
+         /*  CALL       PGM(NP0531R) /* 08/05/12 */
+             CALL       PGM(NP0532R) /* 22/08/31 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00110:   /* 11  H’öi•àó‹µÆ‰ï(’•¶NO)                        */
+             IF         COND(&OPTION = 11) THEN(DO)
+        /*   CALL       PGM(NP0535R)    */
+             CALL       PGM(NP0536R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00120:   /* 12  H’öi•àó‹µÆ‰ï(‘g—§ì”Ôj                     */
+             IF         COND(&OPTION = 12) THEN(DO)
+        /*   CALL       PGM(NP0536R)      */
+             CALL       PGM(NP0537R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00130:   /* 13  ƒ†ƒjƒbƒg•Ê’ŽcÆ‰ïiŠm’èj                        */
+             IF         COND(&OPTION = 13) THEN(DO)
+        /*   CALL       PGM(NP0536R)      */
+        /*   CALL       PGM(NP2420R)      */
+        /*   CALL       PGM(NP2423R)       /* 08/03/12 */
+        /*   CALL       PGM(NP2424R)       /* 08/05/12 */
+             CALL       PGM(NP2425R)       /* 08/06/11 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00140:   /* 14  ‚cì”Ô“™@Œv‰æ‘Æ‰ï                              */
+             IF         COND(&OPTION = 14) THEN(DO)
+      /*     CALL       PGM(NP9670R)    */
+      /*     CALL       PGM(NP9671R)    */
+             CALL       PGM(NP9672R)     /* 08/01/21 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00150:   /* 15  e•”•i–¢Š®¬ˆê——Æ‰ï                              */
+             IF         COND(&OPTION = 15) THEN(DO)
+      /*     CALL       PGM(NP9670R)    */
+      /*     CALL       PGM(NP9671R)    */
+             CALL       PGM(NP2590)     /* 08/06/21 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00160:   /* 16  —š—ðÆ‰ïE•ÏX                                    */
+             IF         COND(&OPTION = 16) THEN(DO)
+             CALL       PGM(SN0100)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00200:   /* 20   ‚a‚h‚mÝŒÉÆ‰ï                                   */
+             IF         COND(&OPTION = 20) THEN(DO)
+        /*   CALL       PGM(NP0580R) /* 12/12/27 */
+        /*   CALL       PGM(NP0581R) /* 12/12/27 */
+             CALL       PGM(NP0582R) /* 22/05/13 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00210:   /* 21   ÝŒÉ’ù³—pƒŠƒXƒg                                 */
+             IF         COND(&OPTION = 21) THEN(DO)
+        /*   CALL       PGM(NP1030R)       */
+             CALL       PGM(NP1031R)
+             ENDDO
+ SDA00300:   /* 30   ƒ†ƒjƒbƒg•Ê’ŽcÆ‰ï                               */
+             IF         COND(&OPTION = 30) THEN(DO)
+             CALL       PGM(NP2370R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00310:   /* 31   •”•iÝŒÉ—L–³E»•i“ü—Í                           */
+             IF         COND(&OPTION = 31) THEN(DO)
+       /*    CALL       PGM(NP0700) */
+             CALL       PGM(NP0702)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00320:   /* 32   •”•iÝŒÉ—L–³EÆ‰ï                             */
+             IF         COND(&OPTION = 32) THEN(DO)
+             CALL       PGM(NP0710)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00330:   /* 33   ‚a‚h‚m»ìŽwŽ¦iÝŒÉ—L–³j                       */
+             IF         COND(&OPTION = 33) THEN(DO)
+             CALL       PGM(NP8430R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00340:   /* 34   oŒÉ“`•[ƒuƒNƒ~ŠÖŒWi–ß‚µj                       */
+             IF         COND(&OPTION = 34) THEN(DO)
+     /*      CALL       PGM(NP3060R) */
+             CALL       PGM(NP3061R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00350:   /* 35   ƒ†ƒjƒbƒg•Ê’P•iŽè”zib•{j                       */
+             IF         COND(&OPTION = 35) THEN(DO)
+             CALL       PGM(NP0896)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00400:   /* 40   ƒ†ƒjƒbƒg•Ê’P•iŽè”zi’}”gj                       */
+             IF         COND(&OPTION = 40) THEN(DO)
+     /*      CALL       PGM(NP3060R) */
+             CALL       PGM(NP0890)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00500:   /* 50   e•”•i’•¶‘EŒ»•i•[ì¬                         */
+             IF         COND(&OPTION = 50) THEN(DO)
+             CALL       PGM(HP0200) /* 08/06/21 */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00510:   /* 51   oŒÉÞ—¿@XVEíœ                             */
+             IF         COND(&OPTION = 51) THEN(DO)
+   /*        CALL       PGM(NA8810R)                      */
+             CALL       PGM(NP0930R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00600:   /* 60   ’•¶‘ˆêŠ‡ˆ—                                   */
+             IF         COND(&OPTION = 60) THEN(DO)
+             CALL       PGM(NP3180)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00610:   /* 61   ‘fŒ^ÞŽ©“®”­’                                   */
+             IF         COND(&OPTION = 61) THEN(DO)
+             CALL       PGM(NP3190)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00620:   /* 62   •”•iŽ©“®”­’                                     */
+             IF         COND(&OPTION = 62) THEN(DO)
+             TFRCTL     PGM(MENP62)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00990:   /* 99   •”•iŠ®¬ˆ—                                     */
+             IF         COND(&OPTION = 99) THEN(DO)
+       /*    CALL       PGM(NP0578SR)    */
+             CALL       PGM(NP0570AR)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00240:   /* 24                                                      */
+             IF         COND(&OPTION = 24 ) THEN(DO)
+             TFRCTL     PGM(MENP00)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00250:   /* 25                                                      */
+             IF         COND(&OPTION = 25 ) THEN(DO)
+             RETURN
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDAENDOP:   CHGVAR     VAR(&MSG) VALUE('SDA2007')
+             SNDPGMMSG  MSGID(&MSG) MSGF(QSDAMSG) TOPGMQ(*SAME)
+             GOTO       CMDLBL(SDASFL)
+ SDAERR:     IF         COND(&ERRCNT > 0) THEN(GOTO SDAEND)
+             CHGVAR     VAR(&ERRCNT) VALUE(&ERRCNT+1)
+ SDAMSG:     RCVMSG     RMV(*NO) MSG(&MSG)
+             IF         COND(&MSG ý= ' ') THEN(DO)
+             SNDPGMMSG  MSG(&MSG)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDASFL:     CHGVAR     VAR(&IN99) VALUE('1')
+             SNDF       DEV(*FILE) RCDFMT(MENUSFLC)
+             GOTO       CMDLBL(SDABEGIN)
+ SDAOFF:     SIGNOFF    LOG(*LIST)
+ SDAFILE:    SNDPGMMSG  MSGID(SDA2002) MSGF(QSDAMSG)
+             GOTO       CMDLBL(SDAEND)
+ SDAFMT:     SNDPGMMSG  MSGID(SDA2006) MSGF(QSDAMSG)
+             GOTO       CMDLBL(SDAEND)
+ SDASZERR:   RCVMSG     RMV(*YES) MSGID(&MSGID) MSGDTA(&MSGDTA)
+             IF         COND(&MSGID ý= ' ') THEN(DO)
+             SNDPGMMSG  MSGID(&MSGID) MSGDTA(&MSGDTA) +
+                        MSGF(QCPFMSG) MSGTYPE(*ESCAPE)
+             ENDDO
+ SDAEND:     RETURN
+             CHGVAR     VAR(&TITLE) VALUE(&TITLE)
+             CHGVAR     VAR(&MSGKEY) VALUE(&MSGKEY)
+             CHGVAR     VAR(&PGMPARM) VALUE(&PGMPARM)
+             ENDPGM     /* END CL PGM */

@@ -1,0 +1,1348 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0040R CODED BY N.KANEDA         *
+     H*                         CODED ON 18.07.19         *
+     H*    äeë„óùìXéÛíçì¸óÕÅ@ïWèÄïi¥◊∞≈º                *
+     H*****************************************************
+     H            Y
+     FDMR0010 IF  E           K        DISK
+     FDMR0030 IF  E           K        DISK
+     FDMR0040 IF  E           K        DISK
+     FDTR0010 UF  E           K        DISK
+     FDTR0020 UF  E           K        DISK                      A
+     FDTR0030 UF  E           K        DISK
+     FDTR0040 IF  E           K        DISK                      A
+     FDTR0120 IF  E           K        DISK                      A
+     FDTR2060XIF  E           K        DISK
+     F            RDTR2060X                         KRENAMERDTR2060
+     FDTR5170 IF  E           K        DISK
+     FDTR5200 UF  E           K        DISK
+     FDTR5230 IF  E           K        DISK                      A
+     F*ML0010 IF  E           K        DISK
+     FAML0011 UF  E           K        DISK
+     F            RAML0010                          KRENAMERAML0011
+     FDTR0050 IF  E           K        DISK                      A
+     FDTR0060 UF  E           K        DISK
+     FNPR0100 IF  E           K        DISK
+     FDTP1110 IF  E           K        DISK
+     FDTP1111 IF  E           K        DISK
+     F            RDTP1110                          KRENAMERDTP1111
+     FQSYSPRT O   F     198     OF    LPRINTER
+     LQSYSPRT  68FL 68OL
+     E                    WK1        30  1
+     E                    WK2        30  1
+     E*------------------------------------------------------------
+     E                    TBL01   1   1 50
+     E*------------------------------------------------------------
+     IRDMR0010
+     I              ZZ0001                          ZZ001E
+     I              ACREC                           ACRECE
+     I              CUSNR                           CUSNRE
+     I              CUSNM                           CUSNME
+     I              SHPNR                           SHPNRE
+     I              AREAD                           AREADE
+     I              CUSA1                           CUSA1E
+     I              CUSA2                           CUSA2E
+     I              AREAC                           AREACE
+     I              PHONE                           PHONEE
+     I              SLNR1                           SLNR1E
+     I              SLBR1                           SLBR1E
+     I              SLNR2                           SLNR2E
+     I              SLBR2                           SLBR2E
+     I              SLNR3                           SLNR3E
+     I              SLBR3                           SLBR3E
+     I              CRLAM                           CRLAME
+     I              DCODE                           DCODEE
+     I              CLSCD                           CLSCDE
+     I              SIHCD                           SIHCDE
+     I              TESIT                           TESITE
+     I              SMTCD                           SMTCDE
+     I              KEITS                           KEITSE
+     I              TATEA                           TATEAE
+     I              TATES                           TATESE
+     I              SIMUA                           SIMUAE
+     I              SIMUS                           SIMUSE
+     I              KESAI                           KESAIE
+     I              USDAY                           USDAYE
+     I              USANS                           USANSE
+     I              OTSUA                           OTSUAE
+     I              OTSUS                           OTSUSE
+     I              TELEX                           TELEXE
+     I              BANNM                           BANNME
+     I              BAAR1                           BAAR1E
+     I              BAAR2                           BAAR2E
+     I              BAYCD                           BAYCDE
+     I              OPPNO                           OPPNOE
+     I              INSNM                           INSNME
+     I              INAR1                           INAR1E
+     I              INAR2                           INAR2E
+     I              NOTPT                           NOTPTE
+     I              NOAR1                           NOAR1E
+     I              NOAR2                           NOAR2E
+     I              INTER                           INTERE
+     I              ZZ0671                          ZZ671E
+     I              MATIM                           MATIME
+     I              MADAY                           MADAYE
+     I              SHPNMB                          SHPNBE
+     I              SHIP1B                          SHI1BE
+     I              SHIP2B                          SHI2BE
+     I              AREASB                          AREABE
+     I              EWECD                           EWECDE
+     I              UPDID                           UPDIDE
+     I              UPDDD                           UPDDDE
+     I              UPDTD                           UPDTDE
+     I              CRTD1                           CRTD1E
+     I              CRTT1                           CRTT1E
+     I              USID1                           USID1E
+     I              JBID1                           JBID1E
+     I              PGID1                           PGID1E
+     IRDMR0030
+     I              ZZ0001                          ZZ001F
+     I              ACREC                           ACRECF
+     I              SHPNR                           SHPNRF
+     I              SHPNM                           SHPNMF
+     I              SHIP1                           SHIP1F
+     I              SHIP2                           SHIP2F
+     I              AREAS                           AREASF
+     I              ZZ0134                          ZZ134F
+     I              MATIM                           MATIMF
+     I              MADAY                           MADAYF
+     I              SHPNMB                          SHPNBF
+     I              SHIP1B                          SHP1BF
+     I              SHIP2B                          SHP2BF
+     I              AREASB                          AREABK
+     I              SHTELB                          SHTEBK
+     IRDMR0040
+     I              ZZ0001                          ZZ001K
+     I              ACREC                           ACRECK
+     I              ITNBR                           ITNBRK
+     I              ITDSC                           ITDSCK
+     I              ITCOD                           ITCODK
+     I              LSTPC                           LSTPCK
+     I              UPD01                           UPD01K
+     I              UPD02                           UPD02K
+     I              UPD03                           UPD03K
+     I              UPD04                           UPD04K
+     I              UPD05                           UPD05K
+     I              UPD06                           UPD06K
+     I              UPD07                           UPD07K
+     I              UPD08                           UPD08K
+     I              UPD09                           UPD09K
+     I              UPD10                           UPD10K
+     I              LENGT                           LENGTK
+     I              LENGH                           LENGHK
+     I              WEIGH                           WEIGHK
+     I              SIKOM                           SIKOMK
+     I              PRIBL                           PRIBLK
+     I              LPOST                           LPOSTK
+     I              UPD11                           UPD11K
+     I              UPD12                           UPD12K
+     I              UPD13                           UPD13K
+     I              UPD14                           UPD14K
+     I              UPD15                           UPD15K
+     I              UPD16                           UPD16K
+     I              UPD17                           UPD17K
+     I              ZZ0178                          ZZ178K
+     I              MATIM                           MATIMK
+     I              MADAY                           MADAYK
+     I              GENCD                           GENCDK
+     I              CRTD10                          CRTD1K
+     I              CRTT10                          CRTT1K
+     I              USID10                          USID1K
+     I              JBID10                          JBID1K
+     I              PGID10                          PGID1K
+     I              ELECD                           ELECDK
+     I              REJET                           REJETK
+     IRDTR0010
+     I              ZZ0001                          ZZ001T
+     I              ACREC                           ACRECT
+     I              A1                              A1T
+     I              A2                              A2T
+     I              A3                              A3T
+     I              A4                              A4T
+     I              A5                              A5T
+     I              A6                              A6T
+     I              A7                              A7T
+     I              A8                              A8T
+     I              A9                              A9T
+     I              A10                             A10T
+     I              A11                             A11T
+     I              A12                             A12T
+     I              A13                             A13T
+     I              A14                             A14T
+     I              QTYOO                           QTYOOT
+     I              QTYOH                           QTYOHT
+     I              QTYRS                           QTYRST
+     I              QTYRD                           QTYRDT
+     I              QTYRR                           QTYRRT
+     I              QTYRM                           QTYRMT
+     I              QTYRT                           QTYRTT
+     I              QTYOB                           QTYOBT
+     I              QTYOR                           QTYORT
+     I              QTYOM                           QTYOMT
+     I              QTYOT                           QTYOTT
+     I              QTSOS                           QTSOST
+     I              NOSTK                           NOSTKT
+     I              YOSTK                           YOSTKT
+     I              HIKIW                           HIKIWT
+     I              MINOW                           MONOWT
+     I              ZZ0082                          ZZ082T
+     I              ITNBR                           ITNBRT
+     IRDTR0040
+     I              ZZ0001                          ZZ0014
+     I              ACREC                           ACREC4
+     I              JUTNO                           JUTNO4
+     I              SEQNO                           SEQNO4
+     I              ITCOD                           ITCOD4
+     I              JUTKC                           JUTKC4
+     I              QUANT1                          QUANT4
+     I              QTYRS                           QTYRS4
+     I              QTYOB                           QTYOB4
+     I              DELCD                           DELCD4
+     I              DOJNO                           DOJNO4
+     I              BUNYN                           BUNYN4
+     I              HIKNB                           HIKNB4
+     IRDTR2060
+     I              ZZ0001                          ZZ001S
+     I              ACREC                           ACRECS
+     I              ITNBR                           ITNBRS
+     IRDTR5170
+     I              ZZ0001                          ZZ001B
+     I              ACREC                           ACRECB
+     I              ITCOD                           ITCODB
+     I              ITDSE                           ITDSEB
+     I              ITDSJ                           ITDSJB
+     I              KYUCD                           KYUCDB
+     I              DESNO                           DESNOB
+     I              UNPCS                           UNPCSB
+     I              PACOD                           PACODB
+     I              UNPRI                           UNPRIB
+     I              SMOLA                           SMOLAB
+     I              STACO                           STACOB
+     I              LANKU                           LANKUB
+     I              BIKOU                           BIKOUB
+     I              IMAXQ                           IMAXQB
+     I              OPQU1                           OPQU2B
+     I              OPQU2                           OPQU2B
+     I              M0MIN                           M0MINB
+     I              PLNUM                           PLNUMB
+     I              PLACE                           PLACEB
+     I              ZZ0165                          ZZ165B
+     IRDTR5200
+     I              ZZ0001                          ZZ001Q
+     I              ACREC                           ACRECQ
+     I              ITCOD                           ITCODQ
+     I              QTYOO                           QTYOOQ
+     I              QTYOH                           QTYOHQ
+     I              QTYRS                           QTYRSQ
+     I              QTYRD                           QTYRDQ
+     I              QTYRR                           QTYRRQ
+     I              QTYRM                           QTYRMQ
+     I              QTYRT                           QTYRTQ
+     I              QTYOB                           QTYOBQ
+     I              QTYOR                           QTYORQ
+     I              QTYOM                           QTYOMQ
+     I              QTYOT                           QTYOTQ
+     I              QTSOS                           QTSOSQ
+     I              ZZ0066                          ZZ066Q
+     I              KOMIY                           KOMIYQ
+     I              TAKU                            TAKUQ
+     I              ZZ0104                          ZZ104Q
+     IRDTR5230
+     I              ZZ0001                          ZZ001R
+     I              ACREC                           ACRECR
+     I              JUTNO                           JUTNOR
+     I              SEQNO                           SEQNOR
+     I              ITCOD                           ITCODR
+     I              JUTKC                           JUTKCR
+     I              QUANT                           QUANTR
+     I              QTYRS                           QTYRSR
+     I              QTYOB                           QTYOBR
+     I              DELCD                           DELCDR
+     I              DOJNO                           DOJNOR
+     I              BUNYN                           BUNYNR
+     I              FILLR                           FILLRR
+     IRDTR0050
+     I              QUANT                           QUANT5
+     I              TANKA                           TANKA5
+     I              KINGA                           KINGA5
+     IRAML0011
+     I              CUSNRA                          CUSNRA
+     I              ITNBRA                          ITNBRA
+     I              ORDQUA                          ORDQUA
+     I              ORDNOA                          ORDNOA
+     I              TANKAA                          TANKAA
+     I              KINGAA                          KINGAA
+     I              A1A                             A1A
+     I              SLSNRA                          SLSNRA
+     I              MFROMA                          MFROMA
+     I              REMARA                          REMARA
+     IDS1         DS
+     I                                        1   80GJUTN2
+     I                                        1   60GJUTNA
+     I                                        7   80GJUTNB
+     IDS2         DS
+     I                                        1  14 WITCOD
+     I                                        1   10W1
+     I                                        2   20W2
+     I                                        3   30W3
+     I                                        4   40W4
+     I                                        5   50W5
+     I                                        6   60W6
+     I                                        7   70W7
+     I                                        8   80W8
+     I                                        9   90W9
+     I                                       10  100W10
+     I                                       11  110W11
+     I                                       12  120W12
+     I                                       13  130W13
+     I                                       14  140W14
+     IDS3         DS
+     I                                        1   6 WJUTKC
+     I                                        1   1 A1
+     I                                        2   20A2
+     I                                        3   30A3
+     I                                        4   40A4
+     I                                        5   50A5
+     I                                        6   60A6
+     IDS4         DS
+     I                                        1  30 ITNBRA
+     I                                        1  14 WITNB1
+     I                                        1  25 ITNB25
+     IDS5         DS
+     I                                        1   80WJUTNO
+     I                                        1   60WCNT
+     I                                        7   80WSEQNO
+     IDS6         DS
+     I                                        1  30 ITDSC
+     I                                        1  25 ITDS25
+     I                                       26  26 ITDS26
+     I                                       27  30 ITDS30
+     IDS10        DS
+     I                                        1  85 WMAIL
+     I                                       37  85 WMAIL2
+     I*< SDS >
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     I*< ºΩ√—ì˙ït>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     C*----------------------------------------------------
+     C           PAR050    PLIST
+     C                     PARM           P#KOSN  1
+     C                     PARM           P#SBTP  1
+     C                     PARM           P#KEY1 10
+     C                     PARM           P#KEY2 14
+     C                     PARM           P#KEY3 10
+     C                     PARM           P#KEY4 10
+     C                     PARM           P#ITCD 14
+     C                     PARM           P#MFIQ 110
+     C                     PARM           P#JUTN  80
+     C                     PARM           P#IDSC 30
+     C                     PARM           P#ITNO 25
+     C                     PARM           P#RTCD  2
+     C*<îrëºêßå‰èàóù: @SB030R >
+     C           PAR060    PLIST
+     C                     PARM           P#SYOK  1        èàóùãÊï™
+     C                     PARM           P#OBJF 10         Ãß≤ŸID
+     C                     PARM           P#OBJ1 15         KEY1
+     C                     PARM           P#OBJ2 15         KEY2
+     C                     PARM           P#OBJ3 15         KEY3
+     C                     PARM           P#OBJ4 15         KEY4
+     C                     PARM           P#OBJ5 15         KEY5
+     C                     PARM           P#CRTP 10         Ãﬂ€∏ﬁ◊—ID
+     C                     PARM           P#USID 10         ’∞ªﬁ∞ID
+     C                     PARM           P#JBID 10         ºﬁÆÃﬁID
+     C                     PARM           P#RTN2  2         ÿ¿∞›∫∞ƒﬁ
+     C*--------------------------------------------------------
+     C           PAR070    PLIST
+     C                     PARM           P#JUTN  80       éÛíçî‘çÜ
+     C*--------------------------------------------------------
+     C           G0010     KLIST
+     C                     KFLD           GJUTNA
+     C                     KFLD           GJUTNB
+     C*-----------------------------------------------------
+     C           D0010     KLIST
+     C                     KFLD           W1
+     C                     KFLD           W2
+     C                     KFLD           W3
+     C                     KFLD           W4
+     C                     KFLD           W5
+     C                     KFLD           W6
+     C                     KFLD           W7
+     C                     KFLD           W8
+     C                     KFLD           W9
+     C                     KFLD           W10
+     C                     KFLD           W11
+     C                     KFLD           W12
+     C                     KFLD           W13
+     C                     KFLD           W14
+     C*-----------------------------------------------------
+     C           D0020     KLIST
+     C                     KFLD           WCNT
+     C                     KFLD           WSEQNO
+     C*-----------------------------------------------------
+     C           D002E     KLIST
+     C                     KFLD           WCNT
+     C                     KFLD           WKSEQ
+     C*-----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#DELC  1
+     C                     PARM           P#SELC  10
+     C                     PARM           P#KOSN  1
+     C                     PARM           P#JUT4  60
+     C                     PARM           P#SEQ4  20
+     C                     PARM           P#NBNB  6
+     C                     PARM           P#NB11  6
+     C                     PARM           P#NB21  6
+     C                     PARM           P#NB31  6
+     C                     PARM           P#NB41  6
+     C                     PARM           P#NB51  6
+     C                     PARM           P#DE11  60
+     C                     PARM           P#DE21  60
+     C                     PARM           P#DE31  60
+     C                     PARM           P#DE41  60
+     C                     PARM           P#DE51  60
+     C                     PARM           P#RECD  2
+     C*-----------------------------------------------------
+     C           D0050     KLIST
+     C                     KFLD           WAA1
+     C                     KFLD           WAA2
+     C                     KFLD           WECNTE
+     C*
+     C                     MOVEL'P'       WAA1    1
+     C                     MOVEL'E'       WAA2    1
+     C*----------------------------------------------------
+     C                     TIME           W#SYST
+     C                     MOVELS#JOB     W#JOB   5
+     C*START------------------------------------------------
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD0         FLAG02  10
+     C                     Z-ADD0         FLAG20  10
+     C*
+     C                     Z-ADD0         WKCNT   20
+     C                     Z-ADD0         WKSEQ   20
+     C*
+     C           *LOVAL    SETLLAML0011
+     C*
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RAML0011                 70
+     C           *IN70     IFEQ '1'
+     C***                  EXSR #UPD01
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C           A1A       IFEQ 'A'
+     C           A1A       OREQ 'B'
+     C           A1A       OREQ 'E'
+     C*
+     C                     SETOF                     95
+     C           CUSNRA    CHAINDMR0010              95
+     C           *IN95     IFEQ '0'
+     C                     Z-ADDDCODEE    WDCODE  20
+     C                     ENDIF
+     C*
+     C***        WKCNT     IFGT 6
+     C****                 EXSR #UPD01
+     C                     Z-ADD0         WKCNT
+     C                     EXSR #CNT                       ÕØ¿ﬁ∞⁄∫∞ƒﬁ
+     C                     EXSR #RTN1
+     C                     EXSR #UPD01
+     C***                  ELSE
+     C***                  EXSR #RTN1
+     C***                  ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C* èIóπ
+     C           FLAG20    IFEQ 0
+     C                     Z-ADD0         FLAG99  10
+     C           FLAG99    DOWEQ0
+     C                     EXSR #DEL01                     AML0010
+     C                     Z-ADD1         FLAG99
+     C                     ENDDO
+     C                     ENDIF
+     C*------------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     C           #RTN1     BEGSR
+     C                     SELEC
+     C           A1A       WHEQ 'A'
+     C                     EXSR #HYOZ
+     C           WKCNT     ADD  1         WKCNT
+     C           A1A       WHEQ 'E'
+     C                     EXSR #PART
+     C           WKCNT     ADD  1         WKCNT
+     C           A1A       WHEQ 'B'
+     C*---------
+     C*DTR0060 UPDATE
+     C                     SETOF                     91
+     C           2         CHAINDTR0060              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           ECNTE     IFEQ 0
+     C           ECNTE     ADD  1         ECNTE
+     C                     ENDIF
+     C*
+     C                     Z-ADDECNTE     WECNTE  40
+     C           ECNTE     ADD  1         ECNTE
+     C                     UPDATRDTR0060
+     C                     ENDIF
+     C*-----------------------------------------------------
+     C                     EXSR #PAR2
+     C           WKCNT     ADD  1         WKCNT
+     C                     ENDSL
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #HYOZ     BEGSR
+     C                     MOVEL*BLANK    WITDSC 30
+     C*
+     C                     SETOF                     919293
+     C           ITNB25    CHAINDMR0040              91
+     C           *IN91     IFEQ '0'
+     C                     MOVELITCODK    WITCOD 14
+     C                     EXSR #TANKA
+     C                     MOVELITNBRK    WITDSC 30
+     C                     MOVELELECDK    WELECD  1
+     C*
+     C                     Z-ADD0         WA5     10
+     C                     Z-ADD0         WHIKI   50
+     C                     Z-ADD0         WMINO   50
+     C           D0010     CHAINDTR0010              92
+     C           *IN92     IFEQ '0'
+     C           QTYOHT    IFGE ORDQUA                     ëSäÆ
+     C           QTYOHT    SUB  ORDQUA    QTYOHT
+     C           QTYRST    ADD  ORDQUA    QTYRST
+     C           QTYRTT    ADD  ORDQUA    QTYRTT
+     C                     Z-ADDORDQUA    WHIKI
+     C                     Z-ADD1         WA5
+     C                     ELSE
+     C           QTYOBT    ADD  ORDQUA    QTYOBT           ñ¢î[
+     C           QTYOTT    ADD  ORDQUA    QTYOTT
+     C                     Z-ADD2         WA5
+     C                     Z-ADDORDQUA    WMINO
+     C                     ENDIF
+     C                     UPDATRDTR0010
+     C* éÛíçÇe
+     C                     Z-ADDWKCNT     WSEQNO
+     C           D0020     CHAINDTR0020              95
+     C           *IN95     IFEQ '1'
+     C                     EXSR #MOV2
+     C                     WRITERDTR0020
+     C                     ENDIF
+     C* à¯ìñÇe
+     C           D0020     CHAINDTR0040              96
+     C           *IN96     IFEQ '1'
+     C                     EXSR #MOV3
+     C                     WRITERDTR0040
+     C                     ENDIF
+     C*
+     C                     EXSR #TR010                     ç›å…à¯ìñé©ìÆ
+     C*DTR0120 WRITE
+     C                     SETOF                     95
+     C           ITNB25    CHAINDTR2060X             95
+     C           *IN95     IFEQ '0'
+     C*
+     C                     SELEC
+     C           TSEBS     WHEQ ' '
+     C*
+     C           SEBAS     IFEQ ' '
+     C                     MOVEL'O'       SHOCDV
+     C                     ELSE
+     C                     MOVELSEBAS     SHOCDV
+     C                     ENDIF
+     C*
+     C           TSEBS     WHEQ 'K'
+     C                     MOVEL'K'       SHOCDV
+     C           TSEBS     WHEQ 'O'
+     C                     MOVEL'O'       SHOCDV
+     C                     OTHER
+     C                     ENDSL
+     C*
+     C                     EXSR #D120
+     C                     ELSE
+     C                     SETON                     H7
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     SETON                     H3
+     C                     ENDIF
+     C                     ELSE
+     C                     SETON                     H4
+     C                     ENDIF
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #CNT      BEGSR
+     C*
+     C                     Z-ADD0         FLAG11  10
+     C           FLAG11    DOWEQ0
+     C*
+     C                     EXSR #HAIT1
+     C*
+     C           P#RTN2    IFEQ *BLANK
+     C*
+     C           1         CHAINDTR0030              93
+     C           *IN93     IFEQ '0'
+     C                     Z-ADDJCCNT     WCNT    60
+     C           1         ADD  JCCNT     JCCNT
+     C                     UPDATRDTR0030
+     C*
+     C                     EXSR #HAIT2
+     C                     Z-ADD1         FLAG11
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     SETOF                     949596
+     C                     Z-ADD0         WSEQNO  20
+     C           D0020     CHAINDTR0020              94
+     C           *IN94     IFEQ '1'
+     C                     EXSR #MOV1
+     C                     WRITERDTR0020
+     C                     ENDIF
+     C*
+     C           WKCNT     ADD  1         WKCNT
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #UPD01    BEGSR
+     C                     SETOF                     90
+     C           D002E     CHAINDTR0020              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDWKCNT     DETCN
+     C                     UPDATRDTR0020
+     C                     ENDIF
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #PART     BEGSR
+     C                     MOVEL*BLANK    WELECD
+     C                     SETOF                     919293
+     C           WITNB1    CHAINDTR5170              91
+     C           *IN91     IFEQ '0'
+     C                     MOVEL*BLANK    WITCOD 14
+     C                     Z-ADDUNPRIB    WTANKA  90
+     C*
+     C                     EXSR #RTN3                       ﬂ∞¬À›“≤
+     C*
+     C                     Z-ADD0         WA5     10
+     C                     Z-ADD0         WHIKI   50
+     C                     Z-ADD0         WMINO   50
+     C           WITNB1    CHAINDTR5200              92
+     C           *IN92     IFEQ '0'
+     C           QTYOHQ    IFGE ORDQUA                     ëSäÆ
+     C           QTYOHQ    SUB  ORDQUA    QTYOHQ
+     C           QTYRSQ    ADD  ORDQUA    QTYRSQ
+     C           QTYRTQ    ADD  ORDQUA    QTYRTQ
+     C                     Z-ADDORDQUA    WHIKI
+     C                     Z-ADD1         WA5
+     C                     ELSE
+     C           QTYOBQ    ADD  ORDQUA    QTYOBQ
+     C           QTYOTQ    ADD  ORDQUA    QTYOTQ
+     C                     Z-ADD2         WA5
+     C                     Z-ADDORDQUA    WMINO
+     C                     ENDIF
+     C                     UPDATRDTR5200
+     C*
+     C                     Z-ADDWKCNT     WSEQNO
+     C           D0020     CHAINDTR0020              95
+     C           *IN95     IFEQ '1'
+     C                     EXSR #MOV2
+     C                     MOVEL'E'       A1
+     C                     MOVEL'**'      NBNBR
+     C                     MOVEL*BLANK    ITDSC
+     C                     MOVELWITDSC    ITDSC
+     C                     MOVELWITNB1    ITCOD
+     C                     WRITERDTR0020
+     C                     ENDIF
+     C*
+     C           D0020     CHAINDTR5230              96
+     C           *IN96     IFEQ '1'
+     C                     EXSR #MOV5
+     C                     WRITERDTR5230
+     C                     ENDIF
+     C*DTR0120 WRITE
+     C                     SETOF                     95
+     C           WJUTNO    CHAINDTR0120              95
+     C           *IN95     IFEQ '1'
+     C*
+     C           PLACEB    IFEQ ' '
+     C                     MOVEL'O'       SHOCDV
+     C                     ELSE
+     C                     MOVELPLACEB    SHOCDV
+     C                     ENDIF
+     C*
+     C                     EXSR #D120
+     C                     ELSE
+     C                     SETON                     H8
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     SETON                     H5
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     SETON                     H6
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #PAR2     BEGSR
+     C                     MOVEL*BLANK    WITDSC 30
+     C                     MOVEL*BLANK    WITDS2 30
+     C                     MOVEL*BLANK    WITDSJ 30
+     C*
+     C                     Z-ADD0         WTANKA  90
+     C                     SETOF                     96
+     C           WITNB1    CHAINDTR5170              96
+     C           *IN96     IFEQ '0'
+     C                     MOVELITDSJB    WITDSJ
+     C                     MOVELITDSEB    WITDSC
+     C                     Z-ADDUNPRIB    WTANKA  90
+     C                     ENDIF
+     C                     EXSR #RTN3
+     C*
+     C                     Z-ADDWKCNT     WSEQNO
+     C           D0020     CHAINDTR0020              95
+     C           *IN95     IFEQ '1'
+     C*
+     C                     EXSR #MOV2
+     C                     MOVEL'E'       A1
+     C                     Z-ADD0         A2
+     C                     Z-ADD0         A3
+     C                     Z-ADD0         A4
+     C                     Z-ADD0         A5
+     C                     Z-ADD1         A6
+     C                     MOVEL*BLANK    ITCOD
+     C                     MOVELDESNOB    ITCOD
+     C                     MOVEL'PE'      NBNBR
+     C                     MOVE WECNTE    NBNBR
+     C                     WRITERDTR0020
+     C                     ENDIF
+     C*√ ≤Ω≥ π≤ª›
+     C                     MOVEL*BLANK    WKATA4 14
+     C                     Z-ADD0         WQUAN4  50
+     C           UNPCSB    IFNE 1
+     C                     MOVEL'∫ﬁ≥π≤'   WKATA4
+     C           UNPCSB    MULT ORDQUA    WQUAN4
+     C*
+     C                     MOVE WQUAN4    WAA     5
+     C           WQUAN4    IFLE 9
+     C                     MOVEL'    '    WAA
+     C                     ELSE
+     C           WQUAN4    IFLE 99
+     C                     MOVEL'   '     WAA
+     C                     ELSE
+     C           WQUAN4    IFLE 999
+     C                     MOVEL'  '      WAA
+     C                     ELSE
+     C           WQUAN4    IFLE 9999
+     C                     MOVEL' '       WAA
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     MOVELWAA       WBB     9
+     C                     MOVE '∫√ ≤'    WBB
+     C                     MOVE WBB       WKATA4
+     C                     ENDIF
+     C*DTR0050 WRITE
+     C*
+     C                     EXSR #DELDY
+     C*
+     C                     SETOF                     92
+     C           D0050     CHAINDTR0050              92
+     C           *IN92     IFEQ '1'
+     C                     MOVEL'SF'      ZZ0001
+     C                     MOVEL*BLANK    ACREC
+     C                     MOVEL'P'       AA1
+     C                     MOVEL'E'       AA2
+     C                     Z-ADDWECNTE    AA4
+     C                     MOVELWITDSC    ITDSC
+     C                     Z-ADDORDQUA    QUANT5
+     C                     Z-ADDUNPRIB    TANKA5
+     C           QUANT5    MULT UNPRIB    KINGA5
+     C                     Z-ADDWJUTNO    JUSEN
+     C                     MOVELCUSNRA    CUSNR
+     C                     Z-ADD0         SIKYN
+     C                     MOVEL'E'       A1
+     C                     Z-ADD0         A2
+     C                     Z-ADD0         A3
+     C                     Z-ADD0         A4
+     C                     Z-ADD0         A5
+     C                     Z-ADD1         A6
+     C                     Z-ADD0         DETCN
+     C                     Z-ADD0         SISAC
+     C                     MOVE WDELDY    DELEV
+     C                     Z-ADD0         MITSU
+     C                     Z-ADD0         ZUMEN
+     C                     Z-ADD0         SIYTE
+     C                     Z-ADD0         TORSI
+     C                     MOVEL*BLANK    TORQU
+     C                     Z-ADD0         KENSA
+     C                     Z-ADD0         ZAISI
+     C                     Z-ADD0         HOSIK
+     C                     MOVELDESNOB    KATA1
+     C                     Z-ADD0         QUAN1
+     C                     MOVEL*BLANK    KIBA1
+     C*∂¿º∑
+     C                     MOVEL*BLANK    KATA2
+     C                     SETOF                     96
+     C           DESNOB    CHAINNPR0100              96
+     C           *IN96     IFEQ '0'
+     C                     MOVELITDSC1    KATA2
+     C                     ELSE
+     C                     MOVELWITDSJ    KATA2
+     C                     ENDIF
+     C*
+     C                     Z-ADD0         QUAN2
+     C                     MOVEL*BLANK    KIBA2
+     C                     MOVEL*BLANK    KATA3
+     C                     Z-ADD0         QUAN3
+     C                     MOVEL*BLANK    KIBA3
+     C                     MOVELWKATA4    KATA4
+     C                     Z-ADD0         QUAN4
+     C                     MOVEL*BLANK    KIBA4
+     C                     MOVEL'PE.∫›Œﬂ≥'KATA5
+     C                     Z-ADD0         QUAN5
+     C                     MOVEL*BLANK    KIBA5
+     C                     Z-ADDUNPRIB    BAIKA
+     C*
+     C                     SELEC
+     C           PLACEB    WHEQ 'O'
+     C                     MOVELLOCAO1    USERN
+     C           PLACEB    WHEQ 'K'
+     C                     MOVELLOCAK1    USERN
+     C           PLACEB    WHEQ 'T'
+     C                     MOVELLOCAT1    USERN
+     C                     ENDSL
+     C*
+     C                     MOVEL*BLANK    SEFIN
+     C                     MOVEL' '       SECAN
+     C                     Z-ADD0         SEHAD
+     C                     Z-ADD0         NSEQN
+     C                     Z-ADD0         OUTQU
+     C                     Z-ADD0         OWQUA
+     C                     Z-ADD0         FIQUA
+     C                     MOVEL*BLANK    FNAIY
+     C                     Z-ADD0         BUNNO
+     C                     Z-ADD0         FIDAY
+     C                     MOVEL' '       SIDEC
+     C                     MOVEL*BLANK    ZZ0348
+     C                     Z-ADD0         MADEL
+     C                     Z-ADDUNPRIB    STPRI
+     C                     MOVEL*BLANK    ZZ0371
+     C                     Z-ADDWDELDY    DELEV8
+     C                     Z-ADD0         SEHAD8
+     C                     Z-ADD0         FIDAY8
+     C                     WRITERDTR0050
+     C                     ENDIF
+     C*
+     C                     EXSR #SPD
+     C*
+     C*DTR0120 WRITE
+     C                     SETOF                     95
+     C           WJUTNO    CHAINDTR0120              95
+     C           *IN95     IFEQ '1'
+     C*
+     C           PLACEB    IFEQ ' '
+     C                     MOVEL'O'       SHOCDV
+     C                     ELSE
+     C                     MOVELPLACEB    SHOCDV
+     C                     ENDIF
+     C                     EXSR #D120
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*-------------------------------------------------------
+     C           #SPD      BEGSR
+     C                     MOVEL' '       P#KOSN
+     C                     MOVEL'7'       P#SBTP
+     C                     MOVELAA1       P#KEY1
+     C                     MOVELAA2       P#KEY2
+     C                     MOVE AA4       P#KEY3
+     C                     MOVEL*BLANK    P#KEY4
+     C                     MOVEL*BLANK    P#ITCD
+     C                     Z-ADDQUANT5    P#MFIQ
+     C                     MOVE JUSEN     P#JUTN
+     C                     MOVELITDSC     P#IDSC
+     C                     MOVEL' '       P#ITNO
+     C                     MOVEL*BLANK    P#RTCD                           *  +
+     C                     CALL 'CT5000R' PAR050
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #MOV1     BEGSR
+     C                     MOVEL'JF'      ZZ0001
+     C                     MOVEL' '       ACREC
+     C                     Z-ADDWCNT      JUTNO
+     C                     Z-ADDWSEQNO    SEQNO
+     C                     MOVELCUSNRA    CUSNR
+     C                     MOVELCUSNRA    SHPNR
+     C                     Z-ADDSLSNRA    SLSNR
+     C                     MOVELORDNOA    ORDNO
+     C                     MOVE *DATE     JUTDY
+     C                     Z-ADD0         DELCD
+     C                     Z-ADD999999    DELDY
+     C                     Z-ADD0         DETCN
+     C                     MOVEL*BLANK    A1
+     C                     Z-ADD0         A2
+     C                     Z-ADD0         A3
+     C                     Z-ADD0         A4
+     C                     Z-ADD0         A5
+     C                     Z-ADD0         A6
+     C                     Z-ADD0         QUANT
+     C                     Z-ADD0         TANKA1
+     C                     Z-ADD0         KINGA
+     C                     MOVEL*BLANK    ITDSC
+     C                     MOVE '0000000' ITCOD
+     C                     MOVEL'0000000' ITCOD
+     C                     MOVEL*BLANK    DOJNO
+     C                     Z-ADD0         BUNYN
+     C                     Z-ADD0         INVNO
+     C                     MOVEL*BLANK    NBNBR
+     C                     Z-ADD0         BUMOR
+     C                     MOVEL*BLANK    BUNDT
+     C                     Z-ADD0         BQUAN
+     C                     Z-ADD0         HJQTY
+     C                     Z-ADD0         BUNSU
+     C                     MOVEL*BLANK    REJUK
+     C                     MOVEL*BLANK    SLSND
+     C                     Z-ADD0         TKING
+     C                     MOVEL*BLANK    SSHUF
+     C                     Z-ADD0         HIKIQ
+     C                     MOVEL*BLANK    NOFIL
+     C                     MOVEL' '       ZZ0172
+     C                     MOVEL*BLANK    SHPCD
+     C                     Z-ADD0         SHUDY
+     C                     MOVE *DATE     REDAY
+     C                     MOVE *DATE     JUTDY8
+     C                     Z-ADD99999999  DELDY8
+     C                     Z-ADD0         SHUDY8
+     C                     MOVE *DATE     REDAY8
+     C                     Z-ADD0         CODED
+     C                     MOVEL*BLANK    CUSID
+     C                     MOVEL*BLANK    SHICD
+     C*
+     C                     MOVE *DATE     CRTD2
+     C                     TIME           CRTT2
+     C                     MOVELS#USR     USID2
+     C                     MOVELS#JOB     JBID2
+     C                     MOVELS#PGID    PGID2
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #MOV2     BEGSR
+     C                     MOVEL'JF'      ZZ0001
+     C                     MOVEL' '       ACREC
+     C                     Z-ADDWCNT      JUTNO
+     C                     Z-ADDWSEQNO    SEQNO
+     C                     MOVELCUSNRA    CUSNR
+     C                     MOVELCUSNRA    SHPNR
+     C                     Z-ADDSLSNRA    SLSNR
+     C                     MOVELORDNOA    ORDNO
+     C*
+     C                     MOVE *DATE     JUTDY
+     C                     Z-ADD0         DELCD
+     C                     Z-ADD999999    DELDY
+     C                     Z-ADD0         DETCN
+     C                     MOVEL'A'       A1
+     C                     Z-ADD0         A2
+     C                     Z-ADD0         A3
+     C                     Z-ADD0         A4
+     C                     Z-ADDWA5       A5
+     C                     Z-ADD0         A6
+     C                     Z-ADDORDQUA    QUANT
+     C                     Z-ADDWTANKA    TANKA1
+     C           TANKA1    MULT QUANT     KINGA
+     C*
+     C                     MOVEL*BLANK    ITDSC
+     C                     MOVELWITDSC    ITDSC
+     C*
+     C                     MOVEL*BLANK    ITDS26
+     C           WELECD    IFNE ' '
+     C           WELECD    ANDNE'#'
+     C                     MOVELWELECD    ITDS26
+     C                     ENDIF
+     C*
+     C                     MOVELWITCOD    ITCOD
+     C                     MOVEL*BLANK    DOJNO
+     C                     Z-ADD0         BUNYN
+     C                     Z-ADD0         INVNO
+     C                     MOVEL*BLANK    NBNBR
+     C                     Z-ADD0         BUMOR
+     C                     MOVEL*BLANK    BUNDT
+     C                     Z-ADD0         BQUAN
+     C                     Z-ADD0         HJQTY
+     C                     Z-ADD0         BUNSU
+     C                     MOVEL*BLANK    REJUK
+     C                     MOVEL*BLANK    SLSND
+     C                     Z-ADD0         TKING
+     C                     MOVEL*BLANK    SSHUF
+     C                     Z-ADD0         HIKIQ
+     C                     MOVEL*BLANK    NOFIL
+     C                     MOVEL*BLANK    ZZ0172
+     C                     MOVEL*BLANK    SHPCD
+     C                     Z-ADD0         SHUDY
+     C                     MOVE *DATE     REDAY
+     C                     MOVE *DATE     JUTDY8
+     C                     Z-ADD99999999  DELDY8
+     C                     Z-ADD0         SHUDY8
+     C                     MOVE *DATE     REDAY8
+     C                     Z-ADD0         CODED
+     C                     MOVEL*BLANK    CUSID
+     C                     MOVEL*BLANK    SHICD
+     C                     Z-ADDW#SYMD    CRTD2
+     C                     Z-ADDW#SHMS    CRTT2
+     C                     MOVELS#USR     USID2
+     C                     MOVELS#JOB     JBID2
+     C                     MOVELS#PGID    PGID2
+     C*
+     C                     MOVEL*BLANK    LCLA2
+     C                     MOVEL*BLANK    MCLA2
+     C                     MOVEL*BLANK    SCLA2
+     C           SEQNO     IFNE 0
+     C                     SETOF                     90
+     C           ITDS25    CHAINDMR0040              90
+     C           *IN90     IFEQ '0'
+     C                     MOVELLCLAS     LCLA2
+     C                     MOVELMCLAS     MCLA2
+     C                     MOVELSCLAS     SCLA2
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     Z-ADDWTANKA    TANKAA
+     C           TANKA1    MULT QUANT     KINGAA
+     C                     UPDATRAML0011
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #MOV3     BEGSR
+     C                     MOVEL'ZM'      ZZ0014
+     C                     MOVEL' '       ACREC4
+     C                     Z-ADDWCNT      JUTNO4
+     C                     Z-ADDWSEQNO    SEQNO4
+     C                     MOVELWITCOD    ITCOD4
+     C                     MOVELWJUTKC    JUTKC4
+     C                     Z-ADDQUANT     QUANT4
+     C                     Z-ADDWHIKI     QTYRS4
+     C                     Z-ADDWMINO     QTYOB4
+     C                     Z-ADD0         DELCD4
+     C                     Z-ADD0         DOJNO4
+     C                     Z-ADD0         BUNYN4
+     C                     MOVEL*BLANK    ZZ0044
+     C                     MOVEL*BLANK    HIKNB4
+     C*
+     C                     Z-ADDW#SYMD    CRTD4
+     C                     Z-ADDW#SHMS    CRTT4
+     C                     MOVELS#USR     USID4
+     C                     MOVELS#JOB     JBID4
+     C                     MOVELS#PGID    PGID4
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #MOV5     BEGSR
+     C                     MOVEL'ZM'      ZZ001R
+     C                     MOVEL' '       ACRECR
+     C                     Z-ADDWCNT      JUTNOR
+     C                     Z-ADDWSEQNO    SEQNOR
+     C                     MOVELWITNB1    ITCODR
+     C                     MOVELWJUTKC    JUTKCR
+     C                     Z-ADDQUANT     QUANTR
+     C                     Z-ADDWHIKI     QTYRSR
+     C                     Z-ADDWMINO     QTYOBR
+     C                     Z-ADD0         DELCDR
+     C                     Z-ADD0         DOJNOR
+     C                     Z-ADD0         BUNYNR
+     C                     MOVEL*BLANK    FILLRR
+     C                     ENDSR
+     C*-------------------------------------------------------
+     C           #TR010    BEGSR
+     C                     MOVEL*BLANK    P#DELC
+     C                     Z-ADD1         P#SELC
+     C                     MOVEL*BLANK    P#KOSN
+     C                     Z-ADDWCNT      P#JUT4
+     C                     Z-ADDWSEQNO    P#SEQ4
+     C                     MOVEL*BLANK    P#NBNB
+     C                     MOVEL*BLANK    P#NB11
+     C                     MOVEL*BLANK    P#NB21
+     C                     MOVEL*BLANK    P#NB31
+     C                     MOVEL*BLANK    P#NB41
+     C                     MOVEL*BLANK    P#NB51
+     C                     Z-ADD0         P#DE11
+     C                     Z-ADD0         P#DE21
+     C                     Z-ADD0         P#DE31
+     C                     Z-ADD0         P#DE41
+     C                     Z-ADD0         P#DE51
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@TR0010' PAR010
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #D120     BEGSR
+     C*
+     C                     SETOF                     95
+     C           WJUTNO    CHAINDTR0120              95
+     C           *IN95     IFEQ '1'
+     C*
+     C                     MOVEL*BLANK    ACRECV
+     C                     Z-ADDWJUTNO    JUTNOV
+     C*
+     C                     MOVELWJUTNO    JUTN2V
+     C                     MOVE WJUTNO    SEQN2V
+     C*
+     C                     MOVELCUSNRA    SHPNRV
+     C*
+     C                     MOVEL*BLANK    YUBINV
+     C                     SETOF                     96
+     C           SHPNRV    CHAINDMR0030              96
+     C           *IN96     IFEQ '0'
+     C                     MOVELSHPNMF    SHPNMV
+     C                     MOVELSHIP1F    SHIP1V
+     C                     MOVELSHIP2F    SHIP2V
+     C                     ENDIF
+     C*
+     C                     MOVEL*BLANK    SHTELV
+     C                     Z-ADD0         SHKD8V
+     C                     Z-ADD0         REDA8V
+     C                     Z-ADD0         SHUD8V
+     C                     MOVEL*BLANK    BUSYOV
+     C                     MOVEL*BLANK    BIKO1V
+     C                     MOVEL*BLANK    BIKO2V
+     C*
+     C                     Z-ADD0         DUEDYV
+     C                     Z-ADD0         TIMCDV
+     C                     Z-ADD0         SAGCDV
+     C*
+     C                     Z-ADDW#SYMD    CRTD2V
+     C                     Z-ADDW#SHMS    CRTT2V
+     C                     MOVELS#USR     USID2V
+     C                     MOVELS#JOB     JBID2V
+     C                     MOVELS#PGID    PGID2V
+     C                     WRITERDTR0120
+     C*-ìdòbî‘çÜâ∫ÇSåÖ
+     C                     Z-ADDJUTNOV    P#JUTN
+     C                     CALL '@SS4120' PAR070
+     C*------------------
+     C                     ENDIF
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #TANKA    BEGSR
+     C                     Z-ADD0         WTANKA  90
+     C                     SELEC
+     C           WDCODE    WHEQ 1
+     C                     Z-ADDUPD01K    WTANKA
+     C           WDCODE    WHEQ 2
+     C                     Z-ADDUPD02K    WTANKA
+     C           WDCODE    WHEQ 3
+     C                     Z-ADDUPD03K    WTANKA
+     C           WDCODE    WHEQ 4
+     C                     Z-ADDUPD04K    WTANKA
+     C           WDCODE    WHEQ 5
+     C                     Z-ADDUPD05K    WTANKA
+     C           WDCODE    WHEQ 6
+     C                     Z-ADDUPD06K    WTANKA
+     C           WDCODE    WHEQ 7
+     C                     Z-ADDUPD07K    WTANKA
+     C           WDCODE    WHEQ 8
+     C                     Z-ADDUPD08K    WTANKA
+     C           WDCODE    WHEQ 9
+     C                     Z-ADDUPD09K    WTANKA
+     C           WDCODE    WHEQ 10
+     C                     Z-ADDUPD10K    WTANKA
+     C           WDCODE    WHEQ 11
+     C                     Z-ADDUPD11K    WTANKA
+     C           WDCODE    WHEQ 12
+     C                     Z-ADDUPD12K    WTANKA
+     C           WDCODE    WHEQ 13
+     C                     Z-ADDUPD13K    WTANKA
+     C           WDCODE    WHEQ 14
+     C                     Z-ADDUPD14K    WTANKA
+     C           WDCODE    WHEQ 15
+     C                     Z-ADDUPD15K    WTANKA
+     C           WDCODE    WHEQ 16
+     C                     Z-ADDUPD16K    WTANKA
+     C           WDCODE    WHEQ 17
+     C                     Z-ADDUPD17K    WTANKA
+     C                     ENDSL
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #RTN3     BEGSR
+     C                     SETOF                     90
+     C*
+     C***        A1        IFEQ 'E'
+     C*
+     C                     MOVEA*BLANK    WK1
+     C                     MOVEA*BLANK    WK2
+     C                     MOVEL'00000000'L      14
+     C                     MOVE '000000'  L
+     C***        ITDS14    CHAINDTR5170              90
+     C***        WWWITN    CHAINDTR5170              90
+     C***        *IN90     IFEQ '0'
+     C                     MOVEAWITNB1    WK1
+     C                     MOVELDESNOB    L
+     C                     MOVEAITDSEB    WK2
+     C***                  ENDIF
+     C*
+     C                     Z-ADD1         Y       20
+     C                     Z-ADD0         FLAG10  10
+     C           FLAG10    DOWEQ0                          +++++++++++++
+     C*                                                                +
+     C                     MOVE WK1,Y     WKITD1  1                    +
+     C           WKITD1    IFEQ *BLANK                     *********   +
+     C                     Z-ADD1         Z       20                   +
+     C           Y         ADD  1         Y                            +
+     C*                                                                +
+     C                     Z-ADD0         FLAG11  10                   +
+     C           FLAG11    DOWEQ0                          +++++++     +
+     C           Y         IFLE 30                         ***** +     +
+     C                     MOVE WK2,Z     WK1,Y                * +     +
+     C           Y         ADD  1         Y                    * +     +
+     C           Z         ADD  1         Z                    * +     +
+     C                     ELSE                            ----* +     +
+     C                     MOVEAWK1       WITDSC               * +     +
+     C                     Z-ADD0         Z                    * +     +
+     C                     Z-ADD0         Y                    * +     +
+     C                     Z-ADD1         FLAG11               * +     +
+     C                     Z-ADD1         FLAG10               * +     +
+     C                     ENDIF                           ***** +     +
+     C*                                                          +     +
+     C                     ENDDO                           +++++++     +
+     C*                                                            *   +
+     C                     ELSE                            --------*   +
+     C           Y         ADD  1         Y                        *   +
+     C                     ENDIF                           *********   +
+     C*                                                                +
+     C                     ENDDO                           +++++++++++++
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #DEL01    BEGSR
+     C                     Z-ADD0         MDS     10
+     C                     MOVELTBL01,1   WMAIL  85
+     C           *LOVAL    SETLLAML0011
+     C*LIST
+     C                     Z-ADD0         FLAG98  10
+     C           FLAG98    DOWEQ0
+     C                     SETOF                     7250
+     C                     READ RAML0011                 72
+     C           *IN72     IFEQ '1'
+     C                     Z-ADD1         FLAG98
+     C                     ELSE
+     C           A1A       IFEQ ' '
+     C                     SETON                     50
+     C                     ENDIF
+     C                     MOVELMFROMA    WMFROM 30
+     C***                  MOVELMFROMA    WMAIL2
+     C*
+     C           MDS       IFEQ 0
+     C                     EXCPTMIDASI
+     C                     Z-ADD1         MDS
+     C                     ENDIF
+     C*
+     C   OF                EXCPTMIDAS1
+     C   OF                SETOF                     OF
+     C*
+     C                     EXCPTMEI01
+     C                     ENDIF
+     C                     ENDDO
+     C*DELETE
+     C           *LOVAL    SETLLAML0011
+     C                     Z-ADD0         FLAG98  10
+     C           FLAG98    DOWEQ0
+     C                     SETOF                     72
+     C                     READ RAML0011                 72
+     C           *IN72     IFEQ '1'
+     C                     Z-ADD1         FLAG98
+     C                     ELSE
+     C*                    DELETRAML0011
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #DELDY    BEGSR                           î[ä˙
+     C                     Z-ADD0         WDELDY  80
+     C                     Z-ADD0         WRRNNO
+     C                     SETOF                     90
+     C           *DATE     CHAINDTP1110              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDRRNNO     WRRNNO  40
+     C                     ENDIF
+     C*
+     C                     Z-ADD0         CNT1    40
+     C           WRRNNO    SETLLDTP1111
+     C                     Z-ADD0         FLAG03  10
+     C           FLAG03    DOWEQ0
+     C                     SETOF                     70
+     C                     READ DTP1111                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG03
+     C                     ELSE
+     C           THOLID    IFEQ ' '
+     C                     ADD  1         CNT1
+     C           CNT1      IFEQ 11
+     C                     Z-ADDY2YMD     WDELDY  80
+     C                     Z-ADD1         FLAG03
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
+     C*------------------------------------------------------------
+     C           #HAIT1    BEGSR
+     C*<<îrëºêßå‰ÅiâèúÅj>>
+     C                     MOVEL'L'       P#SYOK           èàóùãÊï™
+     C                     MOVEL'DTR0030' P#OBJF            Ãß≤ŸID
+     C                     MOVEL'1'       P#OBJ1            KEY1
+     C                     MOVEL*BLANK    P#OBJ2            KEY2
+     C                     MOVEL*BLANK    P#OBJ3            KEY3
+     C                     MOVEL*BLANK    P#OBJ4            KEY4
+     C                     MOVEL*BLANK    P#OBJ5            KEY5
+     C                     MOVELS#PGID    P#CRTP            Ãﬂ€∏ﬁ◊—ID
+     C                     MOVELS#USR     P#USID            ’∞ªﬁ∞ID
+     C                     MOVELS#JOB     P#JBID            ºﬁÆÃﬁID
+     C                     MOVEL*BLANK    P#RTN2            ÿ¿∞›∫∞ƒﬁ
+     C                     CALL '@SB030R' PAR060
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #HAIT2    BEGSR
+     C*<<îrëºêßå‰ÅiâèúÅj>>
+     C                     MOVEL'U'       P#SYOK           èàóùãÊï™
+     C                     MOVEL'DTR0030' P#OBJF            Ãß≤ŸID
+     C                     MOVEL'1'       P#OBJ1            KEY1
+     C                     MOVEL*BLANK    P#OBJ2            KEY2
+     C                     MOVEL*BLANK    P#OBJ3            KEY3
+     C                     MOVEL*BLANK    P#OBJ4            KEY4
+     C                     MOVEL*BLANK    P#OBJ5            KEY5
+     C                     MOVELS#PGID    P#CRTP            Ãﬂ€∏ﬁ◊—ID
+     C                     MOVELS#USR     P#USID            ’∞ªﬁ∞ID
+     C                     MOVELS#JOB     P#JBID            ºﬁÆÃﬁID
+     C                     MOVEL*BLANK    P#RTN2            ÿ¿∞›∫∞ƒﬁ
+     C                     CALL '@SB030R' PAR060
+     C                     ENDSR
+     C*-----------------------------------------------------
+     OQSYSPRT E  101           MIDASI
+     O                         WMAIL     85
+     O***                      WMFROM    81
+     O        E  101           MIDAS1
+     O                                   16 ' '
+     O        E  1             MEI01
+     O                         CUSNRA     6
+     O                         ITNBRA    37
+     O                         ORDQUA4   45
+     O                         ORDNOA    61
+     O                         TANKAA4   69
+     O                         KINGAA4   80
+     O                         SLSNRA    84
+     O                         A1A       86
+     O                 50                90 '¥◊∞'
+     O                         REMARA   151
+     O                         WMFROM   182
+** TBL01< ∫œ›ƒﬁ∂ﬁ≤¿ﬁ›Ω >
+MAIL_ORDER_PROCESSED@TOHNICHI.CO.JP

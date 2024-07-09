@@ -1,0 +1,5 @@
+             PGM
+             CALL       PGM(LA2080R)
+             CLRPFM     FILE(DME1010)
+/* */
+ END:        ENDPGM

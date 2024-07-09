@@ -1,0 +1,130 @@
+     H*****************************************************
+     H*    PROGRAM NAME SS0330R CODED BY N.KANEDA         *
+     H*                         CODED ON 02/10/26         *
+     H*    à⁄ìÆï[çÏê¨                                   *
+     H*****************************************************
+     H        1   Y
+     F*------------------------------------------------------------
+     FDTR0381 IF  E           K        DISK
+     FQSYSPRT O   F     132     OF    LPRINTER
+     LQSYSPRT  66FL 65OL
+     IDS1         DS
+     I                                        1   80JUSEN
+     I                                        1   60JUTNOE
+     I                                        7   80SEQNOE
+     C*------------------------------------------------------------
+     C* /* ºÆ∑¡ æØ√≤ */
+     C                     Z-ADD0         FLAG01  10
+     C                     Z-ADD0         FLAG02  10
+     C                     Z-ADD0         FLAG03  10
+     C                     Z-ADD0         FLAG04  10
+     C                     MOVEL*BLANK    WITDSC 62
+     C                     MOVEL*BLANK    MDS     2
+     C*------------------------------------------------------------
+     C*    ======================================
+     C*           ***  MAIN     RTN  ***
+     C*    ======================================
+     C*
+     C                     MOVEL'ON'      MDS
+     C           *LOVAL    SETLLDTR0381
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0                          +++++++++++++++
+     C                     SETOF                     70
+     C                     READ RDTR0380                 70              +
+     C           *IN70     IFEQ '1'                        ************* +
+     C                     Z-ADD1         FLAG01
+     C                     ELSE                            ------------* +
+     C*
+     C           ACRECE    IFEQ 'I'
+     C           ACRECE    OREQ 'C'
+     C*
+     C           MDS       IFEQ 'ON'                       ***
+     C                     EXCPTMID01                        *
+     C                     MOVEL'OF'      MDS                *
+     C                     ELSE                            --*
+     C                     ENDIF                           ***
+     C*
+     C* /* ïiñº */
+     C                     Z-ADD30        IA                               *  +
+     C                     MOVELITDSCE    IB                               *  +
+     C                     MOVEL*BLANK    OUT                              *  +
+     C                     CALL 'NA0001R'                                  *  +
+     C                     PARM           IA      20                       *  +
+     C                     PARM           IB     50                        *  +
+     C                     PARM           OUT   256                        *  +
+     C                     MOVELOUT       WITDSC                           *  +
+     C*
+     C                     SETOF                     5051
+     C                     SELEC
+     C           ACRECE    WHEQ 'I'
+     C                     SETON                     50
+     C           ACRECE    WHEQ 'C'
+     C                     SETON                     51
+     C                     ENDSL
+     C                     EXCPTMEI01
+     C*
+     C* /* µ ﬁ∞Ã€∞ –¿ﬁº ≤›ºﬁ */
+     C   OF                EXCPTMID01
+     C   OF                SETOF                     OF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO                           +++++++++++++++
+     C*------------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     OQSYSPRT E  203           MID01
+     O                                   23 'TOHNICHI MFG. CO., LTD.'
+     O                                   38 'SS0330R'
+     O                         *DATE Y  117
+     O                                  122 'P.'
+     O                         PAGE  Z  126
+     O                                   69 'ÅñÅñÅ@à⁄ìÆï[Åiçbï{Åj'
+     O                                   75 'ÅñÅñ'
+     O*                                  97 'òAî‘:'
+     O*                        SYKNOE4  105
+     O        E  1             MID01
+     O                                   20 '===================='
+     O                                   40 '===================='
+     O                                   60 '===================='
+     O                                   80 '===================='
+     O                                  100 '===================='
+     O                                  120 '===================='
+     O                                  132 '============'
+     O        E  1             MID01
+     O                                   14 'ë„óùìX'
+     O                                   26 'ïiÅ@ñº'
+     O                                   87 'êîó '
+     O                                   97 'íçï∂ÇmÇn'
+     O                                  114 'éÛíçÇmÇn'
+     O                                  120 'çÏî‘'
+     O                                  131 'òAî‘'
+     O        E  1             MID01
+     O                                   20 '===================='
+     O                                   40 '===================='
+     O                                   60 '===================='
+     O                                   80 '===================='
+     O                                  100 '===================='
+     O                                  120 '===================='
+     O                                  132 '============'
+     O        E  1             MEI01
+     O                 50                 6 'ëÂêX'
+     O                 51                 6 'æ›¿-Y '
+     O                         CUSNRE    12
+     O                         WITDSC    80
+     O                         QUANTEM   86
+     O                         ORDNOE   103
+     O                         JUSEN    113
+     O                         NBNBRE   121
+     O                         SYKNOE4  131
+     O        E  1             MEI01
+     O                                   20 '--------------------'
+     O                                   40 '--------------------'
+     O                                   60 '--------------------'
+     O                                   80 '--------------------'
+     O                                  100 '--------------------'
+     O                                  120 '--------------------'
+     O                                  132 '------------'

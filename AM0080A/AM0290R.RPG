@@ -1,0 +1,71 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0070R CODED BY N.KANEDA         *
+     H*                         CODED ON 20.03.12         *
+     H*    ÇnÇbÇqópéÛíçèàóùÉGÉâämîF                   *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0040 IF  E                    DISK
+     IDS1         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 WKCUS2
+     I                                        1   1 WKCUS1
+     C*----------------------------------------------------
+     C           *ENTRY    PLIST
+     C                     PARM           P#ERR   1        ¥◊∞
+     C*----------------------------------------------------
+     C                     MOVEL' '       P#ERR
+     C                     MOVEL*BLANK    W#ERR   2
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           WKCUS2    IFNE '  '
+     C*
+     C           WKCUS1    IFEQ '0'
+     C*
+     C                     SELEC
+     C           WKCUS2    WHEQ '0W'
+     C           WKCUS2    OREQ '0Q'
+     C           WKCUS2    OREQ '0I'
+     C           WKCUS2    OREQ '0N'
+     C           WKCUS2    OREQ '0F'
+     C           WKCUS2    OREQ '0H'
+     C           WKCUS2    OREQ '0J'
+     C           WKCUS2    OREQ '0G'
+     C           WKCUS2    OREQ '01'
+     C           WKCUS2    OREQ '02'
+     C           WKCUS2    OREQ '0S'
+     C           WKCUS2    OREQ '0B'
+     C           WKCUS2    OREQ '0U'
+     C           WKCUS2    OREQ '0L'
+     C           WKCUS2    OREQ '0M'
+     C           WKCUS2    OREQ '0E'
+     C           WKCUS2    OREQ '0A'
+     C           WKCUS2    OREQ '0T'
+     C                     MOVEL*BLANK    P#ERR
+     C                     Z-ADD1         FLAG01
+     C                     OTHER
+     C                     MOVEL'1'       P#ERR
+     C                     Z-ADD1         FLAG01
+     C                     ENDSL
+     C*
+     C                     ELSE
+     C                     MOVEL'1'       P#ERR
+     C                     Z-ADD1         FLAG01
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------

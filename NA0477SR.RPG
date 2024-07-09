@@ -5831,6 +5831,25 @@
      C                     MOVEATOKSS7    WT1
      C*
      C           '.'       SCAN WTOKSS    W       10
+@ADD C           W         IFNE *ZERO
+@ADD C                     Z-ADD0         WW      10
+@ADD C                     Z-ADD0         ZC      10
+@ADD C                     MOVEL*BLANK    SS      1
+@ADD C           W         ADD  1         WW
+@ADD C           WW        IFLT 12
+@ADD C           1         SUBSTWTOKSS:WW SS
+@ADD C           SS        IFEQ '0'
+@ADD C                     ADD  1         ZC
+@ADD C                     ENDIF
+@ADD C                     ENDIF
+@ADD C                     ADD  1         WW
+@ADD C           WW        IFLT 12
+@ADD C           1         SUBSTWTOKSS:WW SS
+@ADD C           SS        IFEQ '0'
+@ADD C                     ADD  1         ZC
+@ADD C                     ENDIF
+@ADD C                     ENDIF
+@ADD C                     ENDIF
      C*
      C           WT1,1     IFEQ *BLANK
      C                     MOVEAWT1       WK4
@@ -5913,6 +5932,7 @@
      C                     SELEC
      C           W#TOK4    WHGE 1
      C           W#TOK4    ANDLT10
+@ADD C           ZC        ANDEQ*ZERO
      C           W#TOK4    DIV  10        W#TOK6
      C           W#TOK4    WHGE 10
      C           W#TOK4    ANDLT100
@@ -5920,6 +5940,10 @@
      C           W#TOK4    WHGE 100
      C           W#TOK4    ANDLT1000
      C           W#TOK4    DIV  1000      W#TOK6
+@ADD C           ZC        WHEQ 1
+@ADD C           W#TOK4    DIV  100       W#TOK6
+@ADD C           ZC        WHEQ 2
+@ADD C           W#TOK4    DIV  1000      W#TOK6
      C                     ENDSL
      C*
      C           W#TOK3    ADD  W#TOK6    W#TOK5

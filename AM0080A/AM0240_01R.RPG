@@ -1,0 +1,565 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    ＯＣＲ用受注処理同時納入確認処理           *
+     H*    水戸・トミタ用                               *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0040 IF  E                    DISK
+     F*ML0100 UF  E           K        DISK                      A
+     FAML0101 UF  E           K        DISK                      A
+     F            RAML0100                          KRENAMERAML0101
+     FDMR0010 IF  E           K        DISK
+     FDMR0351 IF  E           K        DISK
+     FDMR0340 IF  E           K        DISK
+     FDTR9101 IF  E           K        DISK
+     E                    TBL01   1  30 50
+     IRDMR0010
+     I              ZZ0001                          ZZ0011
+     I              ACREC                           ACREC1
+     I              CUSNR                           CUSNR1
+     I              CUSNM                           CUSNM1
+     I              SHPNR                           SHPNR1
+     I              AREAD                           AREAD1
+     I              CUSA1                           CUSA11
+     I              CUSA2                           CUSA21
+     I              AREAC                           AREAC1
+     I              PHONE                           PHONE1
+     I              SLNR1                           SLNR11
+     I              SLBR1                           SLBR11
+     I              SLNR2                           SLNR21
+     I              SLBR2                           SLBR21
+     I              SLNR3                           SLNR31
+     I              SLBR3                           SLBR31
+     I              CRLAM                           CRLAM1
+     I              DCODE                           DCODE1
+     I              CLSCD                           CLSCD1
+     I              SIHCD                           SIHCD1
+     I              TESIT                           TESIT1
+     I              SMTCD                           SMTCD1
+     I              KEITS                           KEITS1
+     I              TATEA                           TATEA1
+     I              TATES                           TATES1
+     I              SIMUA                           SIMUA1
+     I              SIMUS                           SIMUS1
+     I              KESAI                           KESAI1
+     I              USDAY                           USDAY1
+     I              USANS                           USANS1
+     I              OTSUA                           OTSUA1
+     I              OTSUS                           OTSUS1
+     I              TELEX                           TELEX1
+     I              BANNM                           BANNM1
+     I              BAAR1                           BAAR11
+     I              BAAR2                           BAAR21
+     I              BAYCD                           BAYCD1
+     I              OPPNO                           OPPNO1
+     I              INSNM                           INSNM1
+     I              INAR1                           INAR11
+     I              INAR2                           INAR21
+     I              NOTPT                           NOTPT1
+     I              NOAR1                           NOAR11
+     I              NOAR2                           NOAR21
+     I              INTER                           INTER1
+     I              ZZ0671                          ZZ6711
+     I              MATIM                           MATIM1
+     I              MADAY                           MADAY1
+     I              SHPNMB                          SHPNB1
+     I              SHIP1B                          SHI1B1
+     I              SHIP2B                          SHI2B1
+     I              AREASB                          AREAB1
+     I              EWECD                           EWECD1
+     I              UPDID                           UPDID1
+     I              UPDDD                           UPDDD1
+     I              UPDTD                           UPDTD1
+     I              CRTD1                           CRTD11
+     I              CRTT1                           CRTT11
+     I              USID1                           USID11
+     I              JBID1                           JBID11
+     I              PGID1                           PGID11
+     IDS1         DS
+     I                                        1  42 ITNBRA
+     I                                        1   5 ITNB5A
+     I                                        1  25 ITNB2A
+     IDS2         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 CUS02A
+     IDS3         DS
+     I                                        1   5 CUSNRE
+     I                                        1   2 CUS02E
+     IDS4         DS
+     I                                        1  15 ORDNOE
+     I                                        1   3 ORD03E
+     IDS5         DS
+     I                                        1   5 SHPNRA
+     I                                        1   1 WKSHPN
+     IDS6         DS
+     I                                        1   3 TRESAA
+     I                                        1   2 W#TRE1
+     I                                        1   1 W#TR11
+     I                                        2   2 W#TR21
+     I                                        3   3 W#TRE2
+     IDS7         DS
+     I                                        1  15 ORDNOA
+     I                                        1   7 ORDN7A
+     I                                        1   8 ORDN8A
+     C*----------------------------------------------------
+     C           PAR070    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#SHI1  8
+     C                     PARM           P#SHI2  8
+     C                     PARM           P#UNCH  2
+     C                     PARM           P#SLSN  30
+     C*----------------------------------------------------
+     C           D0100     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           ORDNOA
+     C*----------------------------------------------------
+     C           D0101     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           OFNAMA
+     C                     KFLD           W#ORD3
+     C*------------------------------------------------------------
+     C           D9100     KLIST
+     C                     KFLD           WSOTCD
+     C                     KFLD           WSUBCD
+     C*------------------------------------------------------------
+     C           D0350     KLIST
+     C                     KFLD           CUSNRA
+     C                     KFLD           EMAILA
+     C*-----------------------------------------------------
+     C*水戸・トミタ
+     C                     MOVEL*BLANK    W#ERR   2
+     C*
+     C                     MOVEL*BLANK    W#ORD3 15
+     C*
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C           CUS02A    IFEQ '0M'
+     C           CUS02A    OREQ '0T'
+     C*
+     C           CUS02A    IFEQ '0M'
+     C                     MOVEL*BLANK    W#ORD3
+     C                     MOVELORDN7A    W#ORD3
+     C                     ELSE
+     C                     MOVELORDN8A    W#ORD3
+     C                     ENDIF
+     C*
+     C*数量が０以外
+     C           ORDQUA    IFNE 0
+     C*
+     C                     SETOF                     90
+     C           D0101     CHAINAML0101              90
+     C           *IN90     IFEQ '1'
+     C*
+     C                     EXSR #EIGY
+     C*離島の場合
+     C                     MOVEL*BLANK    WUNCHI  2
+     C                     MOVELP#UNCH    WUNCHI
+     C*
+     C                     EXSR #MOVE1
+     C                     WRITERAML0101
+     C*
+     C                     ELSE
+     C***                  EXSR #EIGY
+     C*明細数をカウントする
+     C           COUNTE    ADD  1         COUNTE
+     C                     EXSR #EXT
+     C           W#EXT     IFNE 1
+     C           GOKEIE    ADD  KINGAA    GOKEIE
+     C                     ENDIF
+     C*
+     C*直送明細あり
+     C           ITNB5A    IFEQ 'ﾁｮｸｿｳ'
+     C                     MOVEL'*'       TYKCDE
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C           ERRCDA    IFNE *BLANK
+     C                     EXSR #ERRCD
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C*トレサありの場合
+     C           W#TRE1    IFGE '1'
+     C           W#TRE1    ANDLE'99'
+     C                     MOVEL'*'       TRESAE
+     C                     ENDIF
+     C*
+     C                     UPDATRAML0101
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #MOVE1    BEGSR
+     C                     MOVELCUSNRA    CUSNRE
+     C                     MOVELORDNOA    ORDNOE
+     C*
+     C                     MOVELYUBINA    YUBINE
+     C                     MOVELSHPNMA    SHPNME
+     C                     MOVELSHIP1A    SHIP1E
+     C                     MOVELSHIP2A    SHIP2E
+     C                     MOVELSHTELA    SHTELE
+     C                     MOVELBUSYOA    BUSYOE
+     C                     MOVELBIKO1A    BIKO1E
+     C                     MOVELBIKO2A    BIKO2E
+     C                     Z-ADD1         COUNTE           明細数
+     C*明細金額合計
+     C***        ITNB5A    IFNE 'ﾁｮｸｿｳ'
+     C                     EXSR #EXT
+     C           W#EXT     IFNE 1
+     C***        A1A       IFNE 'X'
+     C                     Z-ADDKINGAA    GOKEIE
+     C                     ELSE
+     C                     Z-ADD0         GOKEIE
+     C                     ENDIF
+     C*同時納入
+     C                     MOVELDOJCDA    DOJCDE
+     C*直送明細あり
+     C           WUNCHI    IFEQ 'ON'
+     C                     MOVEL'*'       TYKCDE
+     C                     ELSE
+     C           ITNB5A    IFEQ 'ﾁｮｸｿｳ'
+     C                     MOVEL'*'       TYKCDE
+     C                     ELSE
+     C                     MOVEL*BLANK    TYKCDE
+     C                     ENDIF
+     C                     ENDIF
+     C*エラーコード
+     C                     MOVEL*BLANK    ERR01E
+     C                     MOVELERRCDA    ERR01E
+     C                     MOVEL*BLANK    ERR02E
+     C                     MOVEL*BLANK    ERR03E
+     C                     MOVEL*BLANK    ERR04E
+     C                     MOVEL*BLANK    ERR05E
+     C*
+     C                     MOVELEMAILA    EMAILE
+     C                     MOVELERRMOA    ERRMOE
+     C                     MOVEL*BLANK    SHITEE           指定納品先
+     C*
+     C                     Z-ADDP#SLSN    ESLSNE           営業
+     C                     MOVELOFNAMA    OFNAME           ｵﾘｼﾞﾅﾙF
+     C*
+     C                     MOVELWKSHPN    DUMMYE
+     C*
+     C*トレサありの場合
+     C           W#TRE2    IFNE *BLANK
+     C*
+     C           W#TRE1    IFGE '1'
+     C           W#TRE1    ANDLE'99'
+     C                     MOVEL'*'       TRESAE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           W#TR21    IFNE *BLANK
+     C*
+     C           W#TRE1    IFGE '1'
+     C           W#TRE1    ANDLE'99'
+     C                     MOVEL'*'       TRESAE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C           W#TR11    IFGE '1'
+     C           W#TR11    ANDLE'9'
+     C                     MOVEL'*'       TRESAE
+     C                     ELSE
+     C                     MOVEL*BLANK    TRESAE
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C*
+     C                     Z-ADDDUEDYA    DUEDYE
+     C                     Z-ADDSAGCDA    SAGCDE
+     C*
+     C*水戸用
+     C           CUS02A    IFEQ '0M'
+     C                     MOVELORDN7A    ORDN3E
+     C                     ELSE
+     C                     MOVELORDN8A    ORDN3E
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C*文字列操作（会社名）
+     C           #TRSC     BEGSR
+     C                     MOVEL*BLANK    W#SHP1
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD10        P#LENG
+     C                     MOVELSHPNME    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHP1 10
+     C*文字列操作（会社名）
+     C                     MOVEL*BLANK    W#SHP2
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD10        P#LENG
+     C                     MOVELTBL01,1   P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHP2 10
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #ERRCD    BEGSR
+     C*
+     C           ERRCDA    IFEQ ERR01E
+     C           ERRCDA    OREQ ERR02E
+     C           ERRCDA    OREQ ERR03E
+     C           ERRCDA    OREQ ERR04E
+     C           ERRCDA    OREQ ERR05E
+     C                     ELSE
+     C*
+     C           ERR01E    IFEQ *BLANK
+     C                     MOVELERRCDA    ERR01E
+     C                     ELSE
+     C           ERR02E    IFEQ *BLANK
+     C                     MOVELERRCDA    ERR02E
+     C                     ELSE
+     C           ERR03E    IFEQ *BLANK
+     C                     MOVELERRCDA    ERR03E
+     C                     ELSE
+     C           ERR04E    IFEQ *BLANK
+     C                     MOVELERRCDA    ERR04E
+     C                     ELSE
+     C           ERR04E    IFEQ *BLANK
+     C                     MOVELERRCDA    ERR05E
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C***        #ERR50    BEGSR
+     C*指定納品先
+     C***        ERR01E    IFEQ *BLANK
+     C***                  MOVEL'50'      ERR01E
+     C***                  ELSE
+     C***        ERR02E    IFEQ *BLANK
+     C***                  MOVEL'50'      ERR02E
+     C***                  ELSE
+     C***        ERR03E    IFEQ *BLANK
+     C***                  MOVEL'50'      ERR03E
+     C***                  ELSE
+     C***        ERR04E    IFEQ *BLANK
+     C***                  MOVEL'50'      ERR04E
+     C***                  ELSE
+     C***        ERR05E    IFEQ *BLANK
+     C***                  MOVEL'50'      ERR05E
+     C***                  ENDIF
+     C***                  ENDIF
+     C***                  ENDIF
+     C***                  ENDIF
+     C***                  ENDIF
+     C*
+     C***                  ENDSR
+     C*----------------------------------------------------------
+     C           #EIGY     BEGSR
+     C*
+     C           SHIP1A    IFNE *BLANK
+     C*
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI1
+     C                     MOVEL*BLANK    W#SHI2
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELSHIP1A    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI1  8        都道府県
+     C                     MOVELP#MOJ3    W#SHI2 62
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI3
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELW#SHI2    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI3  8        市区町村
+     C                     MOVELP#MOJ3    W#SHI4 62
+     C*
+     C*営業マンコード
+     C                     MOVELW#SHI1    P#SHI1
+     C                     MOVELW#SHI3    P#SHI2
+     C                     MOVEL*BLANK    P#UNCH
+     C                     Z-ADD0         P#SLSN
+     C                     CALL '@AM0220' PAR010
+     C*
+     C                     ELSE
+     C*------------------------------------------
+     C*直送でない場合
+     C                     SETOF                     9192
+     C           CUSNRA    CHAINDMR0010              91
+     C           *IN91     IFEQ '0'
+     C*
+     C                     SELEC
+     C           CUSNRA    WHEQ '0L 00'
+     C           CUSNRA    OREQ '0L 30'
+     C*
+     C*３グループ
+     C                     MOVEL'3'       WSOTCD  1
+     C                     MOVEL*BLANK    WSUBCD  1
+     C                     EXSR #SYINO
+     C*
+     C           CUSNRA    WHEQ '0L 02'
+     C*１グループ
+     C***                  MOVEL'1'       WSOTCD  1
+     C***                  MOVEL*BLANK    WSUBCD  1
+     C                     MOVEL'2'       WSOTCD  1
+     C                     MOVEL'1'       WSUBCD  1
+     C                     EXSR #SYINO
+     C*
+     C                     OTHER
+     C*
+     C*代理店の担当者営業による割当
+     C*代理店CD
+     C* EMAIL
+     C                     SETOF                     91
+     C           EMAILA    CHAINDMR0351              91
+     C           *IN91     IFEQ '0'
+     C*
+     C                     MOVELSOTCDZ    WSOTCD  1
+     C                     MOVELSUBCDZ    WSUBCD  1
+     C                     EXSR #SYINO
+     C*
+     C           WSOTCD    IFEQ *BLANK
+     C           WSUBCD    ANDEQ*BLANK
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI1
+     C                     MOVEL*BLANK    W#SHI5
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELSHI1B1    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI1  8        都道府県
+     C                     MOVELP#MOJ3    W#SHI5 72
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI3
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELW#SHI5    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI3  8        市区町村
+     C                     MOVELP#MOJ3    W#SHI6 72
+     C*
+     C*営業マンコード
+     C                     MOVELW#SHI1    P#SHI1
+     C                     MOVELW#SHI3    P#SHI2
+     C                     MOVEL*BLANK    P#UNCH
+     C                     Z-ADD0         P#SLSN
+     C                     CALL '@AM0220' PAR010
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C*
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI1
+     C                     MOVEL*BLANK    W#SHI5
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELSHI1B1    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI1  8        都道府県
+     C                     MOVELP#MOJ3    W#SHI5 72
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI3
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELW#SHI5    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI3  8        市区町村
+     C                     MOVELP#MOJ3    W#SHI6 72
+     C*
+     C*営業マンコード
+     C                     MOVELW#SHI1    P#SHI1
+     C                     MOVELW#SHI3    P#SHI2
+     C                     MOVEL*BLANK    P#UNCH
+     C                     Z-ADD0         P#SLSN
+     C                     CALL '@AM0220' PAR010
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDSL
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #SYINO    BEGSR
+     C                     SETOF                     91
+     C           D9100     CHAINDTR9101              91
+     C           *IN91     IFEQ '0'
+     C*
+     C                     Z-ADDSLSNR     P#SLSN
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #EXT      BEGSR
+     C                     SETOF                     92
+     C*
+     C                     Z-ADD0         W#EXT   10
+     C                     SETOF                     92
+     C           ITNB5A    CHAINDMR0340              92
+     C           *IN92     IFEQ '0'
+     C*
+     C           ACREC4    IFEQ '*'
+     C                     Z-ADD1         W#EXT
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDSR
+** TBL01< ｺﾏﾝﾄﾞｶﾞｲﾀﾞﾝｽ >
+トラスコ

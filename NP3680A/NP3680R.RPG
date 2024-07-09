@@ -1,0 +1,437 @@
+     H******************************************************
+     H*    PROGRAM NAME-NP3680R CODED BY N.KANEDA          *
+     H*                         CODED ON 20.03.11          *
+     H*   部品自動出庫処理                               *
+     H******************************************************
+     H            Y
+     FAML0051 IF  E           K        DISK
+     FDTR2620 IF  E           K        DISK
+     FAGM0060 IF  E           K        DISK
+     FDTC0002 IF  E           K        DISK
+     FNPR0100 IF  E           K        DISK
+     FNPZ0300 UF  E           K        DISK
+     FNPZ0400 O   E                    DISK                      A
+     FNPD0700AIF  E           K        DISK
+     F            RNPD0700A                         KRENAMERNPD0701
+     FDTP8000 IF  E                    DISK                      A        TC0810
+     F            DTP8000                           KRENAMERDTP8000
+     F                                              KINFDS RECNO
+     FQSYSPRT O   F     132     OF    LPRINTER
+     LQSYSPRT  30FL 30OL
+     IRDTP8000
+     I              DTP8000                         DTP800
+     IRECNO       DS
+     I                                    B 397 4000W#RECN
+     IDS1         DS
+     I                                        1   6 PNBNBR
+     I                                        1   2 P#NBN1
+     IDS2         DS
+     I                                        1   6 NBNBRA
+     I                                        1   2 W#NBN1
+     I                                        3   3 W#NBN3
+     I                                        4   4 W#NBN4
+     I                                        5   5 W#NBN5
+     I                                        6   6 W#NBN6
+     IDS3         DS
+     I                                        1  64 DTP800
+     I                                        1   2 RECC80
+     I                                        3   3 ACRC80
+     I                                        4   90SHPD80
+     I                                       10  150SHPT80
+     I                                       16  29 ITNB80
+     I                                       30  340SHPQ80
+     I                                       37  37 MMMM80
+     I                                       38  43 NBNB80
+     I                                       44  520AAAA80
+     I                                       53  610BBBB80
+     I                                       62  63 SEKC80
+     IDS4         DS
+     I                                        1   80W#SDAY
+     I                                        1   40W#YY
+     I                                        5   60W#MM
+     I                                        7   80W#DD
+     IDS5         DS
+     I                                        1   40SHUDYA
+     I                                        1   20W#MM1
+     I                                        3   40W#DD1
+     I*< SDS >
+     I           SDS
+     I                                        1  10 S#PGID
+     I                                      244 253 S#JOB
+     I                                      254 263 S#USR
+     I*< ｼｽﾃﾑ日付>
+     I            DS
+     I                                        1  140W#SYST
+     I                                        1   60W#SHMS
+     I                                        7  140W#SYMD
+     C*-----------------------------------------------------
+     C                     TIME           W#SYST
+     C                     MOVELS#JOB     W#JOB   5
+     C*----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#KOSN  1
+     C                     PARM           P#PRCN 100
+     C                     PARM           P#SAKB  80
+     C                     PARM           P#RTCD  2
+     C*---------------------------------------------------------
+     C           PAR020    PLIST
+     C                     PARM           P#YMD8  80
+     C                     PARM           P#RTNC  2
+     C*----------------------------------------------------
+     C           D0400     KLIST
+     C                     KFLD           NBNBRA
+     C                     KFLD           ITNBRA
+     C*--------------------------------------------------
+0130 C                     Z-ADD0         Z92     92                      TC0810
+0131 C                     Z-ADD0         Z9      90                      TC0810
+0133 C                     Z-ADD0         TIME    60                      TC0810
+0134 C                     TIME           TIME                            TC0810
+     C*--------------------------------------------------
+     C                     SETOF                     90
+     C           '1'       CHAINDTR2620              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDBALD06    W#BALD  80
+     C                     Z-ADDTALD06    W#TALD  80
+     C                     Z-ADDTALD06    W#NALD  80
+     C                     Z-ADDTALD06    W#YALD  80
+     C                     ENDIF
+     C*--------------------------------------------------
+     C*
+     C                     Z-ADD0         MDS     10
+     C           *LOVAL    SETLLAML0051
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RAML0050                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C           SLSNRA    IFNE 0
+     C*
+     C           QUANTA    IFNE 0
+     C*
+     C                     Z-ADD*DATE     W#SDAY  80
+     C*
+     C                     Z-ADD0         W#DATE  80
+     C           W#MM      IFEQ 01
+     C           W#MM1     IFEQ 12
+     C           W#YY      SUB  1         W#YY
+     C                     MOVELW#YY      W#DATE
+     C                     ELSE
+     C                     MOVELW#YY      W#DATE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVELW#YY      W#DATE
+     C                     ENDIF
+     C*
+     C           SHUDYA    IFEQ 0
+     C                     MOVE *DATE     W#DATE
+     C                     ELSE
+     C                     MOVE SHUDYA    W#DATE
+     C                     ENDIF
+     C*
+     C                     SELEC
+     C* 前月締日＜＝当月締日
+     C           W#DATE    WHGT W#BALD
+     C           W#DATE    ANDEQW#TALD
+     C*
+     C* 当月締日＜＝翌月締日
+     C           W#DATE    WHGT W#TALD
+     C           W#DATE    ANDEQW#NALD
+     C*
+     C* 翌月締日＜＝翌々月締日
+     C           W#DATE    WHGT W#NALD
+     C           W#DATE    ANDEQW#YALD
+     C*
+     C                     OTHER
+     C                     Z-ADD*DATE     W#DATE
+     C*
+     C                     ENDSL
+     C*
+     C* 日付確認
+     C                     SETOF                     60
+     C                     Z-ADDW#DATE    P#YMD8
+     C                     MOVEL*BLANK    P#RTNC
+     C                     CALL '@SB020R' PAR020
+     C           P#RTNC    IFEQ 'ER'
+     C                     SETON                     60
+     C                     Z-ADD*DATE     W#DATE
+     C                     ENDIF
+     C*
+     C*MAIL
+     C                     MOVELMAIL6     WMAIL  40
+     C                     MOVELSLSNRA    WSLSNR  3
+     C           WSLSNR    CHAINAGM0060              90
+     C           *IN90     IFEQ '0'
+     C                     MOVELMAIL6     WMAIL
+     C                     ENDIF
+     C*----
+     C                     MOVEL*BLANK    WITDSC 30
+     C                     SETOF                     90
+     C           ITNBRA    CHAINNPR0100              90
+     C           *IN90     IFEQ '0'
+     C*
+     C                     MOVELITDSC1    WITDSC
+     C           ITTYP1    IFEQ 2
+     C           ORDPC1    ANDEQ1
+     C           ITTYP1    OREQ 3
+     C           ORDPC1    ANDEQ1
+     C           ITTYP1    OREQ 4
+     C           ORDPC1    ANDEQ1
+     C           ITTYP1    OREQ 3
+     C           ORDPC1    ANDEQ3
+     C*
+     C                     SETOF                     915051
+     C                     SETOF                     52
+     C           W#NBN1    CHAINDTC0002              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           *IN60     IFEQ '0'
+     C*
+     C                     EXSR #RTN1
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     SETON                     51
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     SETON                     50
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     SETON                     50
+     C                     ENDIF
+     C*----
+     C           MDS       IFEQ 0
+     C                     EXCPTMIDASI
+     C                     Z-ADD1         MDS
+     C                     ENDIF
+     C                     MOVELNBNBRA    PNBNBR
+     C           W#NBN1    IFEQ 'C '
+     C                     MOVEL'  '      P#NBN1
+     C                     ENDIF
+     C   OF                EXCPTMIDASI
+     C   OF                SETOF                     OF
+     C                     EXCPTMEI01
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #RTN1     BEGSR
+     C           W#NBN1    IFEQ 'B '
+     C           W#NBN1    OREQ 'E '
+     C           W#NBN1    OREQ 'PB'
+     C           W#NBN1    OREQ 'PE'
+     C           W#NBN1    OREQ 'D '
+     C           W#NBN1    OREQ '  '
+     C           W#NBN1    OREQ 'G '
+     C           W#NBN1    OREQ 'Z '
+     C           W#NBN1    OREQ 'J '
+     C           W#NBN1    OREQ 'N '
+     C           W#NBN1    OREQ 'C '
+     C*
+     C*作番３桁目以降数字
+     C           W#NBN3    IFGE '0'
+     C           W#NBN3    ANDLE'9'
+     C           W#NBN4    ANDGE'0'
+     C           W#NBN4    ANDLE'9'
+     C           W#NBN5    ANDGE'0'
+     C           W#NBN5    ANDLE'9'
+     C           W#NBN6    ANDGE'0'
+     C           W#NBN6    ANDLE'9'
+     C*
+     C           W#NBN1    IFEQ 'C '
+     C                     MOVEL*BLANK    W#NBN1
+     C                     ENDIF
+     C                     EXSR #RTN2
+     C*
+     C                     ELSE
+     C                     SETON                     50
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C                     SETOF                     91
+     C           NBNBRA    CHAINNPD0700A             91
+     C           *IN91     IFEQ '0'
+     C                     EXSR #RTN2
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #RTN2     BEGSR
+     C                     SETOF                     93
+     C           ITNBRA    CHAINNPZ0300              93
+     C           *IN93     IFEQ '0'
+     C           QTYOHC    SUB  QUANTA    QTYOHC
+     C           QTYRSC    ADD  QUANTA    QTYRSC
+     C                     UPDATRNPZ0300
+     C                     ENDIF
+     C*
+     C                     MOVEL*BLANK    MM      1
+     C           QUANTA    IFLE 0
+     C                     MOVEL'*'       MM
+     C                     ENDIF
+     C*
+     C                     Z-ADD0         FLAG20  10
+     C           FLAG20    DOWEQ0
+     C*
+     C                     SETOF                     90
+     C           W#RECN    CHAINDTP8000              90
+     C           *IN90     IFEQ '1'
+     C*
+     C                     MOVEL'SZ'      RECC80
+     C                     Z-ADDW#DATE    SHPD80
+     C*
+0074 C           ITTYP1    IFEQ 2                                         TC0810
+0074 C           ORDPC1    ANDEQ1                                         TC0810
+0074 C           ITTYP1    OREQ 3                                         TC0810
+0074 C           ORDPC1    ANDEQ1                                         TC0810
+0074 C           ITTYP1    OREQ 3                                         TC0810
+0074 C           ORDPC1    ANDEQ2                                         TC0810
+0074 C           ITTYP1    OREQ 4                                         TC0810
+0074 C           ORDPC1    ANDEQ1                                         TC0810
+0074 C           ITTYP1    OREQ 4                                         TC0810
+0074 C           ORDPC1    ANDEQ2                                         TC0810
+     C                     TIME           SHPT80
+     C                     ELSE
+     C                     Z-ADD999999    SHPT80
+     C                     ENDIF
+     C*
+     C                     MOVELITNBRA    ITNB80
+     C                     Z-ADDQUANTA    SHPQ80
+     C                     MOVELMM        MMMM80
+     C                     MOVELNBNBRA    NBNB80
+     C                     Z-ADDZ92       AAAA80
+     C                     Z-ADDZ9        BBBB80
+     C*
+     C           W#NBN1    IFEQ '  '
+     C           W#NBN1    OREQ 'D '
+     C           W#NBN1    OREQ 'B '
+     C           W#NBN1    OREQ 'E '
+     C           W#NBN1    OREQ 'PB'
+     C           W#NBN1    OREQ 'PE'
+     C*
+     C                     SETOF                     52
+     C           CONTSA    IFNE *BLANK
+     C                     SETON                     52
+     C                     MOVEL'* '      SEKC80
+     C                     ELSE
+     C                     SETOF                     52
+     C                     MOVEL'  '      SEKC80
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           W#NBN1    IFGE '01'
+     C           W#NBN1    ANDLE'99'
+     C*
+     C                     SETOF                     52
+     C           CONTSA    IFNE *BLANK
+     C                     SETON                     52
+     C                     MOVEL'* '      SEKC80
+     C                     ELSE
+     C                     SETOF                     52
+     C                     MOVEL'  '      SEKC80
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL'  '      SEKC80
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+0116 C                     SETON                     55                   TC0810
+0117 C                     EXCPT                                          TC0810
+0118 C                     SETOF                     55                   TC0810
+     C*SPD
+     C                     MOVEL*BLANK    P#KOSN
+     C                     MOVE W#RECN    P#PRCN
+     C                     MOVE 0         P#SAKB
+     C                     MOVEL*BLANK    P#RTCD
+     C                     CALL 'CT5120R' PAR010
+     C*
+     C                     Z-ADD1         FLAG20
+     C                     ELSE
+     C           W#RECN    ADD  1         W#RECN
+     C                     ENDIF
+     C*
+     C                     ENDDO
+     C*
+0074 C           ITTYP1    IFEQ 2                                         TC0810
+0074 C           ORDPC1    ANDEQ1                                         TC0810
+0074 C           ITTYP1    OREQ 3                                         TC0810
+0074 C           ORDPC1    ANDEQ1                                         TC0810
+0074 C           ITTYP1    OREQ 3                                         TC0810
+0074 C           ORDPC1    ANDEQ2                                         TC0810
+0074 C           ITTYP1    OREQ 4                                         TC0810
+0074 C           ORDPC1    ANDEQ1                                         TC0810
+0074 C           ITTYP1    OREQ 4                                         TC0810
+0074 C           ORDPC1    ANDEQ2                                         TC0810
+     C*
+     C                     MOVEL*BLANK    WACREC  1
+     C*
+     C           QUANTA    IFLT 0
+     C                     MOVEL'D'       WACREC
+     C                     ENDIF
+     C                     MOVEL*BLANK    WITDS2 30
+     C                     SETOF                     8182
+     C           ITNBRA    CHAINNPR0100              81
+     C           *IN81     IFEQ '0'
+     C                     MOVELITDSC1    WITDS2
+     C                     ENDIF
+     C*
+     C                     MOVEL'SP'      RECCDD
+     C                     MOVELWACREC    ACRECD
+     C                     MOVELNBNBRA    NBNBRD
+     C                     MOVELITNBRA    ITNBRD
+     C                     MOVELWITDS2    ITDSCD
+     C                     Z-ADDQUANTA    ZTYRSD
+     C                     Z-ADD0         NUMBRD
+     C                     MOVE W#DATE    REDAYD
+     C*
+     C                     Z-ADDW#SYMD    CRTD1D
+     C                     Z-ADDW#SHMS    CRTT1D
+     C                     MOVELS#USR     USID1D
+     C                     MOVELS#JOB     JBID1D
+     C                     MOVELS#PGID    PGID1D
+     C*
+     C                     WRITERNPZ0400
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*-----------------------------------------------------
+0172 ORDTP8000EADD     55                                                 TC0810
+0171 O                         DTP800                                     TC0810
+     OQSYSPRT E  101           MIDASI
+     O                         WMAIL     40
+     O                         *DATE     60
+     O                         TIME      66
+     O        E  1             MIDASI
+     O                                    6 '図番'
+     O                                   21 '品名'
+     O                                   64 '作番　数量　日付'
+     O                                   73 '社員NO'
+     O        E  1             MEI01
+     O                         ITNBRA    14
+     O                         WITDSC    45
+     O                         PNBNBR    52
+     O                         QUANTAM   58
+     O                         SHUDYAY   64
+     O                         SLSNRA4   70
+     O                         *DATE Y   80
+     O                 52                92 '*'
+     O                 50                96 'ｴﾗｰ'
+     O                 51                96 'ｴﾗｰ'
+     O                 60               102 'ﾋﾂﾞｹｴﾗｰ'

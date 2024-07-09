@@ -1,0 +1,13 @@
+             PGM
+/*ïœêîíËã`*/
+ /*          */
+             OVRDBF     FILE(NPS0300) TOFILE(PLANFT/NPR0300)
+             OVRDBF     FILE(NPS0310) TOFILE(PRD1FMCHG/NPR0310)
+             OVRDBF     FILE(NPW0515) TOFILE(NPW0511)
+   /*        OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 198) LPI(6)   */
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(*N 198) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIOM)
+             CALL       PGM(NP3715R)
+             DLTOVR     FILE(*ALL)
+ ENDCLPGM:
+             ENDPGM     /* END CL PGM */

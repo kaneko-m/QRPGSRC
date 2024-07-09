@@ -1,0 +1,119 @@
+             PGM
+             DCL        VAR(&JOB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&DRPY) TYPE(*CHAR) LEN(8)
+             DCL        VAR(&MSG) TYPE(*CHAR) LEN(75)
+             DCL        VAR(&DRPY2) TYPE(*CHAR) LEN(8)
+             DCL        VAR(&OUTQ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&WSID) TYPE(*CHAR) LEN(3)
+             DCL        VAR(&RTNCD) TYPE(*CHAR) LEN(1)
+             RTVJOBA    OUTQ(&OUTQ)
+             RTVJOBA    JOB(&JOB)
+             CHGVAR     VAR(&WSID) VALUE(%SST(&JOB 1 3))
+             CHGVAR     VAR(&RTNCD) VALUE('0')
+             CHKOBJ     OBJ(DTR0440) OBJTYPE(*FILE) MBR(&WSID *TCAT +
+                          T440)
+             MONMSG     MSGID(CPF0000) EXEC(CHGVAR VAR(&RTNCD) +
+                          VALUE('1'))
+             IF         COND(&RTNCD *EQ '1') THEN(DO)
+             GOTO       CMDLBL(PGM00020)
+             ENDDO
+             ELSE       CMD(DO)
+             GOTO       CMDLBL(PGM00030)
+             ENDDO
+ PGM00020:
+             ADDPFM     FILE(DTR0350) MBR(&WSID *TCAT T350)
+             MONMSG     MSGID(CPF0000)
+             ADDPFM     FILE(DTR0460) MBR(&WSID *TCAT T460)
+             MONMSG     MSGID(CPF0000)
+             ADDPFM     FILE(DTR0440) MBR(&WSID *TCAT T440)
+             MONMSG     MSGID(CPF0000)
+             ADDPFM     FILE(DTR0380) MBR(&WSID *TCAT T380)
+             MONMSG     MSGID(CPF0000)
+             ADDLFM     FILE(DTR0351) MBR(&WSID *TCAT T351) +
+                          DTAMBRS((DTR0350 ((&WSID *TCAT T350))))
+             MONMSG     MSGID(CPF0000)
+             ADDLFM     FILE(DTR0461) MBR(&WSID *TCAT T461) +
+                          DTAMBRS((DTR0460 ((&WSID *TCAT T460))))
+             MONMSG     MSGID(CPF0000)
+             ADDLFM     FILE(DTR0381) MBR(&WSID *TCAT T381) +
+                          DTAMBRS((DTR0380 ((&WSID *TCAT T380))))
+             MONMSG     MSGID(CPF0000)
+             GOTO       CMDLBL(PGM00030)
+ PGM00030:
+             OVRDBF     FILE(DTR1100) TOFILE(DTR1100) MBR(&WSID +
+                          *TCAT T100)
+             OVRDBF     FILE(SNK0030) TOFILE(SNK0030) MBR(&WSID +
+                          *TCAT K030)
+             OVRDBF     FILE(DTR0350) TOFILE(DTR0350) MBR(&WSID +
+                          *TCAT T350)
+             OVRDBF     FILE(DTR0351) TOFILE(DTR0351) MBR(&WSID +
+                          *TCAT T351)
+             OVRDBF     FILE(DTR0380) TOFILE(DTR0380) MBR(&WSID +
+                          *TCAT T380)
+             OVRDBF     FILE(DTR0440) TOFILE(DTR0440) MBR(&WSID +
+                          *TCAT T440)
+             OVRDBF     FILE(DTR0460) TOFILE(DTR0460) MBR(&WSID +
+                          *TCAT T460)
+             CALL       PGM(SS0120R) /* 2019/06/20 */
+     /*      CALL       PGM(SS0123R) /* 2014/11/04 */
+     /*      CALL       PGM(SS0124R) /* 2019/05/27 */
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(21) LPI(6) OVRFLW(20) +
+                          OUTQ(WILPLEXCHG/NOHK)
+             CALL       PGM(SS0131R)
+     /*      CALL       PGM(SS0140R)          */
+             CALL       PGM(SS0140SR) /* SPDªÃﬁŸ∞¡›  05/10/19 */
+             DLTOVR     FILE(*ALL)
+/* íºëóî[ïièë*/
+             CALL       PGM(MSG) PARM('4' &DRPY &MSG)
+             CHGVAR     VAR(&MSG) VALUE('Å{Å{Å{Å@íºëóî[ïièëÅ@Å{Å{Å{')
+             CALL       PGM(MSG) PARM('1' &DRPY &MSG)
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(21) LPI(6) OVRFLW(20) +
+                          OUTQ(WILPLEXCHG/NOHKT)
+             OVRDBF     FILE(DTR0460) TOFILE(DTR0460) MBR(&WSID +
+                          *TCAT T460)
+             OVRDBF     FILE(DTR0461) TOFILE(DTR0461) MBR(&WSID +
+                          *TCAT T461)
+             CALL       PGM(SS0421R)
+             CLRPFM     FILE(DTR0460) MBR(&WSID *TCAT T460)
+             CLRPFM     FILE(DTR0350) MBR(&WSID *TCAT T350)
+             CHGJOB     OUTQ(&OUTQ)
+             DLTOVR     FILE(*ALL)
+/* à⁄ìÆï[ */
+             OVRDBF     FILE(DTR0380) TOFILE(DTR0380) MBR(&WSID +
+                          *TCAT T380)
+             OVRDBF     FILE(DTR0381) TOFILE(DTR0381) MBR(&WSID +
+                          *TCAT T381)
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(66 132) LPI(6) OUTQ(P46)
+             CALL       PGM(SS0330R)
+             CLRPFM     FILE(DTR0380) MBR(&WSID *TCAT T380)
+             CHGJOB     OUTQ(&OUTQ)
+             DLTOVR     FILE(*ALL)
+/* èoâ◊êÊí˘ê≥àÀóä*/
+             CALL       PGM(MSG) PARM('4' &DRPY &MSG)
+             CHGVAR     VAR(&MSG) VALUE('Å{Å{Å{Å@èoâ◊êÊí˘ê≥àÀóäÅ@+
+                          Å{Å{Å{')
+             CALL       PGM(MSG) PARM('1' &DRPY &MSG)
+             OVRDBF     FILE(DTR0440) TOFILE(DTR0440) MBR(&WSID +
+                          *TCAT T440)
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(24) LPI(6) OVRFLW(6) +
+                          OUTQ(WILPLEXCHG/PIK)
+             CALL       PGM(SS0390R) /*19/05/20 */
+             DLTOVR     FILE(*ALL)
+/* ëóÇËèÛ */
+             CALL       PGM(MSG) PARM('4' &DRPY &MSG)
+             CHGVAR     VAR(&MSG) VALUE('Å{Å{Å{Å@ëóÇËèÛÅ@Å{Å{Å{')
+             CALL       PGM(MSG) PARM('1' &DRPY &MSG)
+             OVRDBF     FILE(DTR0440) TOFILE(DTR0440) MBR(&WSID +
+                          *TCAT T440)
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(24 198) LPI(6) +
+                          CPI(15) OVRFLW(19) OUTQ(SP2)
+      /*     CALL       PGM(SS0391R)    */
+      /*     CALL       PGM(SS0392R)    */
+      /*     CALL       PGM(SS0393R)    */
+      /*     CALL       PGM(SS0394R)  /*10/11/24 */
+      /*     CALL       PGM(SS0395R)  /*17/12/04 */
+             CALL       PGM(SS0395_01R) /*19/05/20 */
+             CLRPFM     FILE(DTR0440) MBR(&WSID *TCAT T440)
+             DLTOVR     FILE(*ALL)
+ENDCLPGM:    RETURN
+             ENDPGM

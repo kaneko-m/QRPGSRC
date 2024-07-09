@@ -1,0 +1,118 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0090R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.20         *
+     H*    ÇnÇbÇqópéÛíçèàóùìØéûî[ì¸ämîFèàóù           *
+     H*                                                   *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0101 IF  E           K        DISK
+     F            RAML0100                          KRENAMERAML0101
+     FAML0120 UF  E           K        DISK                      A
+     FAML0130 UF  E           K        DISK                      A
+     IDS1         DS
+     I                                        1  42 ITNBRA
+     I                                        1   5 ITNB5A
+     I                                        1  25 ITNB2A
+     IDS2         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 CUS02A
+     IDS3         DS
+     I                                        1   5 CUSNRE
+     I                                        1   2 CUS02E
+     IDS4         DS
+     I                                        1  15 ORDNOE
+     I                                        1   3 ORD03E
+     IDS5         DS
+     I                                        1   5 SHPNRA
+     I                                        1   1 WKSHPN
+     C*-----------------------------------------------------
+     C           D0120     KLIST
+     C                     KFLD           CUSNRE
+     C                     KFLD           YUBINE
+     C                     KFLD           SHPNME
+     C                     KFLD           SHIP1E
+     C                     KFLD           SHIP2E
+     C                     KFLD           BUSYOE
+     C*-----------------------------------------------------
+     C           D0130     KLIST
+     C                     KFLD           CUSNRE
+     C                     KFLD           YUBINE
+     C                     KFLD           SHPNME
+     C                     KFLD           SHIP1E
+     C                     KFLD           SHIP2E
+     C                     KFLD           ORDNOE
+     C*-----------------------------------------------------
+     C*C
+     C           *LOVAL    SETLLAML0101
+     C*
+     C*
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETOF                     71
+     C                     READ RAML0101                 71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C           YUBINE    IFNE *BLANK
+     C*
+     C*ë„óùìXÅEíºëóêÊÅEíçï∂î‘çÜ
+     C                     SETOF                     91
+     C           D0130     CHAINAML0130              91
+     C           *IN91     IFEQ '1'
+     C                     MOVELCUSNRE    CUSNRG
+     C                     MOVELORDNOE    ORDNOG
+     C                     MOVELYUBINE    YUBING
+     C                     MOVELSHPNME    SHPNMG
+     C                     MOVELSHIP1E    SHIP1G
+     C                     MOVELSHIP2E    SHIP2G
+     C*
+     C                     Z-ADDCOUNTE    COUNTG
+     C                     Z-ADDGOKEIE    GOKEIG
+     C                     WRITERAML0130
+     C                     ELSE
+     C*
+     C           COUNTG    ADD  COUNTE    COUNTG
+     C           GOKEIG    ADD  GOKEIE    GOKEIG
+     C                     UPDATRAML0130
+     C                     ENDIF
+     C*
+     C                     SETOF                     90
+     C           D0120     CHAINAML0120              90
+     C           *IN90     IFEQ '1'
+     C*
+     C                     MOVELCUSNRE    CUSNRF
+     C                     MOVELYUBINE    YUBINF
+     C                     MOVELSHPNME    SHPNMF
+     C                     MOVELSHIP1E    SHIP1F
+     C                     MOVELSHIP2E    SHIP2F
+     C                     MOVELBUSYOE    BUSYOF
+     C*
+     C                     Z-ADDCOUNTE    COUNTF
+     C                     Z-ADDGOKEIE    GOKEIF
+     C                     MOVELTYKCDE    TYKCDF           íºëóñæç◊Ç†ÇË
+     C*
+     C                     WRITERAML0120
+     C*
+     C                     ELSE
+     C*
+     C*
+     C*
+     C           COUNTF    ADD  COUNTE    COUNTF
+     C           GOKEIF    ADD  GOKEIE    GOKEIF
+     C*
+     C           TYKCDE    IFNE *BLANK
+     C                     MOVEL'*'       TYKCDF           íºëóñæç◊Ç†ÇË
+     C                     ENDIF
+     C*
+     C                     UPDATRAML0120
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*----------------------------------------------------------

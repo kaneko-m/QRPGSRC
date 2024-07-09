@@ -1,0 +1,370 @@
+     H*****************************************************
+     H*    PROGRAM NAME SS0395R CODED BY N.KANEDA         *
+     H*                         CODED ON 10/07/30         *
+     H*    ëóÇËèÛî≠çs                                   *
+     H*****************************************************
+     H        1   Y
+     FDTR0440 IF  E           K        DISK
+     FDTR0300 IF  E           K        DISK
+     FDTR030D IF  E           K        DISK
+     F            RDTR0300                          KRENAMERDTR030D
+     FDTR0542 IF  E           K        DISK
+     FDTR0120 IF  E           K        DISK
+     FSNK0010 UF  E           K        DISK
+     FQSYSPRT O   F     132     OF    LPRINTER
+     LQSYSPRT  24FL 19OL
+     IRDTR030D
+     I              SYKNOK                          SYKNOX
+     I              ITDSCK                          ITDSCX
+     I              JUTNOK                          JUTNOX
+     I              SEQNOK                          SEQNOX
+     I              QUANTK                          QUANTX
+     IDS1         DS
+     I                                        1  60 SHIP1B
+     I                                        1  39 SHI11B
+     I                                       40  60 SHI12B
+     IDS2         DS
+     I                                        1  62 BUSYOB
+     I                                        1  39 BUS11B
+     I                                       40  62 BUS12B
+     IDS3         DS
+     I                                        1  62 BIKO1B
+     I                                        1  29 BIK11B
+     I                                       30  62 BIK12B
+     IDS4         DS
+     I                                        1  50 SHPNMB
+     I                                        1  39 SHP11B
+     I                                       40  50 SHP12B
+     IDS5         DS
+     I                                        1  60 SHIP2B
+     I                                        1  39 SHI21B
+     I                                       40  60 SHI22B
+     IDS6         DS
+     I                                        1   80JUTNOB
+     I                                        1   60JUTN1B
+     I                                        7   80SEQN1B
+     I*S6         DS
+     I*                                       1  10 YUBINA
+     IDS7         DS
+     I                                        1  10 YUBINB
+     I                                        1   3 YUBIN1
+     I                                        5   8 YUBIN2
+     I                                        8   8 YUBIN8
+     C           PAR010    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*------------------------------------------------------
+     C           PAR020    PLIST
+     C                     PARM           P#SELC  1
+     C                     PARM           P#SYKN  80
+     C                     PARM           P#WCNT  20
+     C                     PARM           P#RECD  2
+     C*------------------------------------------------------
+     C           D030X     KLIST
+     C                     KFLD           SYKNOK
+     C                     KFLD           WJUTN2
+     C                     KFLD           WSEQN2
+     C*------------------------------------------------------------
+     C           D0540     KLIST
+     C                     KFLD           JUTN1B
+     C                     KFLD           SEQN1B
+     C*------------------------------------------------------------
+     C                     MOVEL*BLANK    WKITCD 14
+     C                     Z-ADD0         WJUTN2  60
+     C                     Z-ADD0         WSEQN2  20
+     C           *LOVAL    SETLLDTR0440
+     C                     SETOF                     70
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0                                      +++
+     C                     READ RDTR0440                 70              +
+     C           *IN70     IFEQ '1'                                    * +
+     C                     Z-ADD1         FLAG01
+     C                     ELSE                                        * +
+     C*
+     C                     SETOF                     90
+     C           JUTNOB    CHAINDTR0120              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           YUBIN8    IFEQ '1'
+     C           YUBIN8    OREQ '2'
+     C           YUBIN8    OREQ '3'
+     C           YUBIN8    OREQ '4'
+     C           YUBIN8    OREQ '5'
+     C           YUBIN8    OREQ '6'
+     C           YUBIN8    OREQ '7'
+     C           YUBIN8    OREQ '8'
+     C           YUBIN8    OREQ '9'
+     C           YUBIN8    OREQ '0'
+     C                     ELSE
+     C*
+     C           SAGCDV    IFNE 0
+     C                     ELSE
+     C* èZèäÇP
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD38        P#LENG
+     C*                    Z-ADD36        P#LENG
+     C                     MOVELSHIP1B    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WSHP1  38
+     C                     MOVELP#MOJ3    WSHP2  24
+     C*                                                                * +
+     C                     MOVEL''      #0E     1
+     C                     MOVE ''      #0F     1
+     C                     MOVEL*BLANK    WKSHP2 24
+     C                     MOVEL#0E       WKSHP2
+     C                     MOVE #0F       WKSHP2
+     C*                                                                * +
+     C                     SETOF                     61
+     C           WSHP2     IFNE WKSHP2
+     C                     SETON                     61
+     C                     ELSE
+     C                     SETOF                     61
+     C                     ENDIF
+     C*                                                                * +
+     C                     MOVEL''      #0E     1
+     C                     MOVE ''      #0F     1
+     C                     MOVEL*BLANK    WWW    60
+     C                     MOVEL#0E       WWW
+     C                     MOVE #0F       WWW
+     C                     SETOF                     60
+     C*
+     C*----------------------------------------------------------
+     C           SHIP2B    IFNE WWW
+     C           SHIP2B    ANDNE*BLANK
+     C* èZèäÇQ
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD38        P#LENG
+     C*                    Z-ADD36        P#LENG
+     C                     MOVELSHIP2B    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WSHP12 38
+     C                     MOVELP#MOJ3    WSHP22 24
+     C*                                                                * +
+     C                     SETON                     60
+     C*                                                                * +
+     C                     MOVEL''      #0E     1
+     C                     MOVE ''      #0F     1
+     C                     MOVEL*BLANK    WKSH22 24
+     C                     MOVEL#0E       WKSH22
+     C                     MOVE #0F       WKSH22
+     C*                                                                * +
+     C                     SETOF                     62
+     C           WSHP22    IFNE WKSH22
+     C                     SETON                     62
+     C                     ELSE
+     C                     SETOF                     62
+     C                     ENDIF
+     C*------------------------------------------------------          * +
+     C*                                                                * +
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C*                                                                * +
+     C*                                                                * +
+     C* âÔé–ñº
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD38        P#LENG
+     C                     MOVELSHPNMB    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WSHPN1 38
+     C                     MOVELP#MOJ3    WSHPN2 14
+     C*                                                                * +
+     C                     MOVEL''      #0E     1
+     C                     MOVE ''      #0F     1
+     C                     MOVEL*BLANK    WKSHPN 14
+     C                     MOVEL#0E       WKSHPN
+     C                     MOVE #0F       WKSHPN
+     C*                                                                * +
+     C                     SETOF                     63
+     C           WSHPN2    IFNE WKSHPN
+     C                     SETON                     63
+     C                     ELSE
+     C                     SETOF                     63
+     C                     ENDIF
+     C*------------------------------------------------------          * +
+     C* ïîèê
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD38        P#LENG
+     C                     MOVELBUSYOB    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WBUSY1 38
+     C                     MOVELP#MOJ3    WBUSY2 26
+     C*                                                                * +
+     C                     MOVEL''      #0E     1
+     C                     MOVE ''      #0F     1
+     C                     MOVEL*BLANK    WKBUSY 26
+     C                     MOVEL#0E       WKBUSY
+     C                     MOVE #0F       WKBUSY
+     C*                                                                * +
+     C                     SETOF                     64
+     C           WBUSY2    IFNE WKBUSY
+     C                     SETON                     64
+     C                     ELSE
+     C                     SETOF                     64
+     C                     ENDIF
+     C*------------------------------------------------------          * +
+     C*                                                                * +
+     C* îıçl
+     C                     MOVEL*BLANK    P#MOJ1
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD38        P#LENG
+     C                     MOVELBIKO1B    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ2    WBIK11 38
+     C                     MOVELP#MOJ3    WBIK12 26
+     C*                                                                * +
+     C*-----ìØéûî[ì¸ÇmÇn
+     C                     Z-ADD0         WDOJNO 100
+     C                     SETOF                     92
+     C           D0540     CHAINDTR0542              92
+     C           *IN92     IFEQ '0'
+     C                     Z-ADDDOJNO4    WDOJNO
+     C                     ELSE
+     C                     Z-ADD0         WDOJNO
+     C                     ENDIF
+     C*------------------------------------------------
+     C*                                                                * +
+     C                     SETOF                     90
+     C           D0540     CHAINDTR0300              90
+     C           *IN90     IFEQ '0'
+     C                     ENDIF
+     C*                                                                * +
+     C* èoâ◊NOñàÇÃéÛíçåèêî
+     C                     MOVEL'K'       P#SELC
+     C                     Z-ADDSYKNOK    P#SYKN
+     C                     Z-ADD0         P#WCNT
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@SS0450' PAR020
+     C*
+     C***        P#WCNT    SUB  1         P#WCNT
+     C*
+     C           P#WCNT    IFEQ 0
+     C                     SETOF                     65
+     C                     ELSE
+     C                     SETON                     65
+     C                     ENDIF
+     C*                                                                * +
+     C* êªïi
+     C*-------------------------------------------
+     C                     MOVEL*BLANK    WKITDS 30
+     C           D030X     SETLLDTR030D
+     C                     Z-ADD0         FLAG10  10
+     C           FLAG10    DOWEQ0
+     C                     READ RDTR030D                 72
+     C           *IN72     IFEQ '1'
+     C                     Z-ADD1         FLAG10
+     C                     ELSE
+     C*
+     C           SYKNOK    IFEQ SYKNOX
+     C                     MOVELITDSCX    WKITDS 30
+     C                     Z-ADDQUANTX    WKQUAN  50
+     C                     Z-ADD1         FLAG10
+     C                     ELSE
+     C                     Z-ADD1         FLAG10
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-------------------------------------------
+     C*                                                                * +
+     C                     SETOF                     90
+     C           3         CHAINSNK0010              90
+     C                     Z-ADDCNT       W#CNT1  20
+     C           CNT       ADD  1         CNT
+     C                     UPDATRSNK0010
+     C*                                                                * +
+     C                     EXCPTMEI01
+     C                     EXSR #CLEAR
+     C*                                                                * +
+     C                     ENDIF                                       * +
+     C                     ENDIF                                       * +
+     C                     ENDIF                                       * +
+     C                     ENDIF                                       * +
+     C                     ENDDO                                       +++
+     C*------------------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*------------------------------------------------------------
+     C           #CLEAR    BEGSR
+     C                     MOVEL*BLANK    WSHP1
+     C                     MOVEL*BLANK    WSHP2
+     C                     MOVEL*BLANK    WSHP12
+     C                     MOVEL*BLANK    WSHP22
+     C                     MOVEL*BLANK    WSHPN1
+     C                     MOVEL*BLANK    WSHPN2
+     C                     MOVEL*BLANK    WBUSY1
+     C                     MOVEL*BLANK    WBUSY2
+     C                     MOVEL*BLANK    WBUSY2
+     C                     MOVEL*BLANK    WBIK11
+     C                     MOVEL*BLANK    WBIK12
+     C                     Z-ADDJUTNOB    WJUTNO  80
+     C                     ENDSR
+     C*------------------------------------------------------------
+     OQSYSPRT E  102           MEI01
+     O                                   10 ' '
+     O        E  1             MEI01
+     O                         YUBINB    32
+     O        E  1             MEI01
+     O                         WSHP1     52
+     O        E  1             MEI01
+     O                                   10 ' '
+     O                 61      WSHP2     38
+     O                                   73 'NO.'
+     O                         W#CNT1    75
+     O        E  1             MEI01
+     O                                   10 ' '
+     O                 60      WSHP12    52
+     O                         JUTNOB    63
+     O                         WDOJNO4   75
+     O                                   78 'S:'
+     O                         SYKNOK4   88
+     O        E  1             MEI01
+     O                 60 62   WSHP22    38
+     O                         WBIK11    92
+     O        E  1             MEI01
+     O                         WSHPN1    52
+     O                         WBIK12    80
+     O        E  1             MEI01
+     O                                   10 ' '
+     O                 63      WSHPN2    28
+     O                         WKITDS    85
+     O        E  1             MEI01
+     O                         WBUSY1    52
+     O                                   60 'êîó '
+     O                         WKQUAN4   65
+     O                                   69 'ëº'
+     O                 61 65   P#WCNT4   71
+     O                                   75 'ì_'
+     O        E  1             MEI01
+     O                                   10 ' '
+     O                 64      WBUSY2    40
+     O        E  3             MEI01
+     O                         SHTELB    33
+     O        E  3             MEI01
+     O                                   10 ' '
+     O        E  2             MEI01
+     O                                   10 ' '
+     O        E  1             MEI01
+     O                         *DATE     63 '    /  /  '

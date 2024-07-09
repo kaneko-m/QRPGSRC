@@ -1,0 +1,202 @@
+/*     %%TS  SD  20030507  093953  STAFF       REL-V4R4M0  5769-PW1           */
+             PGM        /* DATE=Y, COL=1, DSP=--1-            */
+             DCLF       FILE(MEKN92)
+             DCL        VAR(&MSG) TYPE(*CHAR) LEN(80)
+             DCL        VAR(&MSGID) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&MSGDTA) TYPE(*CHAR) LEN(120)
+             DCL        VAR(&ERRCNT) TYPE(*DEC) LEN(1) VALUE(0)
+             DCL        VAR(&TITLE) TYPE(*CHAR) LEN(50) +
+                          VALUE('                                     -
+             ')
+             MONMSG     MSGID(CPF4168 CPF5143) EXEC(GOTO +
+                          CMDLBL(SDAOFF))
+             MONMSG     MSGID(CPF5140 CPF5144) EXEC(GOTO +
+                          CMDLBL(SDAOFF))
+             MONMSG     MSGID(CPF4101) EXEC(GOTO CMDLBL(SDAFILE))
+             MONMSG     MSGID(CPF4131) EXEC(GOTO CMDLBL(SDAFMT))
+             MONMSG     MSGID(CPF4169) EXEC(GOTO CMDLBL(SDASZERR))
+             MONMSG     MSGID(CPF6801) EXEC(GOTO CMDLBL(SDAMSG))
+             MONMSG     MSGID(CPF9999) EXEC(GOTO CMDLBL(SDAERR))
+ SDAMENU:    CHGVAR     VAR(&MENUPGMQ) VALUE(MEKN92)
+ SDABEGIN:   SNDRCVF    DEV(*FILE) RCDFMT(MENUFMT)
+             RMVMSG     CLEAR(*ALL)
+             CHGVAR     VAR(&ERRCNT) VALUE(0)
+ SDACF1:     /* COMMAND FOR "CF1=END" FUNCTION KEY            */
+             IF         COND(&IN01) THEN(DO)
+             RETURN
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00010:   /* 1                                                       */
+             IF         COND(&OPTION = 1 ) THEN(DO)
+             CALL       PGM(MEKN921)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00020:   /* 2                                                       */
+             IF         COND(&OPTION = 2 ) THEN(DO)
+             CALL       PGM(MEKN922)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00030:   /* 3                                                       */
+             IF         COND(&OPTION = 3 ) THEN(DO)
+             CALL       PGM(MEKN923)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00040:   /* 4                                                       */
+             IF         COND(&OPTION = 4 ) THEN(DO)
+             CALL       PGM(MEKN924)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00050:   /* 5                                                       */
+             IF         COND(&OPTION = 5 ) THEN(DO)
+             CALL       PGM(MEKN925)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00060:   /* 6                                                       */
+             IF         COND(&OPTION = 6 ) THEN(DO)
+       /*    CALL       PGM(MEKN926)             */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00070:   /* 7                                                       */
+             IF         COND(&OPTION = 7 ) THEN(DO)
+       /*    CALL       PGM(MEKN927)             */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00080:   /* 8                                                       */
+             IF         COND(&OPTION = 8 ) THEN(DO)
+             CALL       PGM(MEKN928)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00090:   /* 9                                                       */
+             IF         COND(&OPTION = 9 ) THEN(DO)
+             CALL       PGM(MEKN929)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00100:   /* 10                                                      */
+             IF         COND(&OPTION = 10 ) THEN(DO)
+             CALL       PGM(MEKN9210)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00110:   /* 11                                                      */
+             IF         COND(&OPTION = 11 ) THEN(DO)
+             CALL       PGM(MEKN9211)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00120:   /* 12                                                      */
+             IF         COND(&OPTION = 12 ) THEN(DO)
+             CALL       PGM(MEKN9212)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00150:   /* 15                                                      */
+             IF         COND(&OPTION = 15 ) THEN(DO)
+             TFRCTL     PGM(MEKN92A)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00160:   /* 16                                                      */
+             IF         COND(&OPTION = 16 ) THEN(DO)
+        /*   CALL       SS3033R   */
+             CALL       SS3034R
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00170:   /* 17                                                      */
+             IF         COND(&OPTION = 17 ) THEN(DO)
+             CALL       PGM(MEKN9217)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00180:   /* 18                                                      */
+             IF         COND(&OPTION = 18 ) THEN(DO)
+             CALL       PGM(MEKN9218)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00190:   /* 19                                                      */
+             IF         COND(&OPTION = 19 ) THEN(DO)
+             CALL       PGM(MEKN9219)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00200:   /* 20                                                      */
+             IF         COND(&OPTION = 20 ) THEN(DO)
+      /*     CALL       PGM(SS9300R)                */
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00210:   /* 21                                                      */
+             IF         COND(&OPTION = 21 ) THEN(DO)
+             CALL       PGM(MEKN9221)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00220:   /* 22                                                      */
+             IF         COND(&OPTION = 22 ) THEN(DO)
+             CALL       PGM(MEKN9222)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00240:   /* 24                                                      */
+             IF         COND(&OPTION = 24 ) THEN(DO)
+             CALL       PGM(AAA)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00250:   /* 25                                                      */
+             IF         COND(&OPTION = 25 ) THEN(DO)
+             RETURN
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00300:   /* 30                                                      */
+             IF         COND(&OPTION = 30 ) THEN(DO)
+             CALL       PGM(NR0230R)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00320:   /* 32                                                      */
+             IF         COND(&OPTION = 32 ) THEN(DO)
+             CALL       PGM(NP5960)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00400:   /* 40                                                      */
+             IF         COND(&OPTION = 40 ) THEN(DO)
+             CALL       PGM(MEKN9240)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00410:   /* 41                                                      */
+             IF         COND(&OPTION = 41 ) THEN(DO)
+             CALL       PGM(MEKN9241)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00420:   /* 42                                                      */
+             IF         COND(&OPTION = 42 ) THEN(DO)
+             CALL       PGM(MEKN9242)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00430:   /* 43                                                      */
+             IF         COND(&OPTION = 43 ) THEN(DO)
+             CALL       PGM(MEKN9243)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDA00500:   /* 50                                                      */
+             IF         COND(&OPTION = 50 ) THEN(DO)
+             CALL       PGM(MEKN9250)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDAENDOP:   CHGVAR     VAR(&MSG) VALUE('SDA2007')
+             SNDPGMMSG  MSGID(&MSG) MSGF(QSDAMSG) TOPGMQ(*SAME)
+             GOTO       CMDLBL(SDASFL)
+ SDAERR:     IF         COND(&ERRCNT > 0) THEN(GOTO SDAEND)
+             CHGVAR     VAR(&ERRCNT) VALUE(&ERRCNT + 1)
+ SDAMSG:     RCVMSG     RMV(*NO) MSG(&MSG)
+             IF         COND(&MSG ý= ' ') THEN(DO)
+             SNDPGMMSG  MSG(&MSG)
+             GOTO       CMDLBL(SDAMSG)
+             ENDDO
+ SDASFL:     CHGVAR     VAR(&IN99) VALUE('1')
+             SNDF       DEV(*FILE) RCDFMT(MENUSFLC)
+             GOTO       CMDLBL(SDABEGIN)
+ SDAOFF:     SIGNOFF    LOG(*LIST)
+ SDAFILE:    SNDPGMMSG  MSGID(SDA2002) MSGF(QSDAMSG)
+             GOTO       CMDLBL(SDAEND)
+ SDAFMT:     SNDPGMMSG  MSGID(SDA2006) MSGF(QSDAMSG)
+             GOTO       CMDLBL(SDAEND)
+ SDASZERR:   RCVMSG     RMV(*YES) MSGID(&MSGID) MSGDTA(&MSGDTA)
+             IF         COND(&MSGID ý= ' ') THEN(DO)
+             SNDPGMMSG  MSGID(&MSGID) MSGDTA(&MSGDTA) +
+                        MSGF(QCPFMSG) MSGTYPE(*ESCAPE)
+             ENDDO
+ SDAEND:     RETURN
+             CHGVAR     VAR(&TITLE) VALUE(&TITLE)
+             CHGVAR     VAR(&MSGKEY) VALUE(&MSGKEY)
+             CHGVAR     VAR(&PGMPARM) VALUE(&PGMPARM)
+             ENDPGM

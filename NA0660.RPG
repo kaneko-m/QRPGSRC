@@ -1,0 +1,23 @@
+             PGM
+/*変数定義*/
+             DCL        VAR(&ERR) TYPE(*CHAR) LEN(1)
+/*エラー確認*/
+             CALL       PGM(NA0670R) PARM(&ERR)
+/*エラーなし*/
+             OVRPRTF    FILE(QSYSPRT) PAGESIZE(68 198) LPI(6) +
+                          OUTQ(WILPLEXCHG/SHIOM)
+     /*      OVRPRTF    FILE(QSYSPRT) PAGESIZE(68 198) LPI(6) */
+     /*        */
+             IF         COND(&ERR *EQ ' ') THEN(DO)
+     /*      CALL       PGM(NA0660R) /* 受注処理 */
+             CALL       PGM(NA0661R) /* 受注処理 */
+             DLTOVR     FILE(*ALL)
+             ENDDO
+/* エラーあり */
+             IF         COND(&ERR *EQ '1') THEN(DO)
+             CALL       PGM(NA0680R) /* エラーリスト*/
+             ENDDO
+             CLRPFM     FILE(AML0150)
+ /*          */
+ ENDCLPGM:
+             ENDPGM     /* END CL PGM */

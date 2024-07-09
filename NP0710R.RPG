@@ -1,0 +1,717 @@
+     H*****************************************************
+     H*    PROGRAM NAME-NP0710R CODED BY N.KANEDA         *
+     H*                         CODED ON 22.06.08         *
+     H*    製品部品出庫シュミレーション                 *
+     H*****************************************************
+     H        1   Y
+     FNPR0100 IF  E           K        DISK
+     FNPZ0300 IF  E           K        DISK
+     F*<引当分>
+     FNPZ0200 IF  E           K        DISK
+     FNPR0200 IF  E           K        DISK
+     FNPX0040 IF  E           K        DISK
+     FNPR0401 IF  E           K        DISK
+     FDMR0040 IF  E           K        DISK
+     FDTR0010 IF  E           K        DISK
+     F* 常備在庫
+     FCTT0460 IF  E           K        DISK
+     FNP0710FMCF  E                    WORKSTN
+     F                                        RRN1  KSFILE SFLRE1
+     F                                        RRN4  KSFILE SFLRE4
+     F                                        RRN5  KSFILE SFLRE5
+     F                                        RRN6  KSFILE SFLRE6
+     IRNPR0400
+     I              ITDSC4                          ITDSCX
+     I              AS1ZU4                          AS1ZUX
+     I              ITNBR4                          ITNBRX
+     IRDMR0040
+     I              ITNBR                           ITNBRY
+     IRDTR0010
+     I              ITNBR                           ITNBRW
+     IDS1         DS
+     I                                        1  140ITCOD
+     I                                        1   10ITC1
+     I                                        2   20ITC2
+     I                                        3   30ITC3
+     I                                        4   40ITC4
+     I                                        5   50ITC5
+     I                                        6   60ITC6
+     I                                        7   70ITC7
+     I                                        8   80ITC8
+     I                                        9   90ITC9
+     I                                       10  100ITC10
+     I                                       11  110ITC11
+     I                                       12  120ITC12
+     I                                       13  130ITC13
+     I                                       14  140ITC14
+     IDS2         DS
+     I                                        1   6 GNBNB1
+     I                                        1   2 GNB1
+     C*----------------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#ITC2 14        図番
+     C*----------------------------------------------------------
+     C           D0010     KLIST
+     C                     KFLD           ITC1
+     C                     KFLD           ITC2
+     C                     KFLD           ITC3
+     C                     KFLD           ITC4
+     C                     KFLD           ITC5
+     C                     KFLD           ITC6
+     C                     KFLD           ITC7
+     C                     KFLD           ITC8
+     C                     KFLD           ITC9
+     C                     KFLD           ITC10
+     C                     KFLD           ITC11
+     C                     KFLD           ITC12
+     C                     KFLD           ITC13
+     C                     KFLD           ITC14
+     C           D0200     KLIST
+     C                     KFLD           GITNB1
+     C                     KFLD           WCINBR
+     C           DZ200     KLIST
+     C                     KFLD           NBNBR4
+     C                     KFLD           ITNBR4
+     C           D0201     KLIST
+     C                     KFLD           GITNB3
+     C                     KFLD           WCINBR
+     C           D0202     KLIST
+     C                     KFLD           GITNB5
+     C                     KFLD           WCINBR
+     C           D0460     KLIST
+     C                     KFLD           GITNB1
+     C                     KFLD           WPLCD   1
+     C           D0461     KLIST
+     C                     KFLD           GITNB3
+     C                     KFLD           WPLCD   1
+     C           D0462     KLIST
+     C                     KFLD           GITNB5
+     C                     KFLD           WPLCD   1
+     C           D0463     KLIST
+     C                     KFLD           GITNB6
+     C                     KFLD           WPLCD   1
+     C           D046W     KLIST
+     C                     KFLD           WITNBR
+     C                     KFLD           WPLCD
+     C*-----------------------------------------------------
+     C                     Z-ADD0         FLAG00  10
+     C                     Z-ADD0         RRN     50
+     C                     Z-ADD0         RRN1    50
+     C                     Z-ADD0         RRN2    50
+     C                     Z-ADD0         RRN3    50
+     C                     Z-ADD0         RRN4    50
+     C                     Z-ADD0         RRN5    50
+     C                     Z-ADD0         RRN6    50
+     C                     Z-ADD0         WSEQNO  20
+     C                     Z-ADD1         WSEQN2  40
+     C                     MOVEL*BLANK    WCINBR 14
+     C                     Z-ADD1         GDRCDN
+     C                     MOVEL'M'       WPLCD   1
+     C*
+     C                     SETON                     31
+     C                     WRITESFLCT1
+     C                     SETOF                     31
+     C*
+     C           *LOVAL    SETLLNPX0040
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RNPX0040                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C                     EXSR #RTN1
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     EXSR #RTN2
+     C*--------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*--------------------------------------------------
+     C           #RTN1     BEGSR
+     C           RRN1      ADD  1         RRN1
+     C                     MOVELITNBR4    GITNB1
+     C                     MOVELITDSC4    GITDS1
+     C                     Z-ADDQUANT4    GGREQ1
+     C                     Z-ADDITTYP4    GITTY1
+     C                     Z-ADDORDPC4    GORDP1
+     C*   W-ｼﾘｰｽﾞ
+     C                     SETOF                     916062
+     C                     SETOF                     91
+     C           ITNBR4    CHAINNPR0401              91
+     C           *IN91     IFEQ '0'
+     C                     SETOF                     92
+     C           ITDSCX    CHAINDMR0040              92
+     C           *IN92     IFEQ '0'
+     C                     SETOF                     93
+     C           D0010     CHAINDTR0010              93
+     C           *IN93     IFEQ '0'
+     C                     Z-ADDQTYOH     GQTYO1
+     C           QTYOH     IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ELSE
+     C* W-以外
+     C                     SETOF                     916062
+     C           ITNBR4    CHAINNPZ0300              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           GITTY1    IFNE 3
+     C           GORDP1    ANDNE3
+     C                     Z-ADDQTYOHC    GQTYO1           ﾘﾖｳｶﾉｳ
+     C*
+     C                     EXSR #HIK1
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*-----
+     C                     SETOF                     9091
+     C           D0460     CHAINCTT0460              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDGTKQ46    GQTYO1
+     C                     ENDIF
+     C*
+     C                     EXSR #HIK2
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*------
+     C                     SETOF                     9091
+     C           D0460     CHAINCTT0460              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDGTKQ46    GQTYO1
+     C                     ENDIF
+     C*
+     C                     EXSR #HIK2
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C*-----
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*REST計算
+     C                     MOVELGITNB1    WITNBR 14
+     C                     EXSR #REST
+     C                     Z-ADDWREST     GREST1
+     C                     WRITESFLRE1
+     C                     ENDSR
+     C*--------------------------------------------------
+     C           #RTN2     BEGSR
+     C           RRN1      IFGT 0
+     C                     Z-ADD0         FLAG02  10
+     C           FLAG02    DOWEQ0
+     C                     SETON                     30
+     C                     EXFMTSFLCT1
+     C                     SETOF                     30
+     C*
+     C           *IN04     IFEQ '1'
+     C                     SETOF                     808281
+     C                     Z-ADD0         RRN1
+     C                     Z-ADD1         FLAG02
+     C                     ELSE
+     C*
+     C                     Z-ADD0         FLAG03  10
+     C           FLAG03    DOWEQ0
+     C                     SETOF                     71
+     C                     READCSFLRE1                   71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG03
+     C                     ELSE
+     C                     SELEC
+     C           GINPUT    WHEQ '*'
+     C                     Z-ADDRRN1      GDRCDN
+     C*---------------------------------------------
+     C                     SELEC
+     C           GITTY1    WHEQ 3
+     C           GORDP1    ANDEQ3
+     C                     MOVELGITNB1    P#ITC2
+     C                     CALL '@NP7851' PAR010
+     C*
+     C           GITTY1    WHEQ 5
+     C           GORDP1    ANDEQ2
+     C                     MOVELGITNB1    P#ITC2
+     C                     CALL '@NP0120' PAR010           履歴一覧
+     C*
+     C                     OTHER
+     C                     MOVELGITNB1    P#ITC2
+     C                     CALL '@NP8510' PAR010           部品在庫照会
+     C*
+     C                     ENDSL
+     C*---------------------------------------------
+     C*
+     C           GINPUT    WHEQ 'L'
+     C                     Z-ADD1         RRN4
+     C                     WRITESFLRE4
+     C                     SETON                     31
+     C                     WRITESFLCT4
+     C                     SETOF                     31
+     C                     MOVEL*BLANK    GPINB2
+     C                     MOVEL*BLANK    GPITD2
+     C                     Z-ADD0         GQUAN2
+     C                     MOVELGITNB1    GPINB2
+     C                     MOVELGITDS1    GPITD2
+     C                     Z-ADDGGREQ1    GQUAN2
+     C                     EXSR #RTNL1
+     C                     EXSR #DSP03
+     C                     ENDSL
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*--------------------------------------------------
+     C           #RTNL1    BEGSR
+     C                     Z-ADD0         RRN4
+     C           D0200     SETLLNPR0200
+     C                     Z-ADD0         FLAG11  10
+     C           FLAG11    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RNPR0200                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG11
+     C                     ELSE
+     C           PINBR2    IFEQ GITNB1
+     C                     MOVEL*BLANK    GINPU3
+     C                     MOVELCINBR2    GITNB3
+     C                     MOVELCIDSC2    GITDS3
+     C           GGREQ1    MULT NUMBR2    GGREQ3
+     C*
+     C                     SETOF                     91
+     C           CINBR2    CHAINNPR0100              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDITTYP1    GITTY3
+     C                     Z-ADDORDPC1    GORDP3
+     C                     ENDIF
+     C*
+     C                     SETOF                     916062
+     C           CINBR2    CHAINNPZ0300              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDQTYOHC    GQTYO3
+     C*
+     C                     EXSR #HIK1
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C                     ELSE
+     C*--------------------------------------------------
+     C                     SETOF                     9091
+     C           D0461     CHAINCTT0460              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDGTKQ46    GQTYO3
+     C                     ENDIF
+     C*
+     C                     EXSR #HIK2
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C*--------------------------------------------------
+     C                     ENDIF
+     C*
+     C           RRN4      ADD  1         RRN4
+     C                     WRITESFLRE4
+     C                     ELSE
+     C                     Z-ADD1         FLAG11
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
+     C*--------------------------------------------------
+     C           #DSP03    BEGSR
+     C                     Z-ADD1         GDRCD1
+     C*
+     C           RRN4      IFGT 0
+     C                     Z-ADD0         FLAG12  10
+     C           FLAG12    DOWEQ0
+     C                     SETON                     30
+     C                     EXFMTSFLCT4
+     C                     SETOF                     30
+     C*
+     C           *IN04     IFEQ '1'
+     C                     SETOF                     808281
+     C                     Z-ADD0         RRN4
+     C                     SETON                     31
+     C                     WRITESFLCT4
+     C                     SETOF                     31
+     C                     Z-ADD1         FLAG12
+     C                     ELSE
+     C*
+     C                     Z-ADD0         FLAG03  10
+     C           FLAG03    DOWEQ0
+     C                     SETOF                     71
+     C                     READCSFLRE4                   71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG03
+     C                     ELSE
+     C                     SELEC
+     C           GINPU3    WHEQ '*'
+     C                     Z-ADDRRN4      GDRCD1
+     C*---------------------------------------------
+     C                     SELEC
+     C           GITTY3    WHEQ 3
+     C           GORDP3    ANDEQ3
+     C                     MOVELGITNB3    P#ITC2
+     C                     CALL '@NP7851' PAR010
+     C*
+     C           GITTY3    WHEQ 5
+     C           GORDP3    ANDEQ2
+     C                     MOVELGITNB3    P#ITC2
+     C                     CALL '@NP0120' PAR010
+     C*
+     C                     OTHER
+     C                     MOVELGITNB3    P#ITC2
+     C                     CALL '@NP8510' PAR010
+     C*
+     C                     ENDSL
+     C*---------------------------------------------
+     C*
+     C           GINPU3    WHEQ 'L'
+     C                     Z-ADD1         RRN5
+     C                     WRITESFLRE5
+     C                     SETON                     31
+     C                     WRITESFLCT5
+     C                     SETOF                     31
+     C                     MOVEL*BLANK    GPINB3
+     C                     MOVEL*BLANK    GPITD3
+     C                     Z-ADD0         GQUAN3
+     C                     MOVELGITNB3    GPINB3
+     C                     MOVELGITDS3    GPITD3
+     C                     Z-ADDGGREQ3    GQUAN3
+     C                     EXSR #RTNL2
+     C                     EXSR #DSP06
+     C                     ENDSL
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*--------------------------------------------------
+     C           #RTNL2    BEGSR
+     C                     Z-ADD0         RRN5
+     C           D0201     SETLLNPR0200
+     C                     Z-ADD0         FLAG11  10
+     C           FLAG11    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RNPR0200                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG11
+     C                     ELSE
+     C           PINBR2    IFEQ GITNB3
+     C                     MOVEL*BLANK    GINPU5
+     C                     MOVELCINBR2    GITNB5
+     C                     MOVELCIDSC2    GITDS5
+     C           GGREQ1    MULT NUMBR2    GGREQ5
+     C*
+     C                     SETOF                     91
+     C           CINBR2    CHAINNPR0100              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDITTYP1    GITTY5
+     C                     Z-ADDORDPC1    GORDP5
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     SETOF                     916062
+     C           CINBR2    CHAINNPZ0300              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDQTYOHC    GQTYO5
+     C*
+     C                     EXSR #HIK1
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C                     ELSE
+     C*--------------------------------------------------
+     C                     SETOF                     9091
+     C           D0462     CHAINCTT0460              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDGTKQ46    GQTYO5
+     C                     ENDIF
+     C*
+     C                     EXSR #HIK2
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C*--------------------------------------------------
+     C                     ENDIF
+     C*
+     C           RRN5      ADD  1         RRN5
+     C                     WRITESFLRE5
+     C                     ELSE
+     C                     Z-ADD1         FLAG11
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
+     C*--------------------------------------------------
+     C           #DSP06    BEGSR
+     C                     Z-ADD1         GDRCD2
+     C*
+     C           RRN5      IFGT 0
+     C*
+     C                     Z-ADD0         FLAG22  10
+     C           FLAG22    DOWEQ0
+     C                     SETON                     30
+     C                     EXFMTSFLCT5
+     C                     SETOF                     30
+     C*
+     C           *IN04     IFEQ '1'
+     C                     SETOF                     808281
+     C                     Z-ADD0         RRN5
+     C                     SETON                     31
+     C                     WRITESFLCT5
+     C                     SETOF                     31
+     C                     Z-ADD1         FLAG22
+     C                     ELSE
+     C*
+     C                     Z-ADD0         FLAG03  10
+     C           FLAG03    DOWEQ0
+     C                     SETOF                     71
+     C                     READCSFLRE5                   71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG03
+     C                     ELSE
+     C                     SELEC
+     C           GINPU5    WHEQ '*'
+     C                     Z-ADDRRN5      GDRCD2
+     C*---------------------------------------------
+     C                     SELEC
+     C           GITTY5    WHEQ 3
+     C           GORDP5    ANDEQ3
+     C                     MOVELGITNB5    P#ITC2
+     C                     CALL '@NP7851' PAR010
+     C*
+     C           GITTY5    WHEQ 5
+     C           GORDP5    ANDEQ2
+     C                     MOVELGITNB5    P#ITC2
+     C                     CALL '@NP0120' PAR010
+     C*
+     C                     OTHER
+     C                     MOVELGITNB5    P#ITC2
+     C                     CALL '@NP8510' PAR010
+     C                     ENDSL
+     C*---------------------------------------------
+     C           GINPU3    WHEQ 'L'
+     C                     Z-ADD1         RRN6
+     C                     WRITESFLRE6
+     C                     SETON                     31
+     C                     WRITESFLCT6
+     C                     SETOF                     31
+     C                     MOVEL*BLANK    GPINB6
+     C                     MOVEL*BLANK    GPITD6
+     C                     Z-ADD0         GQUAN6
+     C                     MOVELGITNB5    GPINB6
+     C                     MOVELGITDS5    GPITD6
+     C                     Z-ADDGGREQ5    GQUAN6
+     C                     EXSR #RTNL4
+     C                     EXSR #DSP08
+     C                     ENDSL
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*--------------------------------------------------
+     C           #DSP08    BEGSR
+     C                     Z-ADD1         GDRCD3
+     C*
+     C           RRN6      IFGT 0
+     C*
+     C                     Z-ADD0         FLAG23  10
+     C           FLAG23    DOWEQ0
+     C                     SETON                     30
+     C                     EXFMTSFLCT6
+     C                     SETOF                     30
+     C*
+     C           *IN04     IFEQ '1'
+     C                     SETOF                     808281
+     C                     Z-ADD0         RRN6
+     C                     SETON                     31
+     C                     WRITESFLCT6
+     C                     SETOF                     31
+     C                     Z-ADD1         FLAG23
+     C                     ELSE
+     C*
+     C                     Z-ADD0         FLAG24  10
+     C           FLAG24    DOWEQ0
+     C                     SETOF                     71
+     C                     READCSFLRE6                   71
+     C           *IN71     IFEQ '1'
+     C                     Z-ADD1         FLAG24
+     C                     ELSE
+     C                     SELEC
+     C           GINPU6    WHEQ '*'
+     C                     Z-ADDRRN6      GDRCD3
+     C*---------------------------------------------
+     C                     SELEC
+     C           GITTY6    WHEQ 3
+     C           GORDP6    ANDEQ3
+     C                     MOVELGITNB6    P#ITC2
+     C                     CALL '@NP7851' PAR010
+     C*
+     C           GITTY6    WHEQ 5
+     C           GORDP6    ANDEQ2
+     C                     MOVELGITNB6    P#ITC2
+     C                     CALL '@NP0120' PAR010
+     C*
+     C                     OTHER
+     C                     MOVELGITNB6    P#ITC2
+     C                     CALL '@NP8510' PAR010
+     C*
+     C                     ENDSL
+     C                     ENDSL
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*
+     C                     ENDIF
+     C                     ENDSR
+     C*-------------------------------------------------
+     C           #RTNL4    BEGSR
+     C                     Z-ADD0         RRN6
+     C           D0202     SETLLNPR0200
+     C                     Z-ADD0         FLAG11  10
+     C           FLAG11    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RNPR0200                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG11
+     C                     ELSE
+     C           PINBR2    IFEQ GITNB5
+     C                     MOVEL*BLANK    GINPU6
+     C                     MOVELCINBR2    GITNB6
+     C                     MOVELCIDSC2    GITDS6
+     C           GGREQ3    MULT NUMBR2    GGREQ6
+     C*
+     C                     SETOF                     91
+     C           CINBR2    CHAINNPR0100              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDITTYP1    GITTY6
+     C                     Z-ADDORDPC1    GORDP6
+     C                     ENDIF
+     C*
+     C                     SETOF                     916062
+     C           CINBR2    CHAINNPZ0300              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDQTYOHC    GQTYO6
+     C           QTYOHC    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C                     ELSE
+     C*--------------------------------------------------
+     C                     SETOF                     9091
+     C           D0463     CHAINCTT0460              90
+     C           *IN90     IFEQ '0'
+     C                     Z-ADDGTKQ46    GQTYO6
+     C                     ENDIF
+     C*
+     C                     EXSR #HIK2
+     C*
+     C           WKQTYH    IFLT QUANT4
+     C                     SETON                     60
+     C                     ELSE
+     C                     SETOF                     60
+     C                     ENDIF
+     C*--------------------------------------------------
+     C                     ENDIF
+     C*
+     C           RRN6      ADD  1         RRN6
+     C                     WRITESFLRE6
+     C                     ELSE
+     C                     Z-ADD1         FLAG11
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
+     C*-------------------------------------------------
+     C           #HIK1     BEGSR
+     C                     Z-ADD0         WKQTYH 110
+     C                     SETOF                     91
+     C           DZ200     CHAINNPZ0200              91
+     C           *IN91     IFEQ '0'
+     C           QTYOHC    ADD  ZTYRSB    WKQTYH
+     C                     ELSE
+     C                     Z-ADDQTYOHC    WKQTYH
+     C                     ENDIF
+     C                     ENDSR
+     C*-------------------------------------------------
+     C           #HIK2     BEGSR
+     C                     Z-ADD0         WKQTYH 110
+     C                     SETOF                     91
+     C           DZ200     CHAINNPZ0200              91
+     C           *IN91     IFEQ '0'
+     C           GTKQ46    ADD  ZTYRSB    WKQTYH
+     C                     ELSE
+     C                     Z-ADDGTKQ46    WKQTYH
+     C                     ENDIF
+     C                     ENDSR
+     C*-------------------------------------------------
+     C           #REST     BEGSR
+     C                     Z-ADD0         WREST   92
+     C                     Z-ADD0         WRIYO  112
+     C                     Z-ADD0         WSMLAP 112
+     C                     SETOF                     919293
+     C           WITNBR    CHAINNPZ0300              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDQTYOHC    WRIYO
+     C                     ELSE
+     C           D046W     CHAINCTT0460              92
+     C           *IN92     IFEQ '0'
+     C                     Z-ADDGTKQ46    WRIYO
+     C                     ENDIF
+     C                     ENDIF
+     C           WITNBR    CHAINNPR0100              93
+     C           *IN93     IFEQ '0'
+     C                     Z-ADDSMLAP1    WSMLAP
+     C                     ENDIF
+     C*
+     C           WRIYO     IFNE 0
+     C           WSMLAP    ANDNE0
+     C           WRIYO     DIV  WSMLAP    WREST
+     C                     ENDIF
+     C                     ENDSR

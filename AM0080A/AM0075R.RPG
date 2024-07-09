@@ -1,0 +1,760 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0070R CODED BY N.KANEDA         *
+     H*                         CODED ON 21.01.29         *
+     H*    ＯＣＲ用受注処理明細エラー確認処理         *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0040 UF  E                    DISK
+     FDTR5170 IF  E           K        DISK
+     FDTR5200 IF  E           K        DISK
+     FDMR0010 IF  E           K        DISK
+     FDMR0040 IF  E           K        DISK
+     F*その他マスタ
+     FDMR0340 IF  E           K        DISK
+     FAGM0060 IF  E           K        DISK
+     FDMR0030 IF  E           K        DISK
+     FDMR0330 IF  E           K        DISK
+     FDTP1110 IF  E           K        DISK
+     IRDMR0040
+     I              ITCOD                           ITCOD4
+     IRDTR5170
+     I              ZZ0001                          ZZ001D
+     I              ACREC                           ACRECD
+     I              ITCOD                           ITCODD
+     I              ITDSE                           ITDSED
+     I              ITDSJ                           ITDSJD
+     I              KYUCD                           KYUCDD
+     I              DESNO                           DESNOD
+     I              UNPCS                           UNPCSD
+     I              PACOD                           PACODD
+     I              UNPRI                           UNPRID
+     I              SMOLA                           SMOLAD
+     I              STACO                           STACOD
+     I              LANKU                           LANKUD
+     I              BIKOU                           BIKOUD
+     I              IMAXQ                           IMAXQD
+     I              OPQU1                           OPQU2D
+     I              OPQU2                           OPQU2D
+     I              M0MIN                           M0MIND
+     I              PLNUM                           PLNUMD
+     I              PLACE                           PLACED
+     I              ZZ0165                          ZZ165D
+     IDS1         DS
+     I                                        1  42 ITNBRA
+     I                                        1   5 ITNB5A
+     I                                        1   7 ITNB7A
+     I                                        1  25 ITNB2A
+     I                                       26  30 ITNB6A
+     IDS2         DS
+     I                                        1   5 CUSNRA
+     I                                        1   2 W#CUS2
+     IDS3         DS
+     I                                        1   80DELDYA
+     I                                        1   20YY1
+     I                                        3   40YY2
+     IDS4         DS
+     I                                        1   3 TRESAA
+     I                                        2   2 W#TRE2
+     I                                        3   3 W#TRE3
+     C*----------------------------------------------------
+     C           PAR070    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#DATE  80
+     C                     PARM           P#RATE  32
+     C                     PARM           P#HACD  2
+     C*---------------------------------------------------------
+     C           PAR020    PLIST
+     C                     PARM           P#YMD8  80
+     C                     PARM           P#RTNC  2
+     C*---------------------------------------------------------
+     C           PAR030    PLIST
+     C                     PARM           P#KATA 30
+     C                     PARM           P#TOKS 11
+     C                     PARM           P#RECD  2
+     C*----------------------------------------------------
+     C           PAR040    PLIST
+     C                     PARM           P#ITNB 14
+     C                     PARM           P#HAIK  1
+     C*---------------------------------------------------------
+     C                     MOVEL*BLANK    W#ERR   2
+     C                     Z-ADD0         W#RENN  30
+     C*
+     C                     Z-ADD0         FLAG01  10
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0040                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C*
+     C                     Z-ADD0         WTANKA  70
+     C                     Z-ADD0         WKINGA  90
+     C                     MOVEL*BLANK    WA1A    1
+     C                     MOVEL*BLANK    W#ERR
+     C*
+     C           ITNB5A    IFEQ 'ｴｲﾌﾞﾝ'
+     C           W#TRE2    IFEQ *BLANK
+     C           W#TRE3    ANDEQ*BLANK
+     C                     MOVEL'E'       W#TRE2
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C*文字列操作（品名）
+     C           W#TRE2    IFEQ 'E'
+     C           W#TRE3    OREQ 'E'
+     C           ITNB5A    IFEQ 'ﾄﾚｰｻﾋ'
+     C           ITNB5A    OREQ 'ﾄﾚｻﾋﾞ'
+     C                     MOVEL'2'       P#SKBN
+     C                     Z-ADD42        P#LENG
+     C                     MOVEL'ｴｲﾌﾞﾝ'   P#MOJ1
+     C                     MOVELITNBRA    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ3    ITNBRA
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C           ITNB5A    IFEQ 'ｴｲﾌﾞﾝ'
+     C           W#TRE2    IFEQ *BLANK
+     C           W#TRE3    ANDEQ*BLANK
+     C                     MOVEL'E'       W#TRE2
+     C                     ELSE
+     C           W#TRE2    IFNE 'E'
+     C           W#TRE3    ANDEQ*BLANK
+     C                     MOVEL'E'       W#TRE3
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C***
+     C*納期日（６桁の場合）
+     C           DELDYA    IFEQ 0
+     C           DELDYA    OREQ 999999
+     C           DELDYA    OREQ 99999999
+     C                     ELSE
+     C*
+     C           YY1       IFEQ 0
+     C           DELDYA    ADD  20000000  DELDYA
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C*佐川止めの場合
+     C                     EXSR #SAGA
+     C*
+     C                     SETOF                     91
+     C           CUSNRA    CHAINDMR0010              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           DCODE     IFEQ 0
+     C                     Z-ADD1         WDCODE  20       価格コード
+     C                     ELSE
+     C                     Z-ADDDCODE     WDCODE  20       価格コード
+     C                     ENDIF
+     C*受注担当者
+     C           GSLSCD    IFEQ 0
+     C                     Z-ADD921       SLSNRA
+     C                     ELSE
+     C           SLSNRA    IFEQ 0
+     C                     MOVE GSLSCD    SLSNRA
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C*納期指定日付確認
+     C                     Z-ADD0         P#YMD8
+     C                     MOVEL*BLANK    P#RTNC
+     C*
+     C           DELDYA    IFNE 0
+     C           DELDYA    ANDNE999999
+     C           DELDYA    ANDNE99999999
+     C                     Z-ADDDELDYA    P#YMD8
+     C                     MOVEL*BLANK    P#RTNC
+     C                     CALL '@SB020R' PAR020
+     C*
+     C           P#RTNC    IFEQ '  '
+     C                     SETOF                     92
+     C           DELDYA    CHAINDTP1110              92
+     C           *IN92     IFEQ '0'
+     C           THOLID    ANDEQ*BLANK
+     C                     ELSE
+     C                     MOVEL'ER'      P#RTNC
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C           P#RTNC    IFEQ '  '
+     C*メールアドレス取得
+     C                     SETOF                     91
+     C                     MOVELSLSNRA    W#SLSN  3
+     C           W#SLSN    CHAINAGM0060              91
+     C           *IN91     IFEQ '0'
+     C                     MOVELMAIL6     W#MAIL 50
+     C                     ENDIF
+     C*
+     C*五十嵐氏のみ
+     C           W#SLSN    IFEQ '585'
+     C                     MOVEL'585'     SLSNRA
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C*
+     C                     SETOF                     90
+     C           ITNB2A    CHAINDMR0040              90
+     C           *IN90     IFEQ '0'
+     C           REJET     ANDNE'H'
+     C*
+     C*
+     C*
+     C           ORDQUA    IFNE 0
+     C*
+     C*-----------------------------------------------------
+     C*販売単位
+     C                     Z-ADD0         WSDIV1  30
+     C                     Z-ADD0         WSDIV2  30
+     C                     Z-ADD0         W#FLG3  10
+     C           ITNB2A    IFEQ '85'
+     C           ITNB2A    OREQ '86'
+     C           ITNB2A    OREQ '87'
+     C           ITNB2A    OREQ '88'
+     C           ITNB2A    OREQ '89'
+     C*
+     C           ORDQUA    DIV  10        WSDIV1
+     C                     MVR            WSDIV2
+     C*
+     C           WSDIV1    IFEQ 0                          商が０
+     C           WSDIV2    ORGE 1                          余りあり
+     C*
+     C                     Z-ADD1         W#FLG3
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDIF
+     C*-----------------------------------------------------
+     C*
+     C*販売単位
+     C           W#FLG3    IFEQ 0
+     C*
+     C*特価コードがある場合　確認しない
+     C           TPRICA    IFNE ' '
+     C                     Z-ADD0         W#FLG2
+     C****                 EXSR #TANKA                     単価確認
+     C           W#FLG2    IFEQ 0
+     C                     Z-ADDTANKAA    WTANKA
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C           ITNB7A    IFEQ 'R-FHSET'
+     C                     Z-ADD0         W#FLG2
+     C*
+     C                     ELSE
+     C                     EXSR #TANKA                     単価確認
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C           W#FLG2    IFEQ 0
+     C*
+     C                     Z-ADDWTANKA    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'A'       A1A
+     C                     MOVELW#MAIL    MFROMA
+     C*  トルク値確認
+     C*
+     C*
+     C*
+     C*大分類コード TD（ドライバー)
+     C           LCLAS     IFEQ 'TD '
+     C           TOTAM4    ANDEQ'3'                        マスタ単位
+     C           TOTAMA    ANDEQ'4'                        注文書単位
+     C*
+     C           LOWER4    DIV  100       WLOWER  93
+     C           UPPER4    DIV  100       WUPPER  93
+     C                     MOVEL'4'       WTOTAM  1
+     C                     ELSE
+     C                     Z-ADDLOWER4    WLOWER
+     C                     Z-ADDUPPER4    WUPPER
+     C                     MOVELTOTAM4    WTOTAM
+     C                     ENDIF
+     C*
+     C* トルク値あり
+     C           TOKSSA    IFNE *BLANK
+     C*
+     C*ドライバーで単位がCNM/NM以外
+     C*---
+     C           LCLAS     IFEQ 'TD'
+     C           TOTAMA    ANDGE'1'
+     C           TOTAMA    ANDLE'2'
+     C           LCLAS     OREQ 'TD'
+     C           TOTAMA    ANDGE'5'
+     C           TOTAMA    ANDLE'9'
+     C*
+     C*エラーなし
+     C                     ELSE
+     C*
+     C*トルク単位                                                *
+     C           TOTAMA    IFEQ WTOTAM                     ******* *
+     C*
+     C           TOKSEA    IFGE WLOWER
+     C           TOKSEA    ANDLEWUPPER                     *********
+     C*                                                          * *
+     C*小数桁エラー                                            * *
+     C                     EXSR #SHOCD                           * *
+     C           P#RECD    IFEQ 'OK'                       ****  * *
+     C                     ELSE                               *  * *
+     C                     MOVEL'09'      W#ERR               *  * *
+     C                     EXSR #ERRFG                        *  * *
+     C                     ENDIF                           ****  * *
+     C*                                                          * *
+     C                     ELSE                                  * *
+     C                     MOVEL'05'      W#ERR                  * *
+     C                     EXSR #ERRFG                           * *
+     C                     ENDIF                           ******* *
+     C*                                                            *
+     C                     ELSE                            --------*
+     C*                                                            *
+     C***        WUPPER    IFEQ 0                                  *
+     C***        WLOWER    ANDEQ0                          *****   *
+     C*                                                        *   *
+     C*小数桁エラー                                          *   *
+     C***                  EXSR #SHOCD                         *   *
+     C***        P#RECD    IFEQ 'OK'                       *** *   *
+     C***                  ELSE                              * *   *
+     C***                  MOVEL'09'      W#ERR              * *   *
+     C***                  EXSR #ERRFG                       * *   *
+     C***                  ENDIF                           *** *   *
+     C*                                                        *   *
+     C*                                                        *   *
+     C***                  ELSE                            ----*   *
+     C*トルク値エラー                                        *   *
+     C***                  MOVEL'05'      W#ERR                *   *
+     C***                  EXSR #ERRFG                         *   *
+     C***                  ENDIF                           *****   *
+     C                     ENDIF                           *********
+     C*---
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*トルク値エラー（トルク単位のみ入力）                  *   *
+     C           TOTAMA    IFNE *BLANK
+     C           TOKSSA    ANDEQ*BLANK
+     C                     MOVEL'05'      W#ERR                *   *
+     C                     EXSR #ERRFG                         *   *
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C*------------------------
+     C*拡販製品
+     C                     SELEC
+     C           EXPAN4    WHEQ 1
+     C           ESLSNA    IFEQ 0
+     C*
+     C*拡販品担当営業
+     C           TSLSCD    IFNE 0
+     C                     MOVE TSLSCD    SLSNRA
+     C                     ENDIF
+     C*
+     C                     MOVELW#MAIL    MFROMA
+     C                     ELSE
+     C*
+     C                     ENDIF
+     C                     OTHER
+     C                     ENDSL
+     C*
+     C                     ELSE
+     C*単価エラー
+     C                     SELEC
+     C           W#FLG2    WHEQ 1
+     C                     MOVEL'04'      W#ERR
+     C*販売不可ー
+     C           W#FLG2    WHEQ 2
+     C                     MOVEL'06'      W#ERR
+     C                     ENDSL
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*販売単位エラー
+     C                     MOVEL'07'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C*
+     C                     ELSE
+     C*数量エラー
+     C                     MOVEL'03'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*---
+     C                     MOVELITNBRA    WKITNB 14
+     C                     SETOF                     91
+     C           WKITNB    CHAINDTR5170              91
+     C           *IN91     IFEQ '0'
+     C*
+     C* 廃棄部品確認
+     C                     MOVEL*BLANK    WKHAIK  1
+     C                     MOVELWKITNB    P#ITNB
+     C                     MOVEL*BLANK    P#HAIK
+     C***                  CALL '@SS0170' PAR020
+     C                     CALL '@SS0171' PAR020
+     C                     MOVELP#HAIK    WKHAIK
+     C*
+     C           WKHAIK    IFEQ *BLANK
+     C*
+     C           ACRECD    IFNE 'D'
+     C           UNPRID    ANDNE0
+     C*
+     C           LANKUD    IFEQ '*'
+     C*--
+     C                     SETOF                     90
+     C           WKITNB    CHAINDTR5200              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDUNPRID    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'E'       A1A
+     C                     MOVELW#MAIL    MFROMA
+     C                     ELSE
+     C                     Z-ADDUNPRID    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'B'       A1A
+     C                     MOVELW#MAIL    MFROMA
+     C                     ENDIF
+     C*--
+     C                     ELSE
+     C*
+     C                     Z-ADDUNPRID    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'B'       A1A
+     C                     MOVELW#MAIL    MFROMA
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C*型式エラー
+     C                     MOVEL'02'      W#ERR
+     C                     EXSR #ERRFG
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*廃棄エラー
+     C                     MOVEL'02'      W#ERR
+     C                     EXSR #ERRFG
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C                     SETOF                     92
+     C           ITNB5A    CHAINDMR0340              92
+     C           *IN92     IFEQ '0'
+     C*
+     C                     SELEC
+     C           ITNB5A    WHEQ 'ﾁｮｸｿｳ'
+     C           W#CUS2    IFEQ '0B'
+     C*
+     C                     EXSR #TAX
+     C* 税込み価格と比較
+     C           KINGA4    MULT WRATE     W#KING  90
+     C           TANKAA    IFEQ W#KING
+     C                     EXSR #EXT
+     C                     ELSE
+     C*単価エラー
+     C                     MOVEL'04'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C           TANKAA    IFEQ 0
+     C           TANKAA    OREQ KINGA4
+     C                     Z-ADDKINGA4    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     EXSR #EXT
+     C                     ELSE
+     C*
+     C                     EXSR #UNCHI
+     C           W#TANK    IFEQ 1
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     ELSE
+     C*
+     C*単価エラー
+     C                     MOVEL'04'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDIF
+     C                     OTHER
+     C*
+     C           TANKAA    IFEQ 0
+     C           TANKAA    OREQ KINGA4
+     C                     Z-ADDKINGA4    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     EXSR #EXT
+     C*
+     C                     ELSE
+     C*単価エラー
+     C                     MOVEL'04'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C                     ENDSL
+     C*
+     C                     ELSE
+     C*型式エラー
+     C                     MOVEL'02'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*---
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*納期日付エラー
+     C                     MOVEL'08'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*代理店エラー
+     C                     MOVEL'01'      W#ERR
+     C                     EXSR #ERRFG
+     C                     ENDIF
+     C*
+     C           W#RENN    ADD  1         W#RENN
+     C                     Z-ADDW#RENN    RENNOA
+     C                     UPDATRAML0040
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #TAX      BEGSR
+     C                     MOVEL*DATE     P#DATE
+     C                     Z-ADD0         P#RATE
+     C                     MOVEL*BLANK    P#HACD
+     C                     CALL '@AI0090' PAR010
+     C                     Z-ADDP#RATE    WRATE   32
+     C           WRATE     ADD  1         WRATE
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #SHOCD    BEGSR
+     C           LCLAS     IFNE 'TD'
+     C                     MOVELITNBRA    P#KATA
+     C                     MOVELTOKSSA    P#TOKS
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@AM0250' PAR030
+     C                     ELSE
+     C                     MOVEL'OK'      P#RECD
+     C                     ENDIF
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #ERRFG    BEGSR
+     C*
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C*
+     C           YUBINA    IFEQ *BLANK
+     C                     SETOF                     9091
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           SHPNR     CHAINDMR0030              91
+     C           *IN91     IFEQ '0'
+     C                     MOVELAREASB    YUBINA
+     C                     MOVELSHPNMB    SHPNMA
+     C                     MOVELSHIP1B    SHIP1A
+     C                     MOVELSHIP2B    SHIP2A
+     C                     MOVELSHTELB    SHTELA
+     C*
+     C                     MOVEL'*'       SHPNRA
+     C*
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C*
+     C                     SETOF                     9091
+     C           CUSNRA    CHAINDMR0010              90
+     C           *IN90     IFEQ '0'
+     C*
+     C           SHPNR     CHAINDMR0030              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           YUBINA    IFEQ AREASB
+     C*
+     C                     MOVEL*BLANK    SHPNMA
+     C                     MOVEL*BLANK    SHIP1A
+     C                     MOVEL*BLANK    SHIP2A
+     C                     MOVEL*BLANK    SHTELA
+     C*
+     C                     MOVELAREASB    YUBINA
+     C                     MOVELSHPNMB    SHPNMA
+     C                     MOVELSHIP1B    SHIP1A
+     C                     MOVELSHIP2B    SHIP2A
+     C                     MOVELSHTELB    SHTELA
+     C*
+     C                     MOVEL'*'       SHPNRA
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C*
+     C                     MOVELW#ERR     ERRCDA
+     C                     MOVEL' '       A1A
+     C                     MOVELW#MAIL    MFROMA
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #EXT      BEGSR
+     C                     MOVEL'X'       A1A
+     C                     MOVELW#MAIL    MFROMA
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #TANKA    BEGSR
+     C*
+     C                     Z-ADD0         W#FLG2  10
+     C*
+     C                     Z-ADD0         WTANKA
+     C                     SELEC
+     C           WDCODE    WHEQ 0
+     C                     Z-ADDLSTPC     WTANKA
+     C           WDCODE    WHEQ 1
+     C                     Z-ADDUPD01     WTANKA
+     C           WDCODE    WHEQ 2
+     C                     Z-ADDUPD02     WTANKA
+     C           WDCODE    WHEQ 3
+     C                     Z-ADDUPD03     WTANKA
+     C           WDCODE    WHEQ 4
+     C                     Z-ADDUPD04     WTANKA
+     C           WDCODE    WHEQ 5
+     C                     Z-ADDUPD05     WTANKA
+     C           WDCODE    WHEQ 6
+     C                     Z-ADDUPD06     WTANKA
+     C           WDCODE    WHEQ 7
+     C                     Z-ADDUPD07     WTANKA
+     C           WDCODE    WHEQ 8
+     C                     Z-ADDUPD08     WTANKA
+     C           WDCODE    WHEQ 9
+     C                     Z-ADDUPD09     WTANKA
+     C           WDCODE    WHEQ 10
+     C                     Z-ADDUPD10     WTANKA
+     C           WDCODE    WHEQ 11
+     C                     Z-ADDUPD11     WTANKA
+     C           WDCODE    WHEQ 12
+     C                     Z-ADDUPD12     WTANKA
+     C           WDCODE    WHEQ 13
+     C                     Z-ADDUPD13     WTANKA
+     C           WDCODE    WHEQ 14
+     C                     Z-ADDUPD14     WTANKA
+     C           WDCODE    WHEQ 15
+     C                     Z-ADDUPD15     WTANKA
+     C           WDCODE    WHEQ 16
+     C                     Z-ADDUPD16     WTANKA
+     C           WDCODE    WHEQ 17
+     C                     Z-ADDUPD17     WTANKA
+     C                     ENDSL
+     C*
+     C           WTANKA    IFEQ 0
+     C*販売不可製品
+     C                     Z-ADD2         W#FLG2
+     C                     ELSE
+     C*
+     C           TANKAA    IFEQ 0
+     C                     ELSE
+     C*
+     C           TANKAA    IFEQ WTANKA
+     C                     ELSE
+     C*
+     C           W#CUS2    IFEQ '0R'
+     C                     Z-ADDTANKAA    WTANKA
+     C                     ELSE
+     C                     Z-ADD1         W#FLG2  10
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C*佐川営業所止め
+     C*
+     C           #SAGA     BEGSR
+     C*
+     C           YUBINA    IFEQ *BLANK
+     C           SAGCDA    ANDEQ0
+     C*
+     C                     MOVEL*BLANK    SHPNMA
+     C                     MOVEL*BLANK    SHIP1A
+     C                     MOVEL*BLANK    SHIP2A
+     C                     MOVEL*BLANK    SHTELA
+     C                     MOVEL*BLANK    BUSYOA
+     C                     MOVEL*BLANK    BIKO1A
+     C                     MOVEL*BLANK    BIKO2A
+     C*
+     C                     ENDIF
+     C*
+     C           SAGCDA    IFNE 0
+     C                     SETOF                     90
+     C           SAGCDA    CHAINDMR0330              90
+     C           *IN90     IFEQ '0'
+     C*
+     C                     MOVELZIPCD3    YUBINA
+     C                     MOVELSNAM23    SHIP1A
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C*
+     C                     ENDSR
+     C*----------------------------------------------------------
+     C           #UNCHI    BEGSR
+     C*
+     C           SHIP1A    IFNE *BLANK
+     C*
+     C*文字列操作（住所）
+     C                     MOVEL*BLANK    W#SHI1
+     C                     MOVEL*BLANK    W#SHI2
+     C                     MOVEL'1'       P#SKBN
+     C                     Z-ADD8         P#LENG
+     C                     MOVELSHIP1A    P#MOJ1
+     C                     MOVEL*BLANK    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR070
+     C                     MOVELP#MOJ2    W#SHI1  8        都道府県
+     C                     MOVELP#MOJ3    W#SHI2 62
+     C*
+     C                     SELEC
+     C           W#SHI2    WHEQ '北海道'
+     C                     Z-ADD1         W#TANK  10
+     C           W#SHI2    WHEQ '沖縄県'
+     C                     Z-ADD1         W#TANK
+     C                     OTHER
+     C                     ENDSL
+     C*
+     C                     ENDIF
+     C*
+     C                     ENDSR

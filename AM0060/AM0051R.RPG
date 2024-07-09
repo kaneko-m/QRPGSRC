@@ -1,0 +1,199 @@
+     H*****************************************************
+     H*    PROGRAM NAME AM0050R CODED BY N.KANEDA         *
+     H*                         CODED ON 18.09.21         *
+     H*    東日アメリカ向け受注処理                     *
+     H*****************************************************
+     H            Y/                                    1
+     FAML0010 UF  E                    DISK
+     FDTR5170 IF  E           K        DISK
+     FDTR5200 IF  E           K        DISK
+     FDMR0040 IF  E           K        DISK
+     FDMR0170 IF  E           K        DISK
+     IRDMR0040
+     I              ITCOD                           ITCOD4
+     IRDTR5170
+     I              ZZ0001                          ZZ001D
+     I              ACREC                           ACRECD
+     I              ITCOD                           ITCODD
+     I              ITDSE                           ITDSED
+     I              ITDSJ                           ITDSJD
+     I              KYUCD                           KYUCDD
+     I              DESNO                           DESNOD
+     I              UNPCS                           UNPCSD
+     I              PACOD                           PACODD
+     I              UNPRI                           UNPRID
+     I              SMOLA                           SMOLAD
+     I              STACO                           STACOD
+     I              LANKU                           LANKUD
+     I              BIKOU                           BIKOUD
+     I              IMAXQ                           IMAXQD
+     I              OPQU1                           OPQU2D
+     I              OPQU2                           OPQU2D
+     I              M0MIN                           M0MIND
+     I              PLNUM                           PLNUMD
+     I              PLACE                           PLACED
+     I              ZZ0165                          ZZ165D
+     IDS1         DS
+     I                                        1  30 ITNBRA
+     I                                        1  25 ITNB2A
+     IDS2         DS
+     I                                        1  30 W#ITNB
+     I                                        1  25 W#ITN2
+     C           *ENTRY    PLIST
+     C                     PARM           P#ERR   1        ｴﾗｰ
+     C*----------------------------------------------------
+     C           PAR010    PLIST
+     C                     PARM           P#SKBN  1
+     C                     PARM           P#LENG  30
+     C                     PARM           P#MOJ1256
+     C                     PARM           P#MOJ2256
+     C                     PARM           P#MOJ3256
+     C                     PARM           P#RETN  1
+     C*----------------------------------------------------
+     C           D0170     KLIST
+     C                     KFLD           ITNB2A
+     C                     KFLD           W#KOCD
+     C*----------------------------------------------------
+     C                     MOVEL' '       P#ERR
+     C                     Z-ADD0         FLAG01  10
+     C                     MOVEL*BLANK    W#KOCD 25
+     C*
+     C                     MOVEL*BLANK    W#ITNB 30
+     C*
+     C           FLAG01    DOWEQ0
+     C                     SETOF                     7091
+     C                     READ AML0010                  70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG01
+     C                     ELSE
+     C                     Z-ADD0         WTANKA  70
+     C                     Z-ADD0         WKINGA  90
+     C                     MOVEL*BLANK    WA1A    1
+     C*
+     C*型式＋備考結合
+     C                     MOVEL'2'       P#SKBN
+     C                     Z-ADD30        P#LENG
+     C                     MOVELITNBRA    P#MOJ1
+     C                     MOVELREMARA    P#MOJ2
+     C                     MOVEL*BLANK    P#MOJ3
+     C                     MOVEL*BLANK    P#RETN
+     C                     CALL '@SB010R' PAR010
+     C                     MOVELP#MOJ3    W#ITNB
+     C*
+     C*
+     C* 部組製品確認
+     C                     EXSR #DM170
+     C*
+     C           FLAG90    IFEQ 0
+     C*
+     C                     SETOF                     90
+     C***        ITNB2A    CHAINDMR0040              90
+     C           W#ITN2    CHAINDMR0040              90
+     C           *IN90     IFEQ '0'
+     C           REJET     ANDNE'H'
+     C*
+     C           ORDQUA    IFNE 0
+     C*
+     C                     Z-ADDUPD04     TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'A'       A1A
+     C                     UPDATRAML0010
+     C*
+     C                     ELSE
+     C                     MOVEL' '       A1A
+     C                     MOVEL'1'       P#ERR
+     C                     ENDIF
+     C                     ELSE
+     C*---
+     C                     MOVELW#ITNB    WKITNB 14
+     C                     SETOF                     91
+     C           WKITNB    CHAINDTR5170              91
+     C           *IN91     IFEQ '0'
+     C*
+     C           UNPRID    IFNE 0
+     C*
+     C           ACRECD    IFNE 'D'
+     C           UNPRID    ANDNE0
+     C*
+     C           LANKUD    IFEQ '*'
+     C*--
+     C                     SETOF                     90
+     C           WKITNB    CHAINDTR5200              91
+     C           *IN91     IFEQ '0'
+     C                     Z-ADDUNPRID    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'E'       A1A
+     C                     UPDATRAML0010
+     C                     ELSE
+     C                     Z-ADDUNPRID    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'B'       A1A
+     C                     UPDATRAML0010
+     C                     ENDIF
+     C*--
+     C                     ELSE
+     C*
+     C                     Z-ADDUNPRID    TANKAA
+     C           TANKAA    MULT ORDQUA    KINGAA
+     C                     MOVEL'B'       A1A
+     C                     UPDATRAML0010
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL' '       A1A
+     C                     MOVEL'1'       P#ERR
+     C                     UPDATRAML0010
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL' '       A1A
+     C                     MOVEL'1'       P#ERR
+     C                     UPDATRAML0010
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL' '       A1A
+     C                     MOVEL'1'       P#ERR
+     C                     UPDATRAML0010
+     C                     ENDIF
+     C*---
+     C                     ENDIF
+     C*
+     C                     ELSE
+     C                     MOVEL' '       A1A
+     C                     MOVEL'1'       P#ERR
+     C                     UPDATRAML0010
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C                     SETON                     LR
+     C                     RETRN
+     C*-----------------------------------------------------
+     C           #DM170    BEGSR
+     C           D0170     SETLLDMR0170
+     C                     Z-ADD0         FLAG10  10
+     C                     Z-ADD0         FLAG90  10
+     C           FLAG10    DOWEQ0
+     C                     SETOF                     70
+     C                     READ RDMR0170                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG10
+     C                     ELSE
+     C*
+     C           OYACD     IFEQ ITNB2A
+     C           ACREC     IFEQ ' '
+     C*
+     C                     Z-ADD1         FLAG90
+     C                     Z-ADD1         FLAG10
+     C*
+     C                     ELSE
+     C                     ENDIF
+     C                     ELSE
+     C                     Z-ADD1         FLAG10
+     C                     ENDIF
+     C*
+     C                     ENDIF
+     C                     ENDDO
+     C                     ENDSR
