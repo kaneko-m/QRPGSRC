@@ -13,11 +13,11 @@
      FDMC0010 IF  E           K        DISK
      FACS5170 IF  E           K        DISK
      F*
-     F**I0402 IF  E           K        DISK
-     F**          RDXI0400                          KRENAMERDXI0402
+     FDXI0402 IF  E           K        DISK
+     F            RDXI0400                          KRENAMERDXI0402
      F*
-     F*XI0405 IF  E           K        DISK
-     F**          RDXI0400                          KRENAMERDXI0405
+     FDXI0405 IF  E           K        DISK
+     F            RDXI0400                          KRENAMERDXI0405
      FNA8100FMCF  E                    WORKSTN
      FQSYSPRT O   F     132     OF    LPRINTER
      LQSYSPRT  68FL 68OL
@@ -85,6 +85,58 @@
      I              ZZ0371                          FILE44
      IRDMC0010
      I              REDAY                           REDAYX
+     IRDXI0402
+     I              RECCD4                          RECCDB
+     I              ACREC4                          ACRECB
+     I              SEQNO4                          SEQNOB
+     I              NBNBR4                          NBNBRB
+     I              PRNU14                          PRNU1B
+     I              NENC14                          NENC1B
+     I              PRNU24                          PRNU2B
+     I              NENC24                          NENC2B
+     I              ITDSC4                          ITDSCB
+     I              QUANT4                          QUANTB
+     I              FIDAY4                          FIDAYB
+     I              FQUAN4                          FQUANB
+     I              FNAIY4                          FNAIYB
+     I              BIKO14                          BIKO1B
+     I              BIKO24                          BIKO2B
+     I              CRTD14                          CRTD1B
+     I              CRTT14                          CRTT1B
+     I              USID14                          USID1B
+     I              JBID14                          JBID1B
+     I              PGID14                          PGID1B
+     I              UCRTD4                          UCRTDB
+     I              UCRTT4                          UCRTTB
+     I              UUSID4                          UUSIDB
+     I              UJBID4                          UJBIDB
+     I              UPGID4                          UPGIDB
+     IRDXI0405
+     I              RECCD4                          RECCDC
+     I              ACREC4                          ACRECC
+     I              SEQNO4                          SEQNOC
+     I              NBNBR4                          NBNBRC
+     I              PRNU14                          PRNU1C
+     I              NENC14                          NENC1C
+     I              PRNU24                          PRNU2C
+     I              NENC24                          NENC2C
+     I              ITDSC4                          ITDSCC
+     I              QUANT4                          QUANTC
+     I              FIDAY4                          FIDAYC
+     I              FQUAN4                          FQUANC
+     I              FNAIY4                          FNAIYC
+     I              BIKO14                          BIKO1C
+     I              BIKO24                          BIKO2C
+     I              CRTD14                          CRTD1C
+     I              CRTT14                          CRTT1C
+     I              USID14                          USID1C
+     I              JBID14                          JBID1C
+     I              PGID14                          PGID1C
+     I              UCRTD4                          UCRTDC
+     I              UCRTT4                          UCRTTC
+     I              UUSID4                          UUSIDC
+     I              UJBID4                          UJBIDC
+     I              UPGID4                          UPGIDC
      IDS1         DS
      I                                        1   2 GNB1
      I                                        1   1 GNB11
@@ -254,6 +306,53 @@
      C                     ELSE
      C*
      C* 特殊品印刷 -------------------------------------------
+     C                     SETOF                     9265
+     C           GNBNBR    CHAINDXI0402              92
+     C           *IN92     IFEQ '0'
+     C                     Z-ADDPRNU1B    W#PRNU  60
+     C                     Z-ADDQUANTB    W#QUAN  50
+     C                     MOVELNENC1B    W#NENC  1
+     C                     MOVELITDSCB    W#ITDS 30
+     C*
+     C                     EXSR #KEN01
+     C*
+     C                     ELSE
+     C*-----------------------------------------------------
+     C           D0400     SETLLDXI0405
+     C                     Z-ADD0         FLAG90  10
+     C                     Z-ADD0         FLAG95  10
+     C           W#YY      SUB  1         W#YY
+     C           FLAG90    DOWEQ0
+     C                     READ RDXI0405                 70
+     C           *IN70     IFEQ '1'
+     C                     Z-ADD1         FLAG90
+     C                     ELSE
+     C*
+     C                     Z-ADD0         W#YY2   40
+     C                     MOVELCRTD1C    W#YY2
+     C*
+     C           NBNBRC    IFEQ GNBNBR
+     C           W#YY2     ANDGEW#YY                       2年前
+     C                     Z-ADDPRNU1C    W#PRNU  60
+     C                     MOVELNENC1C    W#NENC  1
+     C                     Z-ADDQUANTC    W#QUAN  50
+     C                     MOVELGITDSC    W#ITDS 30
+     C*
+     C                     Z-ADD1         FLAG95
+     C                     Z-ADD1         FLAG90
+     C                     ELSE
+     C                     Z-ADD1         FLAG90
+     C                     ENDIF
+     C                     ENDIF
+     C                     ENDDO
+     C*-----------------------------------------------------
+     C           FLAG95    IFEQ 1
+     C                     EXSR #KEN01
+     C                     ELSE
+     C*
+     C                     Z-ADD999999    W#PRNU
+     C                     MOVE '9'       W#NENC
+     C                     MOVE *DATE     W#KEDY
      C*
      C*
      C                     SETOF                     6065
@@ -267,7 +366,8 @@
      C                     ENDIF
      C*
      C                     ENDIF
-     C*
+     C                     ENDIF
+     C                     ENDIF
      C* 上海向け部品
      C                     OTHER
      C                     EXSR #ACS
@@ -277,6 +377,32 @@
      C                     ELSE
      C                     SETON                     8081
      C                     ENDIF
+     C                     ENDSR
+     C*-----------------------------------------------------
+     C           #KEN01    BEGSR
+     C                     Z-ADD1         WCNT    30
+     C           WCNT      DOUGTW#QUAN
+     C* 検査日
+     C                     MOVE W#PRNU    P#PRNU
+     C                     MOVELW#NENC    P#NECH
+     C                     Z-ADD0         P#KEDY
+     C                     MOVELW#ITDS    P#KATA
+     C                     MOVEL*BLANK    P#RECD
+     C                     CALL '@SS9000' PAR020
+     C*
+     C           P#RECD    IFEQ *BLANK
+     C                     MOVE P#KEDY    W#KEDY  60
+     C                     ELSE
+     C                     MOVE *DATE     W#KEDY  60
+     C                     ENDIF
+     C*
+     C           W#SHMS    ADD  1         W#SHMS
+     C                     SETON                     65
+     C                     EXCPTMID03
+     C                     SETOF                     50
+     C           W#PRNU    ADD  1         W#PRNU
+     C           WCNT      ADD  1         WCNT
+     C                     ENDDO
      C                     ENDSR
      C*-----------------------------------------------------
      C           #ACS      BEGSR
@@ -710,3 +836,19 @@
      O        E  1             MID03
      O                                    8 '!@&Z!@&ｺ'
      C*---------------------------------------------------------
+     O*PDF417-------------------------------------------------------
+     O        E  1     65      MID03
+     O                                   20 '!@&%0!@&V0250!@&H023'
+     O                                   42 '0!@&2D10,02,03,1,01,17'
+     O                                   52 '!@&DN0017,'
+     O                                   62 'AAAAAAAAAA'
+     O                         W#PRNU    68
+     O                         W#NENC    69
+     O                                   73 '!@&ｺ'
+     O        E  1     65      MID03
+     O                                   20 '!@&%0!@&V0305!@&H027'
+     O                                   42 '0!@&P02!@&L0101!@&X21,'
+     O                         W#PRNU    48
+     O                         W#NENC    49
+     O                                   53 '!@&ｺ'
+     O*-------------------------------------------------------------
